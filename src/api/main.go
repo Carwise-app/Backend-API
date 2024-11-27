@@ -30,36 +30,36 @@ func main() {
 
 	auth := app.Group("/auth")
 	{
-		auth.POST("/register")
-		auth.POST("/login")
-		auth.POST("/logout")
-		auth.POST("/reset-password")
-		auth.PUT("/reset-password")
-		auth.PUT("/edit")
+		auth.POST("/register", registerUser)
+		auth.POST("/login", loginUser)
+		auth.POST("/logout", logoutUser)
+		auth.POST("/reset-password", resetPasswordRequest)
+		auth.PUT("/reset-password", resetPassword)
+		auth.PUT("/edit", editUserProfile)
 	}
 
 	aux := app.Group("/aux")
 	{
-		aux.GET("/brands")
-		aux.GET("/brands/models")
+		aux.GET("/brands", getBrands)
+		aux.GET("/brands/models", getModelsByBrand)
 	}
 
 	cars := app.Group("/cars")
 	{
-		cars.GET("/feed")
-		cars.GET("/")
-		cars.GET("/:id")
-		cars.POST("/")
-		cars.PUT("/:id")
-		cars.DELETE("/:id")
+		cars.GET("/feed", getCarsFeed)
+		cars.GET("/", listCars)
+		cars.GET("/:id", getCarByID)
+		cars.POST("/", createCar)
+		cars.PUT("/:id", updateCar)
+		cars.DELETE("/:id", deleteCar)
 	}
 
 	model := app.Group("/model")
 	{
-		model.POST("/predicts")
-		model.GET("/predicts/history")
-		model.POST("/suggestions")
-		model.GET("/suggestions/history")
+		model.POST("/predicts", predictPrice)
+		model.GET("/predicts/history", getPredictionHistory)
+		model.POST("/suggestions", suggestCar)
+		model.GET("/suggestions/history", getSuggestionHistory)
 	}
 
 	app.Run(os.Getenv("HOST") + ":" + os.Getenv("PORT"))
