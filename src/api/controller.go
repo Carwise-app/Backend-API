@@ -104,11 +104,16 @@ func editUserProfile(c *gin.Context) {
 
 }
 
-func getBrands(c *gin.Context) {
+func getBrands(ctx *gin.Context) {
+	brands, err := interactor.GetBrands()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
-}
-func getModelsByBrand(c *gin.Context) {
-
+	ctx.JSON(http.StatusOK, brands)
 }
 
 func getCarsFeed(c *gin.Context) {

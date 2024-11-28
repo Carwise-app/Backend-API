@@ -25,7 +25,7 @@ func ConnectDb() *sql.DB {
 
 	err = initDB(db, "sql/models.sql")
 	if err != nil {
-		log.Print("Database initialization failed: ", err)
+		log.Fatal("Database initialization failed: ", err)
 	}
 	return db
 }

@@ -11,7 +11,14 @@ type TokenRepository interface {
 	AddTokenBlackList(token string) error
 }
 
+type AuxiliaryRepository interface {
+	GetBrands() ([]Brand, error)
+	GetSeriesByBrand(brandID int) ([]Series, error)
+	GetModelsBySeries(seriesID int) ([]Model, error)
+}
+
 type Services struct {
 	UserRepo  UserRepository
 	TokenRepo TokenRepository
+	AuxRepo   AuxiliaryRepository
 }

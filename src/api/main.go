@@ -34,6 +34,7 @@ func main() {
 		carwise.Services{
 			UserRepo:  infra.NewUserRepository(),
 			TokenRepo: infra.NewTokenRepository(),
+			AuxRepo:   infra.NewAuxiliaryRepository(),
 		},
 	)
 
@@ -50,7 +51,6 @@ func main() {
 	aux := app.Group("/aux")
 	{
 		aux.GET("/brands", getBrands)
-		aux.GET("/brands/models", getModelsByBrand)
 	}
 
 	cars := app.Group("/cars")

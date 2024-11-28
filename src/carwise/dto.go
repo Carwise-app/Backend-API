@@ -13,3 +13,22 @@ type UserLoginRequest struct {
 	Email    string `json:"email" validate:"required,email"`
 	Password string `json:"password" validate:"required"`
 }
+
+type BrandResponse struct {
+	Id     int              `json:"id"`
+	Name   string           `json:"name"`
+	Count  int              `json:"count"`
+	Series []SeriesResponse `json:"series"`
+}
+
+type ModelResponse struct {
+	Id    int    `json:"id"`
+	Name  string `json:"name"`
+	Count int    `json:"count"`
+}
+type SeriesResponse struct {
+	Id     int             `json:"id"`
+	Name   string          `json:"name"`
+	Count  int             `json:"count"`
+	Models []ModelResponse `json:"models"`
+}

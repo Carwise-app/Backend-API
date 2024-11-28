@@ -1,6 +1,7 @@
 package carwise
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -83,6 +84,59 @@ func (i *Interactor) AddTokenBlackList(token string) []string {
 	}
 
 	return nil
+}
+
+func (i *Interactor) GetBrands() ([]BrandResponse, error) {
+	brands, err := i.services.AuxRepo.GetBrands()
+	if err != nil {
+		return nil, fmt.Errorf("error fetching brands: %w", err)
+	}
+
+	var brandResponses []BrandResponse
+
+	for _, brand := range brands {
+
+		series, err := i.services.AuxRepo.GetSeriesByBrand(brand.ID)
+		if err != nil {
+			return nil, fmt.Errorf("error fetching series for brand %d: %w", brand.ID, err)
+		}
+
+		var seriesResponses []SeriesResponse
+		for _, s := range series {
+	
+			models, err := i.services.AuxRepo.GetModelsBySeries(s.ID)
+			if err != nil {
+				return nil, fmt.Errorf("error fetching models for series %d: %w", s.ID, err)
+			}
+
+			var modelResponses []ModelResponse
+			for _, model := range models {
+				modelResponses = append(modelResponses, ModelResponse{
+					Id:    model.ID,
+					Name:  model.Name,
+					Count: len(models),
+				})
+			}
+
+	
+			seriesResponses = append(seriesResponses, SeriesResponse{
+				Id:     s.ID,
+				Name:   s.Name,
+				Count:  len(models), 
+				Models: modelResponses,
+			})
+		}
+
+
+		brandResponses = append(brandResponses, BrandResponse{
+			Id:     brand.ID,
+			Name:   brand.Name,
+			Count:  len(series),
+			Series: seriesResponses,
+		})
+	}
+
+	return brandResponses, nil
 }
 
 func hashPassword(password string) (string, error) {

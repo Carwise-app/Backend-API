@@ -109,6 +109,30 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Aux",
+			"item": [
+				{
+					"name": "Brands",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/aux/brands",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"aux",
+								"brands"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
