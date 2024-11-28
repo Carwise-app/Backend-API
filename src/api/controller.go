@@ -26,7 +26,7 @@ func registerUser(ctx *gin.Context) {
 		return
 	}
 
-	errors = interactor.CreateUser(request)
+	user, errors := interactor.CreateUser(request)
 	if errors != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": errors,
@@ -34,7 +34,13 @@ func registerUser(ctx *gin.Context) {
 		return
 	}
 
-	ctx.Status(http.StatusOK)
+	token, err := JWTAuthorization(user)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": []string{"Could not generate token"}})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"access_token": token})
 
 }
 func loginUser(ctx *gin.Context) {

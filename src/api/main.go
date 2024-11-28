@@ -1,6 +1,8 @@
 package main
 
 import (
+	"carwise"
+	"infra"
 	"log"
 	"os"
 	"time"
@@ -27,6 +29,11 @@ func main() {
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
+
+	interactor = carwise.NewInteractor(
+		carwise.Services{
+			UserRepo: infra.NewUserRepository()},
+	)
 
 	auth := app.Group("/auth")
 	{

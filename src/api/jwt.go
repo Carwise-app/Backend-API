@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+	"github.com/google/uuid"
 )
 
 const (
@@ -21,6 +22,7 @@ type UserClaims struct {
 	UserId string `json:"user_id"`
 	Email  string `json:"email"`
 	Role   string `json:"role"`
+	Status string `json:"status"`
 	jwt.StandardClaims
 }
 
@@ -30,7 +32,9 @@ func JWTAuthorization(user *carwise.User) (string, error) {
 		UserId: user.ID,
 		Email:  user.Email,
 		Role:   user.Role,
+		Status: user.Status,
 		StandardClaims: jwt.StandardClaims{
+			Id:        uuid.New().String(),
 			ExpiresAt: expirationTime,
 			IssuedAt:  time.Now().Unix(),
 			Issuer:    JWT_ISSUER,
