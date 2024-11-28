@@ -50,8 +50,16 @@ func (i *Interactor) CreateUser(request UserCreateRequest) (*User, []string) {
 }
 
 func (i *Interactor) LoginUser(request UserLoginRequest) (*User, []string) {
+	user, err := i.services.UserRepo.GetByEmail(request.Email)
+	if err != nil {
+		return nil, []string{err.Error()}
+	}
 
-	return nil, nil
+	if !comparePasswords(user.PasswordHash, request.Password) {
+		return nil, []string{"invalid credentials"}
+	}
+
+	return user, nil
 }
 
 func (i *Interactor) LogoutUser(token string) []string {
