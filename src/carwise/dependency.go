@@ -6,6 +6,12 @@ type UserRepository interface {
 	GetByEmail(email string) (*User, error)
 }
 
+type TokenRepository interface {
+	IsTokenBlackListed(token string) (bool, error)
+	AddTokenBlackList(token string) error
+}
+
 type Services struct {
-	UserRepo UserRepository
+	UserRepo  UserRepository
+	TokenRepo TokenRepository
 }

@@ -32,17 +32,19 @@ func main() {
 
 	interactor = carwise.NewInteractor(
 		carwise.Services{
-			UserRepo: infra.NewUserRepository()},
+			UserRepo:  infra.NewUserRepository(),
+			TokenRepo: infra.NewTokenRepository(),
+		},
 	)
 
 	auth := app.Group("/auth")
 	{
 		auth.POST("/register", registerUser)
 		auth.POST("/login", loginUser)
-		auth.POST("/logout", logoutUser)
+		auth.POST("/logout", AuthMiddleware(), logoutUser)
 		auth.POST("/reset-password", resetPasswordRequest)
 		auth.PUT("/reset-password", resetPassword)
-		auth.PUT("/edit", editUserProfile)
+		auth.PUT("/edit", AuthMiddleware(), editUserProfile)
 	}
 
 	aux := app.Group("/aux")
@@ -56,17 +58,17 @@ func main() {
 		cars.GET("/feed", getCarsFeed)
 		cars.GET("/", listCars)
 		cars.GET("/:id", getCarByID)
-		cars.POST("/", createCar)
-		cars.PUT("/:id", updateCar)
-		cars.DELETE("/:id", deleteCar)
+		cars.POST("/", AuthMiddleware(), createCar)
+		cars.PUT("/:id", AuthMiddleware(), updateCar)
+		cars.DELETE("/:id", AuthMiddleware(), deleteCar)
 	}
 
 	model := app.Group("/model")
 	{
 		model.POST("/predicts", predictPrice)
-		model.GET("/predicts/history", getPredictionHistory)
+		model.GET("/predicts/history", AuthMiddleware(), getPredictionHistory)
 		model.POST("/suggestions", suggestCar)
-		model.GET("/suggestions/history", getSuggestionHistory)
+		model.GET("/suggestions/history", AuthMiddleware(), getSuggestionHistory)
 	}
 
 	app.Run(os.Getenv("HOST") + ":" + os.Getenv("PORT"))

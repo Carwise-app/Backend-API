@@ -68,11 +68,19 @@ func (i *Interactor) LogoutUser(token string) []string {
 }
 
 func (i *Interactor) IsTokenBlackListed(token string) (bool, []string) {
+	isBlacklisted, err := i.services.TokenRepo.IsTokenBlackListed(token)
+	if err != nil {
+		return false, []string{"Failed to check token blacklist: " + err.Error()}
+	}
 
-	return false, nil
+	return isBlacklisted, nil
 }
 
 func (i *Interactor) AddTokenBlackList(token string) []string {
+	err := i.services.TokenRepo.AddTokenBlackList(token)
+	if err != nil {
+		return []string{"Failed to add token to blacklist: " + err.Error()}
+	}
 
 	return nil
 }
