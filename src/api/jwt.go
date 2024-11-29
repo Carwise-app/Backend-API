@@ -90,7 +90,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		claims, ok := token.Claims.(*UserClaims)
-		if !ok || !token.Valid {
+		if !ok || !token.Valid || claims.Status == carwise.AccountStatusBanned || claims.Status == carwise.AccountStatusInactive {
 			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
 			ctx.Abort()
 			return
