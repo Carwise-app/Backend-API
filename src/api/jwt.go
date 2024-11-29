@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	JWT_ISSUER string = "CARWISE API SERVER"
+	JWT_ISSUER string = "Carwise API Server"
 )
 
 var JWT_SECRET = []byte(os.Getenv("JWT_SECRET"))
