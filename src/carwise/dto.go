@@ -32,3 +32,7 @@ type SeriesResponse struct {
 	Count  int             `json:"count"`
 	Models []ModelResponse `json:"models"`
 }
+
+type ResetPasswordRequest struct {
+	Email string `json:"email"  validate:"required,email"`
+}

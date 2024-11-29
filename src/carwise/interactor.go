@@ -63,11 +63,6 @@ func (i *Interactor) LoginUser(request UserLoginRequest) (*User, []string) {
 	return user, nil
 }
 
-func (i *Interactor) LogoutUser(token string) []string {
-
-	return nil
-}
-
 func (i *Interactor) IsTokenBlackListed(token string) (bool, []string) {
 	isBlacklisted, err := i.services.TokenRepo.IsTokenBlackListed(token)
 	if err != nil {
@@ -103,7 +98,7 @@ func (i *Interactor) GetBrands() ([]BrandResponse, error) {
 
 		var seriesResponses []SeriesResponse
 		for _, s := range series {
-	
+
 			models, err := i.services.AuxRepo.GetModelsBySeries(s.ID)
 			if err != nil {
 				return nil, fmt.Errorf("error fetching models for series %d: %w", s.ID, err)
@@ -118,15 +113,13 @@ func (i *Interactor) GetBrands() ([]BrandResponse, error) {
 				})
 			}
 
-	
 			seriesResponses = append(seriesResponses, SeriesResponse{
 				Id:     s.ID,
 				Name:   s.Name,
-				Count:  len(models), 
+				Count:  len(models),
 				Models: modelResponses,
 			})
 		}
-
 
 		brandResponses = append(brandResponses, BrandResponse{
 			Id:     brand.ID,
@@ -137,6 +130,11 @@ func (i *Interactor) GetBrands() ([]BrandResponse, error) {
 	}
 
 	return brandResponses, nil
+}
+
+func (i *Interactor) ResetPasswordRequest(request ResetPasswordRequest) []string {
+
+	return nil
 }
 
 func hashPassword(password string) (string, error) {

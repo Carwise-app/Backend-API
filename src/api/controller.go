@@ -94,8 +94,32 @@ func logoutUser(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 }
 
-func resetPasswordRequest(c *gin.Context) {
+func resetPasswordRequest(ctx *gin.Context) {
+	var request carwise.ResetPasswordRequest
 
+	err := ctx.ShouldBindJSON(&request)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": []string{err.Error()},
+		})
+		return
+	}
+
+	if err := ValidateStruct(&request); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
+	}
+
+	if errors := interactor.ResetPasswordRequest(request); errors != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": errors,
+		})
+		return
+	}
+
+	ctx.Status(http.StatusOK)
 }
 func resetPassword(c *gin.Context) {
 
