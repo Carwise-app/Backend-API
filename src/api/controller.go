@@ -121,7 +121,35 @@ func resetPasswordRequest(ctx *gin.Context) {
 
 	ctx.Status(http.StatusOK)
 }
-func resetPassword(c *gin.Context) {
+func resetPassword(ctx *gin.Context) {
+	var request carwise.ChangePasswordRequest
+
+	token := ctx.Query("token")
+	email := ctx.Query("email")
+
+	err := ctx.ShouldBindJSON(&request)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": []string{err.Error()},
+		})
+		return
+	}
+
+	if err := ValidateStruct(&request); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
+	}
+
+	if errors := interactor.ChangePassword(request, token, email); errors != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": errors,
+		})
+		return
+	}
+
+	ctx.Status(http.StatusOK)
 
 }
 func editUserProfile(c *gin.Context) {

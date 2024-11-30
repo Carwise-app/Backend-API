@@ -141,3 +141,28 @@ func (r *UserRepository) Create(user *carwise.User) error {
 	}
 	return nil
 }
+
+func (r *UserRepository) UpdatePassword(email, hashedPassword string) error {
+	query := `
+		UPDATE users 
+		SET 
+			password_hash = $1, 
+			updated_at = NOW() 
+		WHERE email = $2`
+
+	result, err := r.db.Exec(query, hashedPassword, email)
+	if err != nil {
+		return fmt.Errorf("failed to update password: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed to check rows affected: %w", err)
+	}
+
+	if rowsAffected == 0 {
+		return errors.New("no user found with the provided email")
+	}
+
+	return nil
+}

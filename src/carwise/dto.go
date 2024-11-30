@@ -36,3 +36,8 @@ type SeriesResponse struct {
 type ResetPasswordRequest struct {
 	Email string `json:"email"  validate:"required,email"`
 }
+
+type ChangePasswordRequest struct {
+	Password   string `json:"password" validate:"required"`
+	RePassword string `json:"re_password" validate:"required"`
+}

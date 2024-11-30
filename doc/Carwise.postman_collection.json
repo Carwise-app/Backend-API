@@ -58,7 +58,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"email\": \"johndoe@example.com\",\r\n  \"password\": \"securepassword\"\r\n}\r\n",
+							"raw": "{\r\n  \"email\": \"yusuftalhaklc@gmail.com\",\r\n  \"password\": \"yusuf\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -103,6 +103,72 @@
 							"path": [
 								"auth",
 								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"yusuftalhaklc@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/auth/reset-password",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset Password Request Copy",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"password\":\"\",\r\n    \"re_password\":\"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/auth/reset-password?token=ZvQWSH3q-i7qdLTdMOuPivcvaeQ7_MT96zIfE9gFOSyfj-RIsiCH6A==&email=yusuftalhaklc@gmail.com",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth",
+								"reset-password"
+							],
+							"query": [
+								{
+									"key": "token",
+									"value": "ZvQWSH3q-i7qdLTdMOuPivcvaeQ7_MT96zIfE9gFOSyfj-RIsiCH6A=="
+								},
+								{
+									"key": "email",
+									"value": "yusuftalhaklc@gmail.com"
+								}
 							]
 						}
 					},

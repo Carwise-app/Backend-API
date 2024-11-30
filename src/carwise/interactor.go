@@ -1,7 +1,10 @@
 package carwise
 
 import (
+	"crypto/rand"
+	"encoding/base64"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/google/uuid"
@@ -133,6 +136,78 @@ func (i *Interactor) GetBrands() ([]BrandResponse, error) {
 }
 
 func (i *Interactor) ResetPasswordRequest(request ResetPasswordRequest) []string {
+	existingUser, err := i.services.UserRepo.GetByEmail(request.Email)
+	if err != nil {
+		log.Printf("Error fetching user by email: %v\n", err)
+		return []string{"An unexpected error occurred. Please try again later."}
+	}
+
+	if existingUser == nil {
+		return []string{"No account found with this email."}
+	}
+	token, err := generateToken(40)
+	if err != nil {
+		log.Printf("Error generate password reset token: %v\n", err)
+		return []string{"An unexpected error occurred. Please try again later."}
+	}
+	err = i.services.PasswordResetRepo.SaveResetCode(request.Email, token, 5*24*time.Hour)
+	if err != nil {
+		fmt.Printf("Failed to save reset code: %v\n", err)
+	}
+
+	resetLink := fmt.Sprintf("https://carwise.com/reset-password?token=%s&email=%s", token, request.Email)
+	emailBody := fmt.Sprintf(`Subject: Password Reset Request
+
+		Dear User,
+
+		We received a request to reset the password associated with your account. If you made this request, please click the link below to reset your password:
+
+		%s
+
+		This link will expire in 5 days. If you did not request a password reset, you can safely ignore this email.
+
+		Best regards,
+		Carwise Team`, resetLink)
+
+	err = i.services.MailGW.Send(request.Email, []byte(emailBody))
+	if err != nil {
+		log.Printf("Error send password reset email: %v\n", err)
+		return []string{"An unexpected error occurred. Please try again later."}
+	}
+
+	return nil
+}
+
+func (i *Interactor) ChangePassword(request ChangePasswordRequest, token, email string) []string {
+	verify, err := i.services.PasswordResetRepo.VerifyResetCode(email, token)
+	if err != nil {
+		log.Printf("Error verifying reset token: %v\n", err)
+		return []string{"An unexpected error occurred. Please try again later."}
+	}
+	if !verify {
+		return []string{"Invalid or expired password reset token."}
+	}
+
+	if request.Password != request.RePassword {
+		return []string{"Passwords do not match!"}
+	}
+
+	hashedPassword, err := hashPassword(request.Password)
+	if err != nil {
+		log.Printf("Error hashing password: %v\n", err)
+		return []string{"An unexpected error occurred. Please try again later."}
+	}
+
+	err = i.services.UserRepo.UpdatePassword(email, hashedPassword)
+	if err != nil {
+		log.Printf("Error updating password: %v\n", err)
+		return []string{"An unexpected error occurred. Please try again later."}
+	}
+
+	err = i.services.PasswordResetRepo.DeleteResetCode(email)
+	if err != nil {
+		log.Printf("Error deleting reset token: %v\n", err)
+	}
 
 	return nil
 }
@@ -147,4 +222,14 @@ func hashPassword(password string) (string, error) {
 
 func comparePasswords(passwordHash, password string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(password)) == nil
+}
+
+func generateToken(length int) (string, error) {
+	token := make([]byte, length)
+	_, err := rand.Read(token)
+	if err != nil {
+		return "", err
+	}
+
+	return base64.URLEncoding.EncodeToString(token), nil
 }
