@@ -199,6 +199,40 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Profile",
+			"item": [
+				{
+					"name": "Profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{APP_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/profile/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"profile",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
