@@ -1,5 +1,7 @@
 package carwise
 
+import "time"
+
 type UserCreateRequest struct {
 	FirstName   string `json:"first_name" validate:"required,min=2,max=50"`
 	LastName    string `json:"last_name" validate:"required,min=2,max=50"`
@@ -40,4 +42,17 @@ type ResetPasswordRequest struct {
 type ChangePasswordRequest struct {
 	Password   string `json:"password" validate:"required"`
 	RePassword string `json:"re_password" validate:"required"`
+}
+
+type ProfileResponse struct {
+	ID          string
+	FirstName   string
+	LastName    string
+	ImageUrl    string
+	CountryCode string
+	PhoneNumber string
+	Email       string
+	Role        string
+	Status      string
+	CreatedAt   time.Time
 }

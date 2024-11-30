@@ -94,6 +94,24 @@ func logoutUser(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 }
 
+func userProfile(ctx *gin.Context) {
+	userContext, exists := ctx.Get("user")
+	if !exists {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
+		return
+	}
+	claim := userContext.(*UserClaims)
+
+	profile, err := interactor.GetProfile(claim.UserId)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error": err,
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, profile)
+}
+
 func resetPasswordRequest(ctx *gin.Context) {
 	var request carwise.ResetPasswordRequest
 

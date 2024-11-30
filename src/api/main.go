@@ -50,6 +50,11 @@ func main() {
 		auth.PUT("/edit", AuthMiddleware(), editUserProfile)
 	}
 
+	profile := app.Group("/profile")
+	{
+		profile.GET("/", AuthMiddleware(), userProfile)
+	}
+
 	aux := app.Group("/aux")
 	{
 		aux.GET("/brands", getBrands)

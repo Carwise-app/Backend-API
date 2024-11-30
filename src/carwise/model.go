@@ -123,3 +123,4 @@ type User struct {
 	UpdatedAt    time.Time
 	LastLogin    time.Time
 }
+

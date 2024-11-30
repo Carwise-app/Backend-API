@@ -155,19 +155,18 @@ func (i *Interactor) ResetPasswordRequest(request ResetPasswordRequest) []string
 		fmt.Printf("Failed to save reset code: %v\n", err)
 	}
 
-	resetLink := fmt.Sprintf("https://carwise.com/reset-password?token=%s&email=%s", token, request.Email)
-	emailBody := fmt.Sprintf(`Subject: Password Reset Request
+	resetLink := fmt.Sprintf("http://localhost:3000/reset-password?token=%s&email=%s", token, request.Email)
+	emailBody := fmt.Sprintf(`From: Carwise <app.carwise@gmail.com>
+Subject: Password Reset Request
+Dear User,
+We received a request to reset the password associated with your account. If you made this request, please click the link below to reset your password:
 
-		Dear User,
+%s
 
-		We received a request to reset the password associated with your account. If you made this request, please click the link below to reset your password:
+This link will expire in 5 days. If you did not request a password reset, you can safely ignore this email.
 
-		%s
-
-		This link will expire in 5 days. If you did not request a password reset, you can safely ignore this email.
-
-		Best regards,
-		Carwise Team`, resetLink)
+Best regards,
+Carwise Team`, resetLink)
 
 	err = i.services.MailGW.Send(request.Email, []byte(emailBody))
 	if err != nil {
@@ -212,6 +211,25 @@ func (i *Interactor) ChangePassword(request ChangePasswordRequest, token, email 
 	return nil
 }
 
+func (i *Interactor) GetProfile(id string) (*ProfileResponse, []string) {
+	user, err := i.services.UserRepo.GetByID(id)
+	if err != nil {
+		return nil, []string{err.Error()}
+	}
+	return &ProfileResponse{
+		ID:          user.ID,
+		FirstName:   user.FirstName,
+		LastName:    user.LastName,
+		ImageUrl:    user.ImageUrl,
+		CountryCode: user.CountryCode,
+		PhoneNumber: user.PhoneNumber,
+		Email:       user.Email,
+		Role:        user.Role,
+		Status:      user.Status,
+		CreatedAt:   user.CreatedAt,
+	}, nil
+
+}
 func hashPassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
