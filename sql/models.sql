@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS brands (
     id SERIAL PRIMARY KEY,
+    logo TEXT,
     name VARCHAR(255) NOT NULL
 );
 

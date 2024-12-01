@@ -15,7 +15,7 @@ func NewAuxiliaryRepository() *AuxiliaryRepository {
 }
 
 func (repo *AuxiliaryRepository) GetBrands() ([]carwise.Brand, error) {
-	rows, err := repo.db.Query("SELECT id, name FROM brands")
+	rows, err := repo.db.Query("SELECT id, logo, name FROM brands")
 	if err != nil {
 		return nil, err
 	}

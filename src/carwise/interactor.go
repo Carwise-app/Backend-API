@@ -126,6 +126,7 @@ func (i *Interactor) GetBrands() ([]BrandResponse, error) {
 
 		brandResponses = append(brandResponses, BrandResponse{
 			Id:     brand.ID,
+			Logo:   brand.Logo,
 			Name:   brand.Name,
 			Count:  len(series),
 			Series: seriesResponses,

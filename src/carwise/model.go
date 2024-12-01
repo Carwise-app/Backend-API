@@ -84,6 +84,7 @@ type Images struct {
 
 type Brand struct {
 	ID   int
+	Logo string
 	Name string
 }
 
@@ -123,4 +124,3 @@ type User struct {
 	UpdatedAt    time.Time
 	LastLogin    time.Time
 }
-

@@ -18,6 +18,7 @@ type UserLoginRequest struct {
 
 type BrandResponse struct {
 	Id     int              `json:"id"`
+	Logo   string           `json:"logo"`
 	Name   string           `json:"name"`
 	Count  int              `json:"count"`
 	Series []SeriesResponse `json:"series"`
