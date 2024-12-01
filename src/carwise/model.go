@@ -8,15 +8,23 @@ const (
 	FuelTypeDiesel       = "Diesel"
 	FuelTypePetrol       = "Petrol"
 	FuelTypePetrolAndLPG = "Petrol & LPG"
-	FuelTypeLPG          = "LPG"
+	FuelTypeHybrid       = "Hybrid"
 	FuelTypeElectric     = "Electric"
 	//-----------------------------
-	TransmissionAutomatic = "Automatic"
-	TransmissionManual    = "Manual"
+	TransmissionAutomatic     = "Automatic"
+	TransmissionManual        = "Manual"
+	TransmissionSemiautomatic = "Semiautomatic"
 	//-----------------------------
-	BodyTypeSedan     = "Sedan"
-	BodyTypeHatchback = "Hatchback"
-	BodyTypeCoupe     = "Coupe"
+	BodyTypeSedan        = "Sedan"
+	BodyTypeHatchback3   = "Hatchback/3"
+	BodyTypeHatchback5   = "Hatchback/5"
+	BodyTypeCoupe        = "Coupe"
+	BodyTypeCabrio       = "Cabrio"
+	BodyTypeMPV          = "MPV"
+	BodyTypePickup       = "Pick-up"
+	BodyTypeRoadster     = "Roadster"
+	BodyTypeStationWagon = "Station wagon"
+	BodyTypeSUV          = "SUV"
 	//----------------------------
 	PartConditionOriginal = "Original"
 	PartConditionPainted  = "Painted"
@@ -37,6 +45,7 @@ const (
 
 type Car struct {
 	ID                string
+	OwnerId           string
 	Title             string
 	Description       string
 	Currency          string
