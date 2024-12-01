@@ -47,12 +47,12 @@ func main() {
 		auth.POST("/logout", AuthMiddleware(), logoutUser)
 		auth.POST("/reset-password", resetPasswordRequest)
 		auth.PUT("/reset-password", resetPassword)
-		auth.PUT("/edit", AuthMiddleware(), editUserProfile)
 	}
 
 	profile := app.Group("/profile")
 	{
 		profile.GET("/", AuthMiddleware(), userProfile)
+		profile.PUT("/edit", AuthMiddleware(), editUserProfile)
 	}
 
 	aux := app.Group("/aux")
