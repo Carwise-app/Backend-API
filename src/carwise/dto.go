@@ -8,7 +8,7 @@ type UserCreateRequest struct {
 	CountryCode string `json:"country_code" validate:"required,max=10"`
 	PhoneNumber string `json:"phone_number" validate:"required"`
 	Email       string `json:"email" validate:"required,email"`
-	Password    string `json:"password" validate:"required,min=8"`
+	Password    string `json:"password" validate:"required,strong_password"`
 }
 
 type UserLoginRequest struct {
@@ -40,8 +40,8 @@ type ResetPasswordRequest struct {
 }
 
 type ChangePasswordRequest struct {
-	Password   string `json:"password" validate:"required"`
-	RePassword string `json:"re_password" validate:"required"`
+	Password   string `json:"password" validate:"required,strong_password"`
+	RePassword string `json:"re_password" validate:"required,strong_password,password_match"`
 }
 
 type ProfileResponse struct {
