@@ -45,14 +45,14 @@ type ChangePasswordRequest struct {
 }
 
 type ProfileResponse struct {
-	ID          string
-	FirstName   string
-	LastName    string
-	ImageUrl    string
-	CountryCode string
-	PhoneNumber string
-	Email       string
-	Role        string
-	Status      string
-	CreatedAt   time.Time
+	ID          string    `json:"id,omitempty"`
+	FirstName   string    `json:"first_name,omitempty"`
+	LastName    string    `json:"last_name,omitempty"`
+	ImageUrl    string    `json:"image_url,omitempty"`
+	CountryCode string    `json:"country_code,omitempty"`
+	PhoneNumber string    `json:"phone_number,omitempty"`
+	Email       string    `json:"email,omitempty"`
+	Role        string    `json:"role,omitempty"`
+	Status      string    `json:"status,omitempty"`
+	CreatedAt   time.Time `json:"created_at,omitempty"`
 }
