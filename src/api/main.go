@@ -20,6 +20,7 @@ func main() {
 	}
 
 	app := gin.Default()
+	app.Static("/images", "./images")
 
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
@@ -37,6 +38,7 @@ func main() {
 			AuxRepo:           infra.NewAuxiliaryRepository(),
 			MailGW:            infra.NewMailGateway(),
 			PasswordResetRepo: infra.NewPasswordResetRepository(),
+			CDNRepo:           infra.NewCDNRepository(),
 		},
 	)
 

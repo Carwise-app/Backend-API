@@ -1,12 +1,16 @@
 package carwise
 
-import "time"
+import (
+	"io"
+	"time"
+)
 
 type UserRepository interface {
 	Create(*User) error
 	GetByID(id string) (*User, error)
 	GetByEmail(email string) (*User, error)
 	UpdatePassword(email, hashedPassword string) error
+	Update(user *User) error
 }
 
 type TokenRepository interface {
@@ -30,10 +34,15 @@ type PasswordResetRepository interface {
 	DeleteResetCode(email string) error
 }
 
+type CDNRepository interface {
+	SaveUserAvatar(userID string, image io.Reader) (string, error)
+}
+
 type Services struct {
 	UserRepo          UserRepository
 	TokenRepo         TokenRepository
 	AuxRepo           AuxiliaryRepository
 	MailGW            MailGateway
 	PasswordResetRepo PasswordResetRepository
+	CDNRepo           CDNRepository
 }

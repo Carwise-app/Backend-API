@@ -166,3 +166,22 @@ func (r *UserRepository) UpdatePassword(email, hashedPassword string) error {
 
 	return nil
 }
+
+func (r *UserRepository) Update(user *carwise.User) error {
+	query := `
+        UPDATE users 
+        SET 
+            first_name = $1,
+            last_name = $2,
+            image_url = $3,
+			country_code = $4,
+			phone_number = $5,
+            updated_at = NOW()
+        WHERE id = $6`
+
+	_, err := r.db.Exec(query, user.FirstName, user.LastName, user.ImageUrl, user.CountryCode, user.PhoneNumber, user.ID)
+	if err != nil {
+		return fmt.Errorf("failed to update user: %w", err)
+	}
+	return nil
+}

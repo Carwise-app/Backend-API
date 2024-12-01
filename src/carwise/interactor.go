@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"log"
+	"mime/multipart"
 	"time"
 
 	"github.com/google/uuid"
@@ -231,6 +232,51 @@ func (i *Interactor) GetProfile(id string) (*ProfileResponse, []string) {
 	}, nil
 
 }
+
+func (i *Interactor) EditProfile(userId string, request ProfileEditRequest, avatar *multipart.FileHeader) []string {
+	var errors []string
+	user, err := i.services.UserRepo.GetByID(userId)
+	if err != nil {
+		errors = append(errors, fmt.Sprintf("Failed to get user: %v", err))
+		return errors
+	}
+
+	user.FirstName = request.FirstName
+	user.LastName = request.LastName
+	user.CountryCode = request.CountryCode
+	user.PhoneNumber = request.PhoneNumber
+
+	err = i.services.UserRepo.Update(user)
+	if err != nil {
+		errors = append(errors, fmt.Sprintf("Failed to update user profile: %v", err))
+		return errors
+	}
+
+	if avatar != nil {
+		file, err := avatar.Open()
+		if err != nil {
+			errors = append(errors, fmt.Sprintf("Failed to open avatar file: %v", err))
+			return errors
+		}
+		defer file.Close()
+
+		avatarURL, err := i.services.CDNRepo.SaveUserAvatar(userId, file)
+		if err != nil {
+			errors = append(errors, fmt.Sprintf("Failed to upload avatar: %v", err))
+			return errors
+		}
+
+		user.ImageUrl = avatarURL
+		err = i.services.UserRepo.Update(user)
+		if err != nil {
+			errors = append(errors, fmt.Sprintf("Failed to update user avatar URL: %v", err))
+			return errors
+		}
+	}
+
+	return nil
+}
+
 func hashPassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {

@@ -57,3 +57,10 @@ type ProfileResponse struct {
 	Status      string    `json:"status,omitempty"`
 	CreatedAt   time.Time `json:"created_at,omitempty"`
 }
+
+type ProfileEditRequest struct {
+	FirstName   string `json:"first_name" validate:"required,min=2,max=50"`
+	LastName    string `json:"last_name" validate:"required,min=2,max=50"`
+	CountryCode string `json:"country_code" validate:"required,max=10"`
+	PhoneNumber string `json:"phone_number" validate:"required"`
+}
