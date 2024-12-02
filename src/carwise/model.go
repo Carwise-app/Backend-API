@@ -61,7 +61,6 @@ type Car struct {
 	Year              int
 	FuelType          string
 	Transmission      string
-	Condition         string
 	Mileage           int
 	BodyType          string
 	EnginePower       int
@@ -70,7 +69,6 @@ type Car struct {
 	Color             string
 	Warranty          bool
 	HeavyDamage       bool
-	PlateCountry      string
 	SellerType        string
 	TradeOption       bool
 	FrontBumper       string

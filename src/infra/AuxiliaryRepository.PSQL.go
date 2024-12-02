@@ -24,7 +24,7 @@ func (repo *AuxiliaryRepository) GetBrands() ([]carwise.Brand, error) {
 	var brands []carwise.Brand
 	for rows.Next() {
 		var brand carwise.Brand
-		if err := rows.Scan(&brand.ID, &brand.Name); err != nil {
+		if err := rows.Scan(&brand.ID, &brand.Logo, &brand.Name); err != nil {
 			return nil, err
 		}
 		brands = append(brands, brand)

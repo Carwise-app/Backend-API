@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"log"
+	"math/big"
 	"mime/multipart"
 	"time"
 
@@ -189,10 +190,6 @@ func (i *Interactor) ChangePassword(request ChangePasswordRequest, token, email 
 		return []string{"Invalid or expired password reset token."}
 	}
 
-	if request.Password != request.RePassword {
-		return []string{"Passwords do not match!"}
-	}
-
 	hashedPassword, err := hashPassword(request.Password)
 	if err != nil {
 		log.Printf("Error hashing password: %v\n", err)
@@ -230,7 +227,6 @@ func (i *Interactor) GetProfile(id string) (*ProfileResponse, []string) {
 		Status:      user.Status,
 		CreatedAt:   user.CreatedAt,
 	}, nil
-
 }
 
 func (i *Interactor) EditProfile(userId string, request ProfileEditRequest, avatar *multipart.FileHeader) []string {
@@ -277,6 +273,28 @@ func (i *Interactor) EditProfile(userId string, request ProfileEditRequest, avat
 	return nil
 }
 
+func (i *Interactor) CreateCar(userId string, request CarCreateRequest) []string {
+	request.OwnerId = userId
+	request.ID = uuid.New().String()
+	request.ListingDate = time.Now()
+	var err error
+	request.ListingNumber, err = generateSecureListingNumber(10)
+	if err != nil {
+		return []string{err.Error()}
+	}
+
+	//for _, v := range request.Images {
+	//	// v byte -> image
+	//}
+
+	err = i.services.CarRepo.Create(request.ToCar())
+	if err != nil {
+		return []string{err.Error()}
+	}
+
+	return nil
+}
+
 func hashPassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
@@ -297,4 +315,19 @@ func generateToken(length int) (string, error) {
 	}
 
 	return base64.URLEncoding.EncodeToString(token), nil
+}
+
+func generateSecureListingNumber(length int) (string, error) {
+	letters := []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+	randPart := make([]rune, length)
+
+	for i := range randPart {
+		idx, err := rand.Int(rand.Reader, big.NewInt(int64(len(letters))))
+		if err != nil {
+			return "", err
+		}
+		randPart[i] = letters[idx.Int64()]
+	}
+
+	return string(randPart), nil
 }

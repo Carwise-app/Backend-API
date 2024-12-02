@@ -242,7 +242,37 @@ func listCars(c *gin.Context) {
 func getCarByID(c *gin.Context) {
 
 }
-func createCar(c *gin.Context) {
+func createCar(ctx *gin.Context) {
+	userContext, exists := ctx.Get("user")
+	if !exists {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
+		return
+	}
+	claim := userContext.(*UserClaims)
+
+	var request carwise.CarCreateRequest
+	err := ctx.ShouldBindJSON(&request)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": []string{err.Error()},
+		})
+		return
+	}
+
+	if err := ValidateStruct(&request); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
+	}
+	if errors := interactor.CreateCar(claim.UserId, request); errors != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": errors,
+		})
+		return
+	}
+
+	ctx.Status(http.StatusOK)
 
 }
 func updateCar(c *gin.Context) {

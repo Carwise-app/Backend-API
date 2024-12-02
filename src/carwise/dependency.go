@@ -38,6 +38,10 @@ type CDNRepository interface {
 	SaveUserAvatar(userID string, image io.Reader) (string, error)
 }
 
+type CarRepository interface {
+	Create(car *Car) error
+}
+
 type Services struct {
 	UserRepo          UserRepository
 	TokenRepo         TokenRepository
@@ -45,4 +49,5 @@ type Services struct {
 	MailGW            MailGateway
 	PasswordResetRepo PasswordResetRepository
 	CDNRepo           CDNRepository
+	CarRepo           CarRepository
 }

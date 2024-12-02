@@ -39,6 +39,7 @@ func main() {
 			MailGW:            infra.NewMailGateway(),
 			PasswordResetRepo: infra.NewPasswordResetRepository(),
 			CDNRepo:           infra.NewCDNRepository(),
+			CarRepo:           infra.NewCarRepository(),
 		},
 	)
 
