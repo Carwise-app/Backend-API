@@ -2,7 +2,9 @@ package main
 
 import (
 	"carwise"
+	"log"
 	"net/http"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -236,10 +238,70 @@ func getBrands(ctx *gin.Context) {
 func getCarsFeed(c *gin.Context) {
 
 }
-func listCars(c *gin.Context) {
+func listCars(ctx *gin.Context) {
+	limitStr := ctx.DefaultQuery("limit", "20")
+	pageStr := ctx.DefaultQuery("page", "1")
+	brandIDStr := ctx.DefaultQuery("brand_id", "0")
+	seriesIDStr := ctx.DefaultQuery("series_id", "0")
+	modelIDStr := ctx.DefaultQuery("model_id", "0")
+
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil {
+		log.Println("Error converting limit:", err)
+		ctx.JSON(400, gin.H{"error": "Invalid limit"})
+		return
+	}
+
+	page, err := strconv.Atoi(pageStr)
+	if err != nil {
+		log.Println("Error converting page:", err)
+		ctx.JSON(400, gin.H{"error": "Invalid page"})
+		return
+	}
+
+	brandID, err := strconv.Atoi(brandIDStr)
+	if err != nil {
+		log.Println("Error converting brand_id:", err)
+		ctx.JSON(400, gin.H{"error": "Invalid brand_id"})
+		return
+	}
+
+	seriesID, err := strconv.Atoi(seriesIDStr)
+	if err != nil {
+		log.Println("Error converting series_id:", err)
+		ctx.JSON(400, gin.H{"error": "Invalid series_id"})
+		return
+	}
+
+	modelID, err := strconv.Atoi(modelIDStr)
+	if err != nil {
+		log.Println("Error converting model_id:", err)
+		ctx.JSON(400, gin.H{"error": "Invalid model_id"})
+		return
+	}
+
+	response, errors := interactor.ListCars(page, limit, brandID, seriesID, modelID)
+	if errors != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": errors,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, response)
 
 }
-func getCarByID(c *gin.Context) {
+func getCarByID(ctx *gin.Context) {
+	id := ctx.Param("id")
+
+	carDetail, err := interactor.GetCarDetail(id)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err,
+		})
+		return
+	}
+	ctx.JSON(http.StatusOK, carDetail)
 
 }
 func createCar(ctx *gin.Context) {

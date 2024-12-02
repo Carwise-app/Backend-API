@@ -4,6 +4,7 @@ import (
 	"carwise"
 	"database/sql"
 	"fmt"
+	"log"
 )
 
 type CarRepository struct {
@@ -101,4 +102,156 @@ func (r *CarRepository) Create(car *carwise.Car) error {
 		return fmt.Errorf("failed to create car: %w", err)
 	}
 	return nil
+}
+
+func (r *CarRepository) GetCars(page, limit, brand_id, series_id, model_id int) ([]carwise.Car, error) {
+	offset := (page - 1) * limit
+
+	query := `
+		SELECT *
+		FROM cars
+	`
+	conditions := []string{}
+	args := []interface{}{}
+
+	if brand_id != 0 {
+		conditions = append(conditions, "brand_id = $"+fmt.Sprint(len(args)+1))
+		args = append(args, brand_id)
+	}
+	if series_id != 0 {
+		conditions = append(conditions, "series_id = $"+fmt.Sprint(len(args)+1))
+		args = append(args, series_id)
+	}
+	if model_id != 0 {
+		conditions = append(conditions, "model_id = $"+fmt.Sprint(len(args)+1))
+		args = append(args, model_id)
+	}
+
+	if len(conditions) > 0 {
+		query += " WHERE " + fmt.Sprint(conditions[0])
+		for i := 1; i < len(conditions); i++ {
+			query += " AND " + fmt.Sprint(conditions[i])
+		}
+	}
+
+	query += " LIMIT $" + fmt.Sprint(len(args)+1) + " OFFSET $" + fmt.Sprint(len(args)+2)
+	args = append(args, limit, offset)
+	log.Println(query)
+	log.Println(args...)
+	rows, err := r.db.Query(query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("failed to fetch cars: %w", err)
+	}
+	defer rows.Close()
+
+	var cars []carwise.Car
+	for rows.Next() {
+		var car carwise.Car
+		if err := rows.Scan(
+			&car.ID,
+			&car.OwnerId,
+			&car.Title,
+			&car.Description,
+			&car.Currency,
+			&car.Price,
+			&car.City,
+			&car.District,
+			&car.Neighborhood,
+			&car.ListingNumber,
+			&car.ListingDate,
+			&car.BrandId,
+			&car.SeriesId,
+			&car.ModelId,
+			&car.Year,
+			&car.FuelType,
+			&car.Transmission,
+			&car.Mileage,
+			&car.BodyType,
+			&car.EnginePower,
+			&car.EngineVolume,
+			&car.DriveType,
+			&car.Color,
+			&car.Warranty,
+			&car.HeavyDamage,
+			&car.SellerType,
+			&car.TradeOption,
+			&car.FrontBumper,
+			&car.FrontHood,
+			&car.Roof,
+			&car.FrontRightDoor,
+			&car.RearRightDoor,
+			&car.FrontLeftMudguard,
+			&car.FrontLeftDoor,
+			&car.RearLeftDoor,
+			&car.RearLeftMudguard,
+			&car.RearBumper,
+		); err != nil {
+			return nil, fmt.Errorf("failed to scan car: %w", err)
+		}
+		cars = append(cars, car)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("failed to read rows: %w", err)
+	}
+
+	return cars, nil
+}
+
+func (r *CarRepository) GetByID(id string) (*carwise.Car, error) {
+	query := `
+		SELECT *
+		FROM cars
+		WHERE id = $1
+	`
+	row := r.db.QueryRow(query, id)
+
+	var car carwise.Car
+	err := row.Scan(
+		&car.ID,
+		&car.OwnerId,
+		&car.Title,
+		&car.Description,
+		&car.Currency,
+		&car.Price,
+		&car.City,
+		&car.District,
+		&car.Neighborhood,
+		&car.ListingNumber,
+		&car.ListingDate,
+		&car.BrandId,
+		&car.SeriesId,
+		&car.ModelId,
+		&car.Year,
+		&car.FuelType,
+		&car.Transmission,
+		&car.Mileage,
+		&car.BodyType,
+		&car.EnginePower,
+		&car.EngineVolume,
+		&car.DriveType,
+		&car.Color,
+		&car.Warranty,
+		&car.HeavyDamage,
+		&car.SellerType,
+		&car.TradeOption,
+		&car.FrontBumper,
+		&car.FrontHood,
+		&car.Roof,
+		&car.FrontRightDoor,
+		&car.RearRightDoor,
+		&car.FrontLeftMudguard,
+		&car.FrontLeftDoor,
+		&car.RearLeftDoor,
+		&car.RearLeftMudguard,
+		&car.RearBumper,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("car not found : %w", err)
+		}
+		return nil, fmt.Errorf("failed to fetch car: %w", err)
+	}
+
+	return &car, nil
 }

@@ -295,6 +295,132 @@ func (i *Interactor) CreateCar(userId string, request CarCreateRequest) []string
 	return nil
 }
 
+func (i *Interactor) ListCars(page, limit, brand_id, series_id, model_id int) ([]ListCarResponse, []string) {
+	cars, err := i.services.CarRepo.GetCars(page, limit, brand_id, series_id, model_id)
+	if err != nil {
+		return nil, []string{"failed to fetch cars"}
+	}
+
+	brands, err := i.GetBrands()
+	if err != nil {
+		return nil, []string{"failed to fetch brands"}
+	}
+
+	brandMap := make(map[int]BrandResponse)
+	seriesMap := make(map[int]string)
+	modelMap := make(map[int]string)
+	for _, brand := range brands {
+		brandMap[brand.Id] = brand
+		for _, series := range brand.Series {
+			seriesMap[series.Id] = series.Name
+			for _, models := range series.Models {
+				modelMap[models.Id] = models.Name
+			}
+		}
+	}
+	var response []ListCarResponse
+	for _, v := range cars {
+		response = append(response, ListCarResponse{
+			Id:          v.ID,
+			Thumbnail:   "",
+			Currency:    v.Currency,
+			Price:       v.Price,
+			Brand:       brandMap[v.BrandId].Name,
+			Series:      seriesMap[v.SeriesId],
+			Model:       modelMap[v.ModelId],
+			Title:       v.Title,
+			Year:        v.Year,
+			Mileage:     v.Mileage,
+			ListingDate: v.ListingDate,
+			City:        v.City,
+			District:    v.District,
+		})
+	}
+
+	return response, nil
+}
+
+func (i *Interactor) GetCarDetail(id string) (*CarDetailResponse, []string) {
+	car, err := i.services.CarRepo.GetByID(id)
+	if err != nil {
+		return nil, []string{"failed to fetch cars"}
+	}
+	owner, err := i.services.UserRepo.GetByID(car.OwnerId)
+	if err != nil {
+		return nil, []string{"Error fetching user by"}
+	}
+
+	ownerResponse := OwnerResponse{
+		Id:          owner.ID,
+		FirstName:   owner.FirstName,
+		LastName:    owner.LastName,
+		CountryCode: owner.CountryCode,
+		PhoneNumber: owner.PhoneNumber,
+		CreatedAt:   owner.CreatedAt,
+	}
+
+	brands, err := i.GetBrands()
+	if err != nil {
+		return nil, []string{"failed to fetch brands"}
+	}
+
+	brandMap := make(map[int]BrandResponse)
+	seriesMap := make(map[int]string)
+	modelMap := make(map[int]string)
+	for _, brand := range brands {
+		brandMap[brand.Id] = brand
+		for _, series := range brand.Series {
+			seriesMap[series.Id] = series.Name
+			for _, models := range series.Models {
+				modelMap[models.Id] = models.Name
+			}
+		}
+	}
+
+	carDetailResponse := &CarDetailResponse{
+		ID:                car.ID,
+		Owner:             ownerResponse,
+		Title:             car.Title,
+		Description:       car.Description,
+		Currency:          car.Currency,
+		Price:             car.Price,
+		City:              car.City,
+		District:          car.District,
+		Neighborhood:      car.Neighborhood,
+		ListingNumber:     car.ListingNumber,
+		ListingDate:       car.ListingDate,
+		Brand:             brandMap[car.BrandId].Name, 
+		Series:            seriesMap[car.SeriesId],   
+		Model:             modelMap[car.ModelId],     
+		Year:              car.Year,
+		FuelType:          car.FuelType,
+		Transmission:      car.Transmission,
+		Mileage:           car.Mileage,
+		BodyType:          car.BodyType,
+		EnginePower:       car.EnginePower,
+		EngineVolume:      car.EngineVolume,
+		DriveType:         car.DriveType,
+		Color:             car.Color,
+		Warranty:          car.Warranty,
+		HeavyDamage:       car.HeavyDamage,
+		SellerType:        car.SellerType,
+		TradeOption:       car.TradeOption,
+		FrontBumper:       car.FrontBumper,
+		FrontHood:         car.FrontHood,
+		Roof:              car.Roof,
+		FrontRightDoor:    car.FrontRightDoor,
+		RearRightDoor:     car.RearRightDoor,
+		FrontLeftMudguard: car.FrontLeftMudguard,
+		FrontLeftDoor:     car.FrontLeftDoor,
+		RearLeftDoor:      car.RearLeftDoor,
+		RearLeftMudguard:  car.RearLeftMudguard,
+		RearBumper:        car.RearBumper,
+		Images:            []string{},
+	}
+
+	return carDetailResponse, nil
+}
+
 func hashPassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {

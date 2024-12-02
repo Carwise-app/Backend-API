@@ -147,3 +147,69 @@ func (r CarCreateRequest) ToCar() *Car {
 		RearBumper:        r.RearBumper,
 	}
 }
+
+type ListCarResponse struct {
+	Id          string    `json:"id,omitempty"`
+	Thumbnail   string    `json:"thumbnail,omitempty"`
+	Currency    string    `json:"currency"`
+	Price       float64   `json:"price"`
+	Brand       string    `json:"brand,omitempty"`
+	Series      string    `json:"series,omitempty"`
+	Model       string    `json:"model,omitempty"`
+	Title       string    `json:"title,omitempty"`
+	Year        int       `json:"year,omitempty"`
+	Mileage     int       `json:"mileage,omitempty"`
+	ListingDate time.Time `json:"listing_date,omitempty"`
+	City        string    `json:"city,omitempty"`
+	District    string    `json:"district,omitempty"`
+}
+
+type CarDetailResponse struct {
+	ID                string        `json:"id,omitempty"`
+	Owner             OwnerResponse `json:"owner,omitempty"`
+	Title             string        `json:"title,omitempty"`
+	Description       string        `json:"description,omitempty"`
+	Currency          string        `json:"currency,omitempty"`
+	Price             float64       `json:"price,omitempty"`
+	City              string        `json:"city,omitempty"`
+	District          string        `json:"district,omitempty"`
+	Neighborhood      string        `json:"neighborhood,omitempty"`
+	ListingNumber     string        `json:"listing_number,omitempty"`
+	ListingDate       time.Time     `json:"listing_date,omitempty"`
+	Brand             string        `json:"brand,omitempty"`
+	Series            string        `json:"series,omitempty"`
+	Model             string        `json:"model,omitempty"`
+	Year              int           `json:"year,omitempty"`
+	FuelType          string        `json:"fuel_type,omitempty"`
+	Transmission      string        `json:"transmission,omitempty"`
+	Mileage           int           `json:"mileage,omitempty"`
+	BodyType          string        `json:"body_type,omitempty"`
+	EnginePower       int           `json:"engine_power,omitempty"`
+	EngineVolume      int           `json:"engine_volume,omitempty"`
+	DriveType         string        `json:"drive_type,omitempty"`
+	Color             string        `json:"color,omitempty"`
+	Warranty          bool          `json:"warranty,omitempty"`
+	HeavyDamage       bool          `json:"heavy_damage,omitempty"`
+	SellerType        string        `json:"seller_type,omitempty"`
+	TradeOption       bool          `json:"trade_option,omitempty"`
+	FrontBumper       string        `json:"front_bumper,omitempty"`
+	FrontHood         string        `json:"front_hood,omitempty"`
+	Roof              string        `json:"roof,omitempty"`
+	FrontRightDoor    string        `json:"front_right_door,omitempty"`
+	RearRightDoor     string        `json:"rear_right_door,omitempty"`
+	FrontLeftMudguard string        `json:"front_left_mudguard,omitempty"`
+	FrontLeftDoor     string        `json:"front_left_door,omitempty"`
+	RearLeftDoor      string        `json:"rear_left_door,omitempty"`
+	RearLeftMudguard  string        `json:"rear_left_mudguard,omitempty"`
+	RearBumper        string        `json:"rear_bumper,omitempty"`
+	Images            []string      `json:"images,omitempty"`
+}
+
+type OwnerResponse struct {
+	Id          string    `json:"id,omitempty"`
+	FirstName   string    `json:"first_name,omitempty"`
+	LastName    string    `json:"last_name,omitempty"`
+	CountryCode string    `json:"country_code,omitempty"`
+	PhoneNumber string    `json:"phone_number,omitempty"`
+	CreatedAt   time.Time `json:"created_at,omitempty"`
+}

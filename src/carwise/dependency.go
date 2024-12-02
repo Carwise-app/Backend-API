@@ -40,6 +40,8 @@ type CDNRepository interface {
 
 type CarRepository interface {
 	Create(car *Car) error
+	GetCars(page, limit, brand_id, series_id, model_id int) ([]Car, error)
+	GetByID(id string) (*Car, error)
 }
 
 type Services struct {
