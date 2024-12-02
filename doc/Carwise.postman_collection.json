@@ -11,12 +11,26 @@
 			"item": [
 				{
 					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"var jsonData = pm.response.json();\r",
+									"pm.globals.set(\"APP_TOKEN\", jsonData.access_token);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"first_name\": \"John\",\r\n  \"last_name\": \"Doe\",\r\n  \"country_code\": \"90\",\r\n  \"phone_number\": \"5050550505\",\r\n  \"email\": \"johndoe@example.com\",\r\n  \"password\": \"securepassword\"\r\n}\r\n",
+							"raw": "{\r\n  \"first_name\": \"John\",\r\n  \"last_name\": \"Doe\",\r\n  \"country_code\": \"90\",\r\n  \"phone_number\": \"5050550505\",\r\n  \"email\": \"johndoe@example.com\",\r\n  \"password\": \"Securepassword1\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -35,7 +49,54 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Register",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"first_name\": \"John\",\r\n  \"last_name\": \"Doe\",\r\n  \"country_code\": \"90\",\r\n  \"phone_number\": \"5050550505\",\r\n  \"email\": \"johndoe@example.com\",\r\n  \"password\": \"Securepassword1\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/auth/register",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"auth",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 02 Dec 2024 20:03:36 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "395"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMzE5MjA1NTItZTIwZS00ZWM4LTk3YzgtNjg2YzI2Yzg0YTk4IiwiZW1haWwiOiJqb2huZG9lQGV4YW1wbGUuY29tIiwicm9sZSI6IlJlZ3VsYXIiLCJzdGF0dXMiOiJBY3RpdmUiLCJleHAiOjE3NjQ3MDU4MTYsImp0aSI6ImVlOTMwOGI4LTQ3NjQtNDY1My05OTI2LTQwODFhMDI1ZDIxNSIsImlhdCI6MTczMzE2OTgxNiwiaXNzIjoiQ2Fyd2lzZSBBUEkgU2VydmVyIn0.tI_dX_4Fg6q5_PB2QtehjbPSMVZnxKA5220-bXjSRFU\"\n}"
+						}
+					]
 				},
 				{
 					"name": "Login",
@@ -58,7 +119,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"email\": \"yusuftalhaklc@gmail.com\",\r\n  \"password\": \"yusuf\"\r\n}\r\n",
+							"raw": "{\r\n  \"email\": \"johndoe@example.com\",\r\n  \"password\": \"Securepassword1\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -77,7 +138,54 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"email\": \"johndoe@example.com\",\r\n  \"password\": \"Securepassword1\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/auth/login",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 02 Dec 2024 18:21:08 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "395"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNGNlNmE2YTAtYWQxYy00NzFhLTlhODMtMDQ3ODdmNWM3MzA3IiwiZW1haWwiOiJqb2huZG9lQGV4YW1wbGUuY29tIiwicm9sZSI6IlJlZ3VsYXIiLCJzdGF0dXMiOiJBY3RpdmUiLCJleHAiOjE3NjQ2OTk2NjgsImp0aSI6Ijk3OTM3ZDE4LWUwZjItNDA1OC05N2RmLTRmZWY1YjlmYzRjYyIsImlhdCI6MTczMzE2MzY2OCwiaXNzIjoiQ2Fyd2lzZSBBUEkgU2VydmVyIn0.oF3LMw6kxTvWaMNcyBeHuzq3ZSUT14NPhkfbqxI0VJE\"\n}"
+						}
+					]
 				},
 				{
 					"name": "Logout",
@@ -106,7 +214,41 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Logout",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/auth/logout",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"auth",
+										"logout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 02 Dec 2024 20:08:27 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
 				},
 				{
 					"name": "Reset Password Request",
@@ -115,7 +257,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\":\"yusuftalhaklc@gmail.com\"\r\n}",
+							"raw": "{\r\n    \"email\":\"johndoe@example.com\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -137,7 +279,7 @@
 					"response": []
 				},
 				{
-					"name": "Reset Password Request Copy",
+					"name": "Reset Password",
 					"request": {
 						"method": "PUT",
 						"header": [],
@@ -151,7 +293,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8080/auth/reset-password?token=ZvQWSH3q-i7qdLTdMOuPivcvaeQ7_MT96zIfE9gFOSyfj-RIsiCH6A==&email=yusuftalhaklc@gmail.com",
+							"raw": "localhost:8080/auth/reset-password?token=ZvQWSH3q-i7qdLTdMOuPivcvaeQ7_MT96zIfE9gFOSyfj-RIsiCH6A==&email=johndoe@example.com",
 							"host": [
 								"localhost"
 							],
@@ -167,7 +309,7 @@
 								},
 								{
 									"key": "email",
-									"value": "yusuftalhaklc@gmail.com"
+									"value": "johndoe@example.com"
 								}
 							]
 						}
@@ -196,7 +338,45 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Brands",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/aux/brands",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"aux",
+										"brands"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 02 Dec 2024 20:05:17 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1311"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": 1,\n        \"logo\": \"https://example.com/logos/audi.png\",\n        \"name\": \"Audi\",\n        \"count\": 3,\n        \"series\": [\n            {\n                \"id\": 1,\n                \"name\": \"A4\",\n                \"count\": 2,\n                \"models\": [\n                    {\n                        \"id\": 1,\n                        \"name\": \"Avant\",\n                        \"count\": 2\n                    },\n                    {\n                        \"id\": 2,\n                        \"name\": \"Sedan\",\n                        \"count\": 2\n                    }\n                ]\n            },\n            {\n                \"id\": 2,\n                \"name\": \"Q5\",\n                \"count\": 2,\n                \"models\": [\n                    {\n                        \"id\": 3,\n                        \"name\": \"Sportback\",\n                        \"count\": 2\n                    },\n                    {\n                        \"id\": 4,\n                        \"name\": \"SUV\",\n                        \"count\": 2\n                    }\n                ]\n            },\n            {\n                \"id\": 3,\n                \"name\": \"A6\",\n                \"count\": 2,\n                \"models\": [\n                    {\n                        \"id\": 5,\n                        \"name\": \"Allroad\",\n                        \"count\": 2\n                    },\n                    {\n                        \"id\": 6,\n                        \"name\": \"Sedan\",\n                        \"count\": 2\n                    }\n                ]\n            }\n        ]\n    },\n    {\n        \"id\": 2,\n        \"logo\": \"https://example.com/logos/bmw.png\",\n        \"name\": \"BMW\",\n        \"count\": 3,\n        \"series\": [\n            {\n                \"id\": 4,\n                \"name\": \"3 Series\",\n                \"count\": 2,\n                \"models\": [\n                    {\n                        \"id\": 7,\n                        \"name\": \"Sedan\",\n                        \"count\": 2\n                    },\n                    {\n                        \"id\": 8,\n                        \"name\": \"Touring\",\n                        \"count\": 2\n                    }\n                ]\n            },\n            {\n                \"id\": 5,\n                \"name\": \"X5\",\n                \"count\": 2,\n                \"models\": [\n                    {\n                        \"id\": 9,\n                        \"name\": \"SUV\",\n                        \"count\": 2\n                    },\n                    {\n                        \"id\": 10,\n                        \"name\": \"M Performance\",\n                        \"count\": 2\n                    }\n                ]\n            },\n            {\n                \"id\": 6,\n                \"name\": \"5 Series\",\n                \"count\": 2,\n                \"models\": [\n                    {\n                        \"id\": 11,\n                        \"name\": \"Sedan\",\n                        \"count\": 2\n                    },\n                    {\n                        \"id\": 12,\n                        \"name\": \"Touring\",\n                        \"count\": 2\n                    }\n                ]\n            }\n        ]\n    },\n    {\n        \"id\": 3,\n        \"logo\": \"https://example.com/logos/mercedes.png\",\n        \"name\": \"Mercedes-Benz\",\n        \"count\": 3,\n        \"series\": [\n            {\n                \"id\": 7,\n                \"name\": \"C-Class\",\n                \"count\": 2,\n                \"models\": [\n                    {\n                        \"id\": 13,\n                        \"name\": \"Sedan\",\n                        \"count\": 2\n                    },\n                    {\n                        \"id\": 14,\n                        \"name\": \"Coupe\",\n                        \"count\": 2\n                    }\n                ]\n            },\n            {\n                \"id\": 8,\n                \"name\": \"E-Class\",\n                \"count\": 2,\n                \"models\": [\n                    {\n                        \"id\": 15,\n                        \"name\": \"Sedan\",\n                        \"count\": 2\n                    },\n                    {\n                        \"id\": 16,\n                        \"name\": \"Estate\",\n                        \"count\": 2\n                    }\n                ]\n            },\n            {\n                \"id\": 9,\n                \"name\": \"GLE\",\n                \"count\": 2,\n                \"models\": [\n                    {\n                        \"id\": 17,\n                        \"name\": \"SUV\",\n                        \"count\": 2\n                    },\n                    {\n                        \"id\": 18,\n                        \"name\": \"Coupe\",\n                        \"count\": 2\n                    }\n                ]\n            }\n        ]\n    }\n]"
+						}
+					]
 				}
 			]
 		},
@@ -230,7 +410,448 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Profile",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/profile/",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"profile",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 02 Dec 2024 20:05:38 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "254"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"4ce6a6a0-ad1c-471a-9a83-04787f5c7307\",\n    \"first_name\": \"John\",\n    \"last_name\": \"Doe\",\n    \"image_url\": \"\",\n    \"country_code\": \"90\",\n    \"phone_number\": \"5050550505\",\n    \"email\": \"johndoe@example.com\",\n    \"role\": \"Regular\",\n    \"status\": \"Active\",\n    \"created_at\": \"2024-12-02T23:03:36.168188Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Profile Edit",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{APP_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "first_name",
+									"value": "John",
+									"type": "text"
+								},
+								{
+									"key": "last_name",
+									"value": "Doe",
+									"type": "text"
+								},
+								{
+									"key": "country_code",
+									"value": "415",
+									"type": "text"
+								},
+								{
+									"key": "phone_number",
+									"value": "5550123",
+									"type": "text"
+								},
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": []
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/profile/edit",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"profile",
+								"edit"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Profile Edit",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "first_name",
+											"value": "John",
+											"type": "text"
+										},
+										{
+											"key": "last_name",
+											"value": "Doe",
+											"type": "text"
+										},
+										{
+											"key": "country_code",
+											"value": "415",
+											"type": "text"
+										},
+										{
+											"key": "phone_number",
+											"value": "5550123",
+											"type": "text"
+										},
+										{
+											"key": "avatar",
+											"type": "file",
+											"src": []
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:8080/profile/edit",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"profile",
+										"edit"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 02 Dec 2024 20:07:56 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Car",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{APP_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Fabrika özel sipariş\",\r\n  \"description\": \"Araç M paketin üstüne opsiyonlanıp fabrikadan sipariş olarak alınmıştır.\",\r\n  \"currency\": \"TRY\",\r\n  \"price\": 2875000.00,\r\n  \"city\": \"Samsun\",\r\n  \"district\": \"Atakum\",\r\n  \"neighborhood\": \"Çakırlar Yalı Mh.\",\r\n  \"brand_id\": 2,\r\n  \"series_id\": 4,\r\n  \"model_id\": 7,\r\n  \"year\": 2020,\r\n  \"fuel_type\": \"Petrol\",\r\n  \"transmission\": \"Automatic\",\r\n  \"mileage\": 28000,\r\n  \"body_type\": \"Sedan\",\r\n  \"engine_power\": 170,\r\n  \"engine_volume\": 1597,\r\n  \"drive_type\": \"Rear-Wheel Drive\",\r\n  \"color\": \"Siyah\",\r\n  \"warranty\": true,\r\n  \"heavy_damage\": false,\r\n  \"seller_type\": \"Dealer\",\r\n  \"trade_option\": false,\r\n  \"front_bumper\": \"Original\",\r\n  \"front_hood\": \"Original\",\r\n  \"roof\": \"Original\",\r\n  \"front_right_door\": \"Original\",\r\n  \"rear_right_door\": \"Original\",\r\n  \"front_left_mudguard\": \"Painted\",\r\n  \"front_left_door\": \"Original\",\r\n  \"rear_left_door\": \"Original\",\r\n  \"rear_left_mudguard\": \"Original\",\r\n  \"rear_bumper\": \"Original\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/cars",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cars"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Create",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"title\": \"Fabrika özel sipariş\",\r\n  \"description\": \"Araç M paketin üstüne opsiyonlanıp fabrikadan sipariş olarak alınmıştır.\",\r\n  \"currency\": \"TRY\",\r\n  \"price\": 2875000.00,\r\n  \"city\": \"Samsun\",\r\n  \"district\": \"Atakum\",\r\n  \"neighborhood\": \"Çakırlar Yalı Mh.\",\r\n  \"brand_id\": 2,\r\n  \"series_id\": 4,\r\n  \"model_id\": 7,\r\n  \"year\": 2020,\r\n  \"fuel_type\": \"Petrol\",\r\n  \"transmission\": \"Automatic\",\r\n  \"mileage\": 28000,\r\n  \"body_type\": \"Sedan\",\r\n  \"engine_power\": 170,\r\n  \"engine_volume\": 1597,\r\n  \"drive_type\": \"Rear-Wheel Drive\",\r\n  \"color\": \"Siyah\",\r\n  \"warranty\": true,\r\n  \"heavy_damage\": false,\r\n  \"seller_type\": \"Dealer\",\r\n  \"trade_option\": false,\r\n  \"front_bumper\": \"Original\",\r\n  \"front_hood\": \"Original\",\r\n  \"roof\": \"Original\",\r\n  \"front_right_door\": \"Original\",\r\n  \"rear_right_door\": \"Original\",\r\n  \"front_left_mudguard\": \"Painted\",\r\n  \"front_left_door\": \"Original\",\r\n  \"rear_left_door\": \"Original\",\r\n  \"rear_left_mudguard\": \"Original\",\r\n  \"rear_bumper\": \"Original\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/cars",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"cars"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Mon, 02 Dec 2024 20:08:19 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "0"
+								}
+							],
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "Get",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/cars/?page=1&limit=20",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cars",
+								""
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								},
+								{
+									"key": "brand_id",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "series_id",
+									"value": null,
+									"disabled": true
+								},
+								{
+									"key": "model_id",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/cars/?page=1&limit=20",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"cars",
+										""
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										},
+										{
+											"key": "limit",
+											"value": "20"
+										},
+										{
+											"key": "brand_id",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "series_id",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "model_id",
+											"value": null,
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 02 Dec 2024 20:02:35 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "822"
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"id\": \"6b0a3bd6-df4c-442c-aea5-7af0dd011fbc\",\n        \"currency\": \"USD\",\n        \"price\": 35000,\n        \"brand\": \"Audi\",\n        \"series\": \"A4\",\n        \"model\": \"Avant\",\n        \"title\": \"2022 Audi A4 Avant\",\n        \"year\": 2022,\n        \"mileage\": 12000,\n        \"listing_date\": \"2024-12-02T21:35:24.409558Z\",\n        \"city\": \"Los Angeles\",\n        \"district\": \"Hollywood\"\n    },\n    {\n        \"id\": \"2075ede7-0199-4844-b5ef-d4eb219e0ef2\",\n        \"currency\": \"TRY\",\n        \"price\": 950000,\n        \"brand\": \"Audi\",\n        \"series\": \"A4\",\n        \"model\": \"Avant\",\n        \"title\": \"HATASIZ BOYASIZ 2022 AUDI A4 AVANT\",\n        \"year\": 2022,\n        \"mileage\": 15000,\n        \"listing_date\": \"2024-12-02T21:38:20.32298Z\",\n        \"city\": \"İstanbul\",\n        \"district\": \"Kadıköy\"\n    },\n    {\n        \"id\": \"7482b2fa-1365-4e4b-bb06-937d472184a0\",\n        \"currency\": \"TRY\",\n        \"price\": 2875000,\n        \"brand\": \"BMW\",\n        \"series\": \"3 Series\",\n        \"model\": \"Sedan\",\n        \"title\": \"Fabrika özel sipariş\",\n        \"year\": 2020,\n        \"mileage\": 28000,\n        \"listing_date\": \"2024-12-02T22:02:41.428054Z\",\n        \"city\": \"Samsun\",\n        \"district\": \"Atakum\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get detail",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/cars/:id",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cars",
+								":id"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "89626789-aed4-49b0-a25f-d8f154b734e0"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Get detail",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/cars/:id",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"cars",
+										":id"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "1",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "89626789-aed4-49b0-a25f-d8f154b734e0"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Date",
+									"value": "Mon, 02 Dec 2024 20:04:57 GMT"
+								},
+								{
+									"key": "Content-Length",
+									"value": "1087"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": \"89626789-aed4-49b0-a25f-d8f154b734e0\",\n    \"owner\": {\n        \"id\": \"4ce6a6a0-ad1c-471a-9a83-04787f5c7307\",\n        \"first_name\": \"John\",\n        \"last_name\": \"Doe\",\n        \"country_code\": \"90\",\n        \"phone_number\": \"5050550505\",\n        \"created_at\": \"2024-12-02T23:03:36.168188Z\"\n    },\n    \"title\": \"Fabrika özel sipariş\",\n    \"description\": \"Araç M paketin üstüne opsiyonlanıp fabrikadan sipariş olarak alınmıştır.\",\n    \"currency\": \"TRY\",\n    \"price\": 2875000,\n    \"city\": \"Samsun\",\n    \"district\": \"Atakum\",\n    \"neighborhood\": \"Çakırlar Yalı Mh.\",\n    \"listing_number\": \"TOLDJYGAMX\",\n    \"listing_date\": \"2024-12-02T23:04:39.352091Z\",\n    \"brand\": \"BMW\",\n    \"series\": \"3 Series\",\n    \"model\": \"Sedan\",\n    \"year\": 2020,\n    \"fuel_type\": \"Petrol\",\n    \"transmission\": \"Automatic\",\n    \"mileage\": 28000,\n    \"body_type\": \"Sedan\",\n    \"engine_power\": 170,\n    \"engine_volume\": 1597,\n    \"drive_type\": \"Rear-Wheel Drive\",\n    \"color\": \"Siyah\",\n    \"warranty\": true,\n    \"seller_type\": \"Dealer\",\n    \"front_bumper\": \"Original\",\n    \"front_hood\": \"Original\",\n    \"roof\": \"Original\",\n    \"front_right_door\": \"Original\",\n    \"rear_right_door\": \"Original\",\n    \"front_left_mudguard\": \"Painted\",\n    \"front_left_door\": \"Original\",\n    \"rear_left_door\": \"Original\",\n    \"rear_left_mudguard\": \"Original\",\n    \"rear_bumper\": \"Original\"\n}"
+						}
+					]
 				}
 			]
 		}
