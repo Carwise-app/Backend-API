@@ -235,9 +235,6 @@ func getBrands(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, brands)
 }
 
-func getCarsFeed(c *gin.Context) {
-
-}
 func listCars(ctx *gin.Context) {
 	limitStr := ctx.DefaultQuery("limit", "20")
 	pageStr := ctx.DefaultQuery("page", "1")

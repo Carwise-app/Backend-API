@@ -65,7 +65,6 @@ func main() {
 
 	cars := app.Group("/cars")
 	{
-		cars.GET("/feed", getCarsFeed)
 		cars.GET("/", listCars)
 		cars.GET("/:id", getCarByID)
 		cars.POST("/", AuthMiddleware(), createCar)
