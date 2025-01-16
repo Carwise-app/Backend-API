@@ -44,6 +44,11 @@ type CarRepository interface {
 	GetByID(id string) (*Car, error)
 }
 
+type MessageRepository interface {
+	SaveMessage(message *Message) error
+	GetMessagesBetween(senderId, receiverId string, limit, offset int) ([]Message, error)
+}
+
 type Services struct {
 	UserRepo          UserRepository
 	TokenRepo         TokenRepository
@@ -52,4 +57,5 @@ type Services struct {
 	PasswordResetRepo PasswordResetRepository
 	CDNRepo           CDNRepository
 	CarRepo           CarRepository
+	MessageRepo       MessageRepository
 }

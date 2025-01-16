@@ -160,3 +160,11 @@ CREATE TABLE IF NOT EXISTS cars (
     rear_left_mudguard part_condition,
     rear_bumper part_condition
 );
+
+CREATE TABLE IF NOT EXISTS messages (
+    id VARCHAR(255) PRIMARY KEY,
+    sender_id VARCHAR(255) NOT NULL,
+    receiver_id VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

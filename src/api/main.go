@@ -40,6 +40,7 @@ func main() {
 			PasswordResetRepo: infra.NewPasswordResetRepository(),
 			CDNRepo:           infra.NewCDNRepository(),
 			CarRepo:           infra.NewCarRepository(),
+			MessageRepo:       infra.NewMessageRepository(),
 		},
 	)
 
@@ -79,6 +80,7 @@ func main() {
 		model.POST("/suggestions", suggestCar)
 		model.GET("/suggestions/history", AuthMiddleware(), getSuggestionHistory)
 	}
+
 
 	app.Run(os.Getenv("HOST") + ":" + os.Getenv("PORT"))
 }

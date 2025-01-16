@@ -3,6 +3,7 @@ package carwise
 import (
 	"crypto/rand"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"log"
 	"math/big"
@@ -389,9 +390,9 @@ func (i *Interactor) GetCarDetail(id string) (*CarDetailResponse, []string) {
 		Neighborhood:      car.Neighborhood,
 		ListingNumber:     car.ListingNumber,
 		ListingDate:       car.ListingDate,
-		Brand:             brandMap[car.BrandId].Name, 
-		Series:            seriesMap[car.SeriesId],   
-		Model:             modelMap[car.ModelId],     
+		Brand:             brandMap[car.BrandId].Name,
+		Series:            seriesMap[car.SeriesId],
+		Model:             modelMap[car.ModelId],
 		Year:              car.Year,
 		FuelType:          car.FuelType,
 		Transmission:      car.Transmission,
@@ -419,6 +420,39 @@ func (i *Interactor) GetCarDetail(id string) (*CarDetailResponse, []string) {
 	}
 
 	return carDetailResponse, nil
+}
+
+func (i *Interactor) SendMessage(senderId, receiverId, messageContent string) error {
+	if senderId == "" || receiverId == "" || messageContent == "" {
+		return errors.New("sender, receiver, and message content cannot be empty")
+	}
+
+	message := &Message{
+		SenderId:   senderId,
+		ReceiverId: receiverId,
+		Message:    messageContent,
+		CreatedAt:  time.Now(),
+	}
+
+	err := i.services.MessageRepo.SaveMessage(message)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (i *Interactor) GetMessages(senderId, receiverId string, limit, offset int) ([]Message, error) {
+	if senderId == "" || receiverId == "" {
+		return nil, errors.New("sender and receiver IDs cannot be empty")
+	}
+
+	messages, err := i.services.MessageRepo.GetMessagesBetween(senderId, receiverId, limit, offset)
+	if err != nil {
+		return nil, err
+	}
+
+	return messages, nil
 }
 
 func hashPassword(password string) (string, error) {

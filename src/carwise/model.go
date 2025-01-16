@@ -131,3 +131,11 @@ type User struct {
 	UpdatedAt    time.Time
 	LastLogin    time.Time
 }
+
+type Message struct {
+	Id         string
+	SenderId   string
+	ReceiverId string
+	Message    string
+	CreatedAt  time.Time
+}
