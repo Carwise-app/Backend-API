@@ -17,9 +17,12 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: '1.21.0'
+          
+      - name: Install dependencies
+        run: go mod download
 
       - name: Build
-        run: go build -v ./...
+        run: go build -v ./src/api
 
   deploy:
     needs: build
