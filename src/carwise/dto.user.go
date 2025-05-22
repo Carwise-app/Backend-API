@@ -22,23 +22,3 @@ type ChangePasswordRequest struct {
 	Password   string `json:"password" validate:"required,strong_password"`
 	RePassword string `json:"re_password" validate:"required,strong_password,password_match"`
 }
-
-type ProfileResponse struct {
-	Id          string `json:"id"`
-	FirstName   string `json:"first_name"`
-	LastName    string `json:"last_name"`
-	ImageUrl    string `json:"image_url"`
-	CountryCode string `json:"country_code"`
-	PhoneNumber string `json:"phone_number"`
-	Email       string `json:"email"`
-	Role        int    `json:"role"`
-	Status      int    `json:"status"`
-	CreatedAt   int64  `json:"created_at"`
-}
-
-type ProfileEditRequest struct {
-	FirstName   string `json:"first_name" validate:"required,min=2,max=50"`
-	LastName    string `json:"last_name" validate:"required,min=2,max=50"`
-	CountryCode string `json:"country_code" validate:"required,max=10"`
-	PhoneNumber string `json:"phone_number" validate:"required"`
-}
