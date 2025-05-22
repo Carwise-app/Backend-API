@@ -39,6 +39,7 @@ func main() {
 			PasswordResetRepo: infra.NewPasswordResetRepository(),
 			CDNRepo:           infra.NewCDNRepository(),
 			MessageRepo:       infra.NewMessageRepository(),
+			BrandRepo:         infra.NewBrandRepository(),
 		},
 	)
 
@@ -56,6 +57,14 @@ func main() {
 		profile.GET("/", AuthMiddleware(), Profile)
 		profile.PUT("/edit", AuthMiddleware(), ProfileEdit)
 	}
+
+	brand := app.Group("/brand")
+	{
+		brand.POST("/", AuthMiddleware(), CreateBrand)
+		brand.PUT("/:id", AuthMiddleware(), UpdateBrand)
+		brand.DELETE("/:id", AuthMiddleware(), DeleteBrand)
+	}
+
 	/*
 		aux := app.Group("/aux")
 		{

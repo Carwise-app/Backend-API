@@ -37,6 +37,13 @@ type MessageRepository interface {
 	GetMessagesBetween(senderId, receiverId string, limit, offset int) ([]Message, error)
 }
 
+type BrandRepository interface {
+	Create(brand *Brand) error
+	Update(brand *Brand) error
+	Delete(id string) error
+	GetById(id string) (*Brand, error)
+}
+
 type Services struct {
 	UserRepo          UserRepository
 	TokenRepo         TokenRepository
@@ -44,4 +51,5 @@ type Services struct {
 	PasswordResetRepo PasswordResetRepository
 	CDNRepo           CDNRepository
 	MessageRepo       MessageRepository
+	BrandRepo         BrandRepository
 }

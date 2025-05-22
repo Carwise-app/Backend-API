@@ -16,20 +16,20 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS brands (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    logo TEXT DEFAULT '',
+    image_id TEXT DEFAULT '',
     name VARCHAR(255) NOT NULL DEFAULT ''
 );
 
 CREATE TABLE IF NOT EXISTS series (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    brand_id INT,
+    brand_id UUID NOT NULL REFERENCES brands(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL DEFAULT ''
 );
 
 CREATE TABLE IF NOT EXISTS models (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    brand_id UUID,
-    series_id UUID,
+    brand_id UUID NOT NULL REFERENCES brands(id) ON DELETE CASCADE,
+    series_id UUID NOT NULL REFERENCES series(id) ON DELETE CASCADE,
     name VARCHAR(255) NOT NULL DEFAULT ''
 );
 
@@ -61,5 +61,5 @@ CREATE TABLE IF NOT EXISTS listings (
 
 CREATE TABLE IF NOT EXISTS images (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    path TEXT NOT NULL DEFAULT '',
+    path TEXT NOT NULL DEFAULT ''
 );
