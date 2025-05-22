@@ -35,52 +35,50 @@ func main() {
 		carwise.Services{
 			UserRepo:          infra.NewUserRepository(),
 			TokenRepo:         infra.NewTokenRepository(),
-			AuxRepo:           infra.NewAuxiliaryRepository(),
 			MailGW:            infra.NewMailGateway(),
 			PasswordResetRepo: infra.NewPasswordResetRepository(),
 			CDNRepo:           infra.NewCDNRepository(),
-			CarRepo:           infra.NewCarRepository(),
 			MessageRepo:       infra.NewMessageRepository(),
 		},
 	)
 
 	auth := app.Group("/auth")
 	{
-		auth.POST("/register", registerUser)
-		auth.POST("/login", loginUser)
-		auth.POST("/logout", AuthMiddleware(), logoutUser)
-		auth.POST("/reset-password", resetPasswordRequest)
-		auth.PUT("/reset-password", resetPassword)
+		auth.POST("/register", Register)
+		auth.POST("/login", Login)
+		auth.POST("/logout", Logout)
+		auth.POST("/reset-password", ForgotPassword)
+		auth.PUT("/reset-password", ResetPassword)
 	}
 
 	profile := app.Group("/profile")
 	{
-		profile.GET("/", AuthMiddleware(), userProfile)
-		profile.PUT("/edit", AuthMiddleware(), editUserProfile)
+		profile.GET("/", AuthMiddleware(), Profile)
+		profile.PUT("/edit", AuthMiddleware(), ProfileEdit)
 	}
+	/*
+		aux := app.Group("/aux")
+		{
+			aux.GET("/brands", getBrands)
+		}
 
-	aux := app.Group("/aux")
-	{
-		aux.GET("/brands", getBrands)
-	}
+		cars := app.Group("/cars")
+		{
+			cars.GET("/", listCars)
+			cars.GET("/:id", getCarByID)
+			cars.POST("/", AuthMiddleware(), createCar)
+			cars.PUT("/:id", AuthMiddleware(), updateCar)
+			cars.DELETE("/:id", AuthMiddleware(), deleteCar)
+		}
 
-	cars := app.Group("/cars")
-	{
-		cars.GET("/", listCars)
-		cars.GET("/:id", getCarByID)
-		cars.POST("/", AuthMiddleware(), createCar)
-		cars.PUT("/:id", AuthMiddleware(), updateCar)
-		cars.DELETE("/:id", AuthMiddleware(), deleteCar)
-	}
-
-	model := app.Group("/model")
-	{
-		model.POST("/predicts", predictPrice)
-		model.GET("/predicts/history", AuthMiddleware(), getPredictionHistory)
-		model.POST("/suggestions", suggestCar)
-		model.GET("/suggestions/history", AuthMiddleware(), getSuggestionHistory)
-	}
-
+		model := app.Group("/model")
+		{
+			model.POST("/predicts", predictPrice)
+			model.GET("/predicts/history", AuthMiddleware(), getPredictionHistory)
+			model.POST("/suggestions", suggestCar)
+			model.GET("/suggestions/history", AuthMiddleware(), getSuggestionHistory)
+		}
+	*/
 
 	app.Run(os.Getenv("HOST") + ":" + os.Getenv("PORT"))
 }

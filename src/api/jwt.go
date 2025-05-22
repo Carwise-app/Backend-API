@@ -21,15 +21,15 @@ var JWT_SECRET = []byte(os.Getenv("JWT_SECRET"))
 type UserClaims struct {
 	UserId string `json:"user_id"`
 	Email  string `json:"email"`
-	Role   string `json:"role"`
-	Status string `json:"status"`
+	Role   int    `json:"role"`
+	Status int    `json:"status"`
 	jwt.StandardClaims
 }
 
 func JWTAuthorization(user *carwise.User) (string, error) {
 	expirationTime := time.Now().Add(24 * 365 * time.Hour).Unix()
 	claims := UserClaims{
-		UserId: user.ID,
+		UserId: user.Id,
 		Email:  user.Email,
 		Role:   user.Role,
 		Status: user.Status,
@@ -90,7 +90,7 @@ func AuthMiddleware() gin.HandlerFunc {
 		}
 
 		claims, ok := token.Claims.(*UserClaims)
-		if !ok || !token.Valid || claims.Status == carwise.AccountStatusBanned || claims.Status == carwise.AccountStatusInactive {
+		if !ok || !token.Valid || claims.Status == 2 || claims.Status == 3 {
 			ctx.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token claims"})
 			ctx.Abort()
 			return

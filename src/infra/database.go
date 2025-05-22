@@ -23,23 +23,5 @@ func ConnectDb() *sql.DB {
 		log.Fatal("failed to connect to database: %w", err)
 	}
 
-	err = initDB(db, "sql/models.sql")
-	if err != nil {
-		log.Fatal("Database initialization failed: ", err)
-	}
 	return db
-}
-
-func initDB(db *sql.DB, filePath string) error {
-	sqlFile, err := os.ReadFile(filePath)
-	if err != nil {
-		return fmt.Errorf("could not read SQL file: %v", err)
-	}
-
-	_, err = db.Exec(string(sqlFile))
-	if err != nil {
-		return fmt.Errorf("could not execute SQL file: %v", err)
-	}
-
-	return nil
 }

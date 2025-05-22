@@ -18,12 +18,6 @@ type TokenRepository interface {
 	AddTokenBlackList(token string) error
 }
 
-type AuxiliaryRepository interface {
-	GetBrands() ([]Brand, error)
-	GetSeriesByBrand(brandID int) ([]Series, error)
-	GetModelsBySeries(seriesID int) ([]Model, error)
-}
-
 type MailGateway interface {
 	Send(To string, Body []byte) error
 }
@@ -38,12 +32,6 @@ type CDNRepository interface {
 	SaveUserAvatar(userID string, image io.Reader) (string, error)
 }
 
-type CarRepository interface {
-	Create(car *Car) error
-	GetCars(page, limit, brand_id, series_id, model_id int) ([]Car, error)
-	GetByID(id string) (*Car, error)
-}
-
 type MessageRepository interface {
 	SaveMessage(message *Message) error
 	GetMessagesBetween(senderId, receiverId string, limit, offset int) ([]Message, error)
@@ -52,10 +40,8 @@ type MessageRepository interface {
 type Services struct {
 	UserRepo          UserRepository
 	TokenRepo         TokenRepository
-	AuxRepo           AuxiliaryRepository
 	MailGW            MailGateway
 	PasswordResetRepo PasswordResetRepository
 	CDNRepo           CDNRepository
-	CarRepo           CarRepository
 	MessageRepo       MessageRepository
 }

@@ -2,7 +2,7 @@ package carwise
 
 import (
 	"crypto/rand"
-	"encoding/base64"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"log"
@@ -35,18 +35,18 @@ func (i *Interactor) CreateUser(request UserCreateRequest) (*User, []string) {
 		return nil, []string{"Failed to hash password."}
 	}
 	user := &User{
-		ID:           uuid.New().String(),
-		FirstName:    request.FirstName,
-		LastName:     request.LastName,
-		CountryCode:  request.CountryCode,
-		PhoneNumber:  request.PhoneNumber,
-		Email:        request.Email,
-		PasswordHash: hashedPassword,
-		Role:         UserRoleRegular,
-		Status:       AccountStatusActive,
-		CreatedAt:    time.Now(),
-		UpdatedAt:    time.Now(),
-		LastLogin:    time.Now(),
+		Id:          uuid.New().String(),
+		FirstName:   request.FirstName,
+		LastName:    request.LastName,
+		CountryCode: request.CountryCode,
+		PhoneNumber: request.PhoneNumber,
+		Email:       request.Email,
+		Password:    hashedPassword,
+		Role:        1,
+		Status:      1,
+		CreatedAt:   time.Now().Unix(),
+		UpdatedAt:   time.Now().Unix(),
+		LastLogin:   time.Now().Unix(),
 	}
 
 	err = i.services.UserRepo.Create(user)
@@ -62,7 +62,7 @@ func (i *Interactor) LoginUser(request UserLoginRequest) (*User, []string) {
 		return nil, []string{err.Error()}
 	}
 
-	if !comparePasswords(user.PasswordHash, request.Password) {
+	if !comparePasswords(user.Password, request.Password) {
 		return nil, []string{"invalid credentials"}
 	}
 
@@ -85,58 +85,6 @@ func (i *Interactor) AddTokenBlackList(token string) []string {
 	}
 
 	return nil
-}
-
-func (i *Interactor) GetBrands() ([]BrandResponse, error) {
-	brands, err := i.services.AuxRepo.GetBrands()
-	if err != nil {
-		return nil, fmt.Errorf("error fetching brands: %w", err)
-	}
-
-	var brandResponses []BrandResponse
-
-	for _, brand := range brands {
-
-		series, err := i.services.AuxRepo.GetSeriesByBrand(brand.ID)
-		if err != nil {
-			return nil, fmt.Errorf("error fetching series for brand %d: %w", brand.ID, err)
-		}
-
-		var seriesResponses []SeriesResponse
-		for _, s := range series {
-
-			models, err := i.services.AuxRepo.GetModelsBySeries(s.ID)
-			if err != nil {
-				return nil, fmt.Errorf("error fetching models for series %d: %w", s.ID, err)
-			}
-
-			var modelResponses []ModelResponse
-			for _, model := range models {
-				modelResponses = append(modelResponses, ModelResponse{
-					Id:    model.ID,
-					Name:  model.Name,
-					Count: len(models),
-				})
-			}
-
-			seriesResponses = append(seriesResponses, SeriesResponse{
-				Id:     s.ID,
-				Name:   s.Name,
-				Count:  len(models),
-				Models: modelResponses,
-			})
-		}
-
-		brandResponses = append(brandResponses, BrandResponse{
-			Id:     brand.ID,
-			Logo:   brand.Logo,
-			Name:   brand.Name,
-			Count:  len(series),
-			Series: seriesResponses,
-		})
-	}
-
-	return brandResponses, nil
 }
 
 func (i *Interactor) ResetPasswordRequest(request ResetPasswordRequest) []string {
@@ -217,7 +165,7 @@ func (i *Interactor) GetProfile(id string) (*ProfileResponse, []string) {
 		return nil, []string{err.Error()}
 	}
 	return &ProfileResponse{
-		ID:          user.ID,
+		Id:          user.Id,
 		FirstName:   user.FirstName,
 		LastName:    user.LastName,
 		ImageUrl:    user.ImageUrl,
@@ -274,154 +222,6 @@ func (i *Interactor) EditProfile(userId string, request ProfileEditRequest, avat
 	return nil
 }
 
-func (i *Interactor) CreateCar(userId string, request CarCreateRequest) []string {
-	request.OwnerId = userId
-	request.ID = uuid.New().String()
-	request.ListingDate = time.Now()
-	var err error
-	request.ListingNumber, err = generateSecureListingNumber(10)
-	if err != nil {
-		return []string{err.Error()}
-	}
-
-	//for _, v := range request.Images {
-	//	// v byte -> image
-	//}
-
-	err = i.services.CarRepo.Create(request.ToCar())
-	if err != nil {
-		return []string{err.Error()}
-	}
-
-	return nil
-}
-
-func (i *Interactor) ListCars(page, limit, brand_id, series_id, model_id int) ([]ListCarResponse, []string) {
-	cars, err := i.services.CarRepo.GetCars(page, limit, brand_id, series_id, model_id)
-	if err != nil {
-		return nil, []string{"failed to fetch cars"}
-	}
-
-	brands, err := i.GetBrands()
-	if err != nil {
-		return nil, []string{"failed to fetch brands"}
-	}
-
-	brandMap := make(map[int]BrandResponse)
-	seriesMap := make(map[int]string)
-	modelMap := make(map[int]string)
-	for _, brand := range brands {
-		brandMap[brand.Id] = brand
-		for _, series := range brand.Series {
-			seriesMap[series.Id] = series.Name
-			for _, models := range series.Models {
-				modelMap[models.Id] = models.Name
-			}
-		}
-	}
-	var response []ListCarResponse
-	for _, v := range cars {
-		response = append(response, ListCarResponse{
-			Id:          v.ID,
-			Thumbnail:   "",
-			Currency:    v.Currency,
-			Price:       v.Price,
-			Brand:       brandMap[v.BrandId].Name,
-			Series:      seriesMap[v.SeriesId],
-			Model:       modelMap[v.ModelId],
-			Title:       v.Title,
-			Year:        v.Year,
-			Mileage:     v.Mileage,
-			ListingDate: v.ListingDate,
-			City:        v.City,
-			District:    v.District,
-		})
-	}
-
-	return response, nil
-}
-
-func (i *Interactor) GetCarDetail(id string) (*CarDetailResponse, []string) {
-	car, err := i.services.CarRepo.GetByID(id)
-	if err != nil {
-		return nil, []string{"failed to fetch cars"}
-	}
-	owner, err := i.services.UserRepo.GetByID(car.OwnerId)
-	if err != nil {
-		return nil, []string{"Error fetching user by"}
-	}
-
-	ownerResponse := OwnerResponse{
-		Id:          owner.ID,
-		FirstName:   owner.FirstName,
-		LastName:    owner.LastName,
-		CountryCode: owner.CountryCode,
-		PhoneNumber: owner.PhoneNumber,
-		CreatedAt:   owner.CreatedAt,
-	}
-
-	brands, err := i.GetBrands()
-	if err != nil {
-		return nil, []string{"failed to fetch brands"}
-	}
-
-	brandMap := make(map[int]BrandResponse)
-	seriesMap := make(map[int]string)
-	modelMap := make(map[int]string)
-	for _, brand := range brands {
-		brandMap[brand.Id] = brand
-		for _, series := range brand.Series {
-			seriesMap[series.Id] = series.Name
-			for _, models := range series.Models {
-				modelMap[models.Id] = models.Name
-			}
-		}
-	}
-
-	carDetailResponse := &CarDetailResponse{
-		ID:                car.ID,
-		Owner:             ownerResponse,
-		Title:             car.Title,
-		Description:       car.Description,
-		Currency:          car.Currency,
-		Price:             car.Price,
-		City:              car.City,
-		District:          car.District,
-		Neighborhood:      car.Neighborhood,
-		ListingNumber:     car.ListingNumber,
-		ListingDate:       car.ListingDate,
-		Brand:             brandMap[car.BrandId].Name,
-		Series:            seriesMap[car.SeriesId],
-		Model:             modelMap[car.ModelId],
-		Year:              car.Year,
-		FuelType:          car.FuelType,
-		Transmission:      car.Transmission,
-		Mileage:           car.Mileage,
-		BodyType:          car.BodyType,
-		EnginePower:       car.EnginePower,
-		EngineVolume:      car.EngineVolume,
-		DriveType:         car.DriveType,
-		Color:             car.Color,
-		Warranty:          car.Warranty,
-		HeavyDamage:       car.HeavyDamage,
-		SellerType:        car.SellerType,
-		TradeOption:       car.TradeOption,
-		FrontBumper:       car.FrontBumper,
-		FrontHood:         car.FrontHood,
-		Roof:              car.Roof,
-		FrontRightDoor:    car.FrontRightDoor,
-		RearRightDoor:     car.RearRightDoor,
-		FrontLeftMudguard: car.FrontLeftMudguard,
-		FrontLeftDoor:     car.FrontLeftDoor,
-		RearLeftDoor:      car.RearLeftDoor,
-		RearLeftMudguard:  car.RearLeftMudguard,
-		RearBumper:        car.RearBumper,
-		Images:            []string{},
-	}
-
-	return carDetailResponse, nil
-}
-
 func (i *Interactor) SendMessage(senderId, receiverId, messageContent string) error {
 	if senderId == "" || receiverId == "" || messageContent == "" {
 		return errors.New("sender, receiver, and message content cannot be empty")
@@ -431,7 +231,7 @@ func (i *Interactor) SendMessage(senderId, receiverId, messageContent string) er
 		SenderId:   senderId,
 		ReceiverId: receiverId,
 		Message:    messageContent,
-		CreatedAt:  time.Now(),
+		CreatedAt:  time.Now().Unix(),
 	}
 
 	err := i.services.MessageRepo.SaveMessage(message)
@@ -467,14 +267,19 @@ func comparePasswords(passwordHash, password string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(passwordHash), []byte(password)) == nil
 }
 
-func generateToken(length int) (string, error) {
-	token := make([]byte, length)
-	_, err := rand.Read(token)
-	if err != nil {
-		return "", err
+func generateToken(size int) (string, error) {
+	if size <= 0 {
+		return "", fmt.Errorf("invalid size for token generation")
 	}
 
-	return base64.URLEncoding.EncodeToString(token), nil
+	buf := make([]byte, size)
+	_, err := rand.Read(buf)
+	if err != nil {
+		return "", fmt.Errorf("failed to generate random bytes: %v", err)
+	}
+
+	return hex.EncodeToString(buf), nil
+
 }
 
 func generateSecureListingNumber(length int) (string, error) {
