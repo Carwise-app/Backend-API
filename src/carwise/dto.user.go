@@ -22,3 +22,12 @@ type ChangePasswordRequest struct {
 	Password   string `json:"password" validate:"required,strong_password"`
 	RePassword string `json:"re_password" validate:"required,strong_password,password_match"`
 }
+
+type UserInfo struct {
+	Id          string `json:"id"`
+	FirstName   string `json:"first_name"`
+	LastName    string `json:"last_name"`
+	Email       string `json:"email"`
+	CountryCode string `json:"country_code"`
+	PhoneNumber string `json:"phone_number"`
+}

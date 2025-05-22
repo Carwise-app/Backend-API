@@ -1,20 +1,33 @@
 package carwise
 
 type Brand struct {
-	Id      string
-	ImageId string
-	Name    string
+	Id      string `json:"id,omitempty"`
+	ImageId string `json:"image_id,omitempty"`
+	Name    string `json:"name,omitempty"`
 }
 
 type Series struct {
-	Id      string
-	BrandId string
-	Name    string
+	Id      string `json:"id,omitempty"`
+	BrandId string `json:"brand_id,omitempty"`
+	Name    string `json:"name,omitempty"`
 }
 
 type Model struct {
-	Id       int
-	BrandId  string
-	SeriesId string
-	Name     string
+	Id       string `json:"id,omitempty"`
+	BrandId  string `json:"brand_id,omitempty"`
+	SeriesId string `json:"series_id,omitempty"`
+	Name     string `json:"name,omitempty"`
+}
+
+type BrandWithDetails struct {
+	Id      string         `json:"id,omitempty"`
+	ImageId string         `json:"image_id,omitempty"`
+	Name    string         `json:"name,omitempty"`
+	Series  []SeriesDetail `json:"series,omitempty"`
+}
+
+type SeriesDetail struct {
+	Id     string  `json:"id,omitempty"`
+	Name   string  `json:"name,omitempty"`
+	Models []Model `json:"models,omitempty"`
 }

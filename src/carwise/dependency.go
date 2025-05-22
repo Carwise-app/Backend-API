@@ -38,10 +38,30 @@ type MessageRepository interface {
 }
 
 type BrandRepository interface {
+	GetAll() ([]Brand, error)
+	GetAllWithDetails() ([]BrandWithDetails, error)
 	Create(brand *Brand) error
 	Update(brand *Brand) error
 	Delete(id string) error
 	GetById(id string) (*Brand, error)
+
+	GetAllSeriesByBrandId(brandId string) ([]Series, error)
+	CreateSeries(series *Series) error
+	UpdateSeries(series *Series) error
+	DeleteSeries(id string) error
+	GetSeriesById(id string) (*Series, error)
+
+	GetAllModelsBySeriesId(seriesId string) ([]Model, error)
+	CreateModel(model *Model) error
+	UpdateModel(model *Model) error
+	DeleteModel(id string) error
+	GetModelById(id string) (*Model, error)
+}
+
+type ListingRepository interface {
+	CreateListing(listing *Listing) error
+	GetListingById(id string) (*Listing, error)
+	GetListingBySlug(slug string) (*Listing, error)
 }
 
 type Services struct {
@@ -52,4 +72,5 @@ type Services struct {
 	CDNRepo           CDNRepository
 	MessageRepo       MessageRepository
 	BrandRepo         BrandRepository
+	ListingRepo       ListingRepository
 }

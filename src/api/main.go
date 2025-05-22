@@ -40,6 +40,7 @@ func main() {
 			CDNRepo:           infra.NewCDNRepository(),
 			MessageRepo:       infra.NewMessageRepository(),
 			BrandRepo:         infra.NewBrandRepository(),
+			ListingRepo:       infra.NewListingRepository(),
 		},
 	)
 
@@ -63,6 +64,23 @@ func main() {
 		brand.POST("/", AuthMiddleware(), CreateBrand)
 		brand.PUT("/:id", AuthMiddleware(), UpdateBrand)
 		brand.DELETE("/:id", AuthMiddleware(), DeleteBrand)
+		brand.GET("/", AuthMiddleware(), GetAllBrands)
+
+		brand.POST("/:id/series", AuthMiddleware(), CreateSeries)
+		brand.PUT("/:id/series/:sid", AuthMiddleware(), UpdateSeries)
+		brand.DELETE("/:id/series/:sid", AuthMiddleware(), DeleteSeries)
+
+		brand.POST("/:id/series/:sid/model", AuthMiddleware(), CreateModel)
+		brand.PUT("/:id/series/:sid/model/:mid", AuthMiddleware(), UpdateModel)
+		brand.DELETE("/:id/series/:sid/model/:mid", AuthMiddleware(), DeleteModel)
+	}
+
+	listing := app.Group("/listing")
+	{
+		listing.POST("/", AuthMiddleware(), CreateListing)
+		listing.GET("/:id", GetListing)
+		/*listing.PUT("/:id", AuthMiddleware(), UpdateListing)
+		listing.DELETE("/:id", AuthMiddleware(), DeleteListing)*/
 	}
 
 	/*
