@@ -41,6 +41,8 @@ type Listing struct {
 }
 
 type Image struct {
-	Id   string
-	Path string
+	Id        string
+	Path      string
+	CreatedBy string
+	CreatedAt int64
 }

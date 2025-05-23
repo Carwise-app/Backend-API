@@ -20,7 +20,7 @@ func main() {
 	}
 
 	app := gin.Default()
-	app.Static("/images", "./images")
+	app.Static("/uploads", "./uploads")
 
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
@@ -41,6 +41,7 @@ func main() {
 			MessageRepo:       infra.NewMessageRepository(),
 			BrandRepo:         infra.NewBrandRepository(),
 			ListingRepo:       infra.NewListingRepository(),
+			ImageRepo:         infra.NewImageRepository(),
 		},
 	)
 
@@ -88,7 +89,7 @@ func main() {
 	upload := app.Group("/upload")
 	{
 		upload.POST("/", AuthMiddleware(), UploadImage)
-		
+		upload.DELETE("/:id", AuthMiddleware(), DeleteImage)
 	}
 
 	app.Run(os.Getenv("HOST") + ":" + os.Getenv("PORT"))

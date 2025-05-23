@@ -83,5 +83,7 @@ CREATE TABLE IF NOT EXISTS listings (
 
 CREATE TABLE IF NOT EXISTS images (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    path TEXT NOT NULL DEFAULT ''
+    path TEXT NOT NULL DEFAULT '',
+    created_by UUID NOT NULL REFERENCES users(id),
+    created_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP)
 );

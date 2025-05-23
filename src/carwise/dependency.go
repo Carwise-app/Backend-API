@@ -2,6 +2,7 @@ package carwise
 
 import (
 	"io"
+	"mime/multipart"
 	"time"
 )
 
@@ -68,6 +69,12 @@ type ListingRepository interface {
 	CountListing(filter *ListingFilter) (int, error)
 }
 
+type ImageRepository interface {
+	SaveImage(file *multipart.FileHeader, userId string) (*Image, error)
+	GetImageById(id string) (*Image, error)
+	DeleteImage(id string) error
+}
+
 type Services struct {
 	UserRepo          UserRepository
 	TokenRepo         TokenRepository
@@ -77,4 +84,5 @@ type Services struct {
 	MessageRepo       MessageRepository
 	BrandRepo         BrandRepository
 	ListingRepo       ListingRepository
+	ImageRepo         ImageRepository
 }
