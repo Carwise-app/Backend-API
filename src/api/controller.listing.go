@@ -3,7 +3,9 @@ package main
 import (
 	"carwise"
 	"net/http"
+	"slices"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -46,16 +48,7 @@ func GetListing(ctx *gin.Context) {
 }
 
 func ListListing(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
-
 	var request carwise.ListListingRequest
-	request.UserId = claim.UserId
-	request.Role = claim.Role
 
 	page := ctx.DefaultQuery("page", "1")
 	limit := ctx.DefaultQuery("limit", "10")
@@ -73,6 +66,11 @@ func ListListing(ctx *gin.Context) {
 
 	request.Filter.Page = pageInt
 	request.Filter.Limit = limitInt
+
+	query := ctx.Query("query")
+	if query != "" {
+		request.Filter.Query = query
+	}
 
 	bodyType := ctx.Query("body_type")
 	if bodyType != "" {
@@ -231,16 +229,135 @@ func ListListing(ctx *gin.Context) {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid heavy damage"})
 			return
 		}
-		request.Filter.HeavyDamage = heavyDamageBool
+		request.Filter.HeavyDamage = &heavyDamageBool
 	}
 
-	sortBy := ctx.Query("sort_by")
-	if sortBy != "" {
-		request.Filter.SortBy = sortBy
-	}
-	sortOrder := ctx.Query("sort_order")
-	if sortOrder != "" {
-		request.Filter.SortOrder = sortOrder
+	createdBy := ctx.Query("created_by")
+	if createdBy != "" {
+		request.Filter.CreatedBy = createdBy
 	}
 
+	request.Filter.SortBy = ctx.DefaultQuery("sort", "created_at")
+	if !slices.Contains([]string{"created_at", "price", "kilometers", "year"}, request.Filter.SortBy) {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid sort field"})
+		return
+	}
+	request.Filter.SortOrder = strings.ToLower(ctx.DefaultQuery("order", "asc"))
+	if !slices.Contains([]string{"asc", "desc"}, request.Filter.SortOrder) {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "invalid sort order"})
+		return
+	}
+
+	status := ctx.Query("status")
+	if status != "" {
+		statusInt, err := strconv.Atoi(status)
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid status"})
+			return
+		}
+		request.Filter.Status = statusInt
+	}
+
+	response, err := interactor.ListListing(&request)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, response)
+}
+
+func UpdateListing(ctx *gin.Context) {
+	userContext, exists := ctx.Get("user")
+	if !exists {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
+		return
+	}
+	claim := userContext.(*UserClaims)
+
+	var request carwise.UpdateListingRequest
+	request.UserId = claim.UserId
+	request.Role = claim.Role
+
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	id := ctx.Param("id")
+	if id == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid listing id"})
+		return
+	}
+	request.Id = id
+
+	err := interactor.UpdateListing(&request)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Listing updated successfully"})
+}
+
+func DeleteListing(ctx *gin.Context) {
+	userContext, exists := ctx.Get("user")
+	if !exists {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
+		return
+	}
+	claim := userContext.(*UserClaims)
+
+	var request carwise.DeleteListingRequest
+	request.UserId = claim.UserId
+	request.Role = claim.Role
+
+	id := ctx.Param("id")
+	if id == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid listing id"})
+		return
+	}
+	request.Id = id
+
+	err := interactor.DeleteListing(&request)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Listing deleted successfully"})
+}
+
+func UpdateListingStatus(ctx *gin.Context) {
+	userContext, exists := ctx.Get("user")
+	if !exists {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
+		return
+	}
+	claim := userContext.(*UserClaims)
+
+	var request carwise.UpdateListingStatusRequest
+	request.UserId = claim.UserId
+	request.Role = claim.Role
+
+	id := ctx.Param("id")
+	if id == "" {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid listing id"})
+		return
+	}
+	request.Id = id
+
+	err := ctx.ShouldBindJSON(&request)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err = interactor.UpdateListingStatus(&request)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Listing status updated successfully"})
 }

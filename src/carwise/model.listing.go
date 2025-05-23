@@ -8,6 +8,7 @@ type Listing struct {
 	Slug              string
 	Title             string
 	Description       string
+	Status            int
 	Currency          string
 	Price             int
 	City              string

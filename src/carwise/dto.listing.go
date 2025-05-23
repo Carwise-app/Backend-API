@@ -43,6 +43,7 @@ type ListingDetailInfo struct {
 type GetListingResponse struct {
 	Id           string            `json:"id"`
 	Slug         string            `json:"slug"`
+	Status       int               `json:"status"`
 	Brand        Brand             `json:"brand"`
 	Series       Series            `json:"series"`
 	Model        Model             `json:"model"`
@@ -62,14 +63,13 @@ type GetListingResponse struct {
 
 type ListListingRequest struct {
 	Filter ListingFilter
-	UserId string
-	Role   int
 }
 
 type ListingFilter struct {
 	BrandId          string `json:"brand_id"`
 	SeriesId         string `json:"series_id"`
 	ModelId          string `json:"model_id"`
+	Query            string `json:"query"`
 	BodyType         string `json:"body_type"`
 	DriveType        string `json:"drive_type"`
 	TransmissionType string `json:"transmission_type"`
@@ -88,9 +88,64 @@ type ListingFilter struct {
 	MinEngineVolume  int    `json:"min_engine_volume"`
 	MaxEngineVolume  int    `json:"max_engine_volume"`
 	Color            string `json:"color"`
-	HeavyDamage      bool   `json:"heavy_damage"`
+	HeavyDamage      *bool  `json:"heavy_damage"`
 	SortBy           string `json:"sort_by"`
 	SortOrder        string `json:"sort_order"`
+	CreatedBy        string `json:"created_by"`
+	Status           int    `json:"status"`
 	Page             int    `json:"page"`
 	Limit            int    `json:"limit"`
+}
+
+type UpdateListingRequest struct {
+	Id           string            `json:"id"`
+	BrandId      string            `json:"brand_id"`
+	SeriesId     string            `json:"series_id"`
+	ModelId      string            `json:"model_id"`
+	Title        string            `json:"title"`
+	Description  string            `json:"description"`
+	Currency     string            `json:"currency"`
+	Price        int               `json:"price"`
+	City         string            `json:"city"`
+	District     string            `json:"district"`
+	Neighborhood string            `json:"neighborhood"`
+	Images       []string          `json:"images"`
+	DetailInfo   ListingDetailInfo `json:"detail"`
+	UserId       string            `json:"-"`
+	Role         int               `json:"-"`
+}
+
+type DeleteListingRequest struct {
+	Id     string `json:"-"`
+	UserId string `json:"-"`
+	Role   int    `json:"-"`
+}
+
+type UpdateListingStatusRequest struct {
+	Id     string `json:"-"`
+	Status int    `json:"status" validate:"required,min=1,max=3"`
+	UserId string `json:"-"`
+	Role   int    `json:"-"`
+}
+
+type ListListingResponse struct {
+	Listings []ListListingInfo `json:"listings"`
+	Total    int               `json:"total"`
+}
+
+type ListListingInfo struct {
+	Id           string `json:"id"`
+	Slug         string `json:"slug"`
+	Status       int    `json:"status"`
+	Brand        Brand  `json:"brand"`
+	Series       Series `json:"series"`
+	Model        Model  `json:"model"`
+	Title        string `json:"title"`
+	Currency     string `json:"currency"`
+	Price        int    `json:"price"`
+	City         string `json:"city"`
+	District     string `json:"district"`
+	Neighborhood string `json:"neighborhood"`
+	Image        Image  `json:"image"`
+	CreatedAt    int64  `json:"created_at"`
 }

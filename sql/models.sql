@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS listings (
     model_id UUID NOT NULL REFERENCES models(id),
     title VARCHAR(255) NOT NULL DEFAULT '',
     description TEXT NOT NULL DEFAULT '',
+    status INT NOT NULL DEFAULT 1,
     currency VARCHAR(3) NOT NULL DEFAULT '',
     price INT NOT NULL DEFAULT 0,
     city VARCHAR(255) NOT NULL DEFAULT '',

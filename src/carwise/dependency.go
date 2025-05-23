@@ -62,6 +62,10 @@ type ListingRepository interface {
 	CreateListing(listing *Listing) error
 	GetListingById(id string) (*Listing, error)
 	GetListingBySlug(slug string) (*Listing, error)
+	UpdateListing(listing *Listing) error
+	DeleteListing(id string) error
+	ListListing(filter *ListingFilter) ([]Listing, error)
+	CountListing(filter *ListingFilter) (int, error)
 }
 
 type Services struct {

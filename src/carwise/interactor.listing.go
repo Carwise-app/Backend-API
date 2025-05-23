@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"errors"
 	"fmt"
+	"log"
 	"strings"
 	"time"
 
@@ -72,6 +73,7 @@ func (i *Interactor) CreateListing(request *CreateListingRequest) (string, error
 		CreatedBy:         request.UserId,
 		CreatedAt:         time.Now().Unix(),
 		UpdatedAt:         time.Now().Unix(),
+		Status:            1,
 	}
 
 	err = i.services.ListingRepo.CreateListing(listing)
@@ -119,6 +121,7 @@ func (i *Interactor) GetListingById(idOrSlug string) (*GetListingResponse, error
 	response := &GetListingResponse{
 		Id:           listing.Id,
 		Slug:         listing.Slug,
+		Status:       listing.Status,
 		Brand:        *brand,
 		Series:       *series,
 		Model:        *model,
@@ -162,6 +165,166 @@ func (i *Interactor) GetListingById(idOrSlug string) (*GetListingResponse, error
 		},
 		CreatedAt: listing.CreatedAt,
 		UpdatedAt: listing.UpdatedAt,
+	}
+
+	return response, nil
+}
+
+func (i *Interactor) UpdateListing(request *UpdateListingRequest) error {
+	listing, err := i.services.ListingRepo.GetListingById(request.Id)
+	if err != nil {
+		return err
+	}
+
+	if listing.Status == 2 || listing.Status == 3 {
+		return errors.New("listing is not active")
+	}
+
+	if request.Role != 2 {
+		if listing.CreatedBy != request.UserId {
+			return errors.New("unauthorized")
+		}
+	}
+
+	listing.BrandId = request.BrandId
+	listing.SeriesId = request.SeriesId
+	listing.ModelId = request.ModelId
+
+	listing.Title = request.Title
+	listing.Description = request.Description
+	listing.Currency = request.Currency
+	listing.Price = request.Price
+	listing.City = request.City
+	listing.District = request.District
+	listing.Neighborhood = request.Neighborhood
+	listing.Images = request.Images
+	listing.FuelType = request.DetailInfo.FuelType
+	listing.TransmissionType = request.DetailInfo.TransmissionType
+	listing.BodyType = request.DetailInfo.BodyType
+	listing.DriveType = request.DetailInfo.DriveType
+	listing.EnginePower = request.DetailInfo.EnginePower
+	listing.EngineVolume = request.DetailInfo.EngineVolume
+	listing.Kilometers = request.DetailInfo.Kilometers
+	listing.Year = request.DetailInfo.Year
+	listing.Color = request.DetailInfo.Color
+	listing.HeavyDamage = request.DetailInfo.HeavyDamage
+	listing.FrontBumper = request.DetailInfo.FrontBumper
+	listing.FrontHood = request.DetailInfo.FrontHood
+	listing.Roof = request.DetailInfo.Roof
+	listing.FrontRightDoor = request.DetailInfo.FrontRightDoor
+	listing.RearRightDoor = request.DetailInfo.RearRightDoor
+	listing.FrontLeftMudguard = request.DetailInfo.FrontLeftMudguard
+	listing.FrontLeftDoor = request.DetailInfo.FrontLeftDoor
+	listing.RearLeftDoor = request.DetailInfo.RearLeftDoor
+	listing.RearLeftMudguard = request.DetailInfo.RearLeftMudguard
+	listing.RearBumper = request.DetailInfo.RearBumper
+	listing.UpdatedAt = time.Now().Unix()
+
+	err = i.services.ListingRepo.UpdateListing(listing)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (i *Interactor) DeleteListing(request *DeleteListingRequest) error {
+	listing, err := i.services.ListingRepo.GetListingById(request.Id)
+	if err != nil {
+		return err
+	}
+
+	if request.Role != 2 {
+		if listing.CreatedBy != request.UserId {
+			return errors.New("unauthorized")
+		}
+	}
+
+	err = i.services.ListingRepo.DeleteListing(listing.Id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (i *Interactor) UpdateListingStatus(request *UpdateListingStatusRequest) error {
+	listing, err := i.services.ListingRepo.GetListingById(request.Id)
+	if err != nil {
+		return err
+	}
+
+	if listing.Status == 3 {
+		return errors.New("listing has been closed by admin, no modifications allowed")
+	}
+
+	if request.Role != 2 {
+		if listing.CreatedBy != request.UserId {
+			return errors.New("unauthorized")
+		}
+	}
+
+	listing.Status = request.Status
+	listing.UpdatedAt = time.Now().Unix()
+
+	err = i.services.ListingRepo.UpdateListing(listing)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (i *Interactor) ListListing(request *ListListingRequest) (*ListListingResponse, error) {
+	listings, err := i.services.ListingRepo.ListListing(&request.Filter)
+	if err != nil {
+		return nil, err
+	}
+
+	total, err := i.services.ListingRepo.CountListing(&request.Filter)
+	if err != nil {
+		return nil, err
+	}
+	log.Println(total)
+	log.Println(len(listings))
+	listingsInfo := make([]ListListingInfo, 0, len(listings))
+	for _, listing := range listings {
+		brand, err := i.services.BrandRepo.GetById(listing.BrandId)
+		if err != nil {
+			return nil, err
+		}
+
+		series, err := i.services.BrandRepo.GetSeriesById(listing.SeriesId)
+		if err != nil {
+			return nil, err
+		}
+
+		model, err := i.services.BrandRepo.GetModelById(listing.ModelId)
+		if err != nil {
+			return nil, err
+		}
+
+		listingsInfo = append(listingsInfo, ListListingInfo{
+			Id:           listing.Id,
+			Slug:         listing.Slug,
+			Status:       listing.Status,
+			Brand:        *brand,
+			Series:       *series,
+			Model:        *model,
+			Title:        listing.Title,
+			Currency:     listing.Currency,
+			Price:        listing.Price,
+			City:         listing.City,
+			District:     listing.District,
+			Neighborhood: listing.Neighborhood,
+			Image:        Image{},
+			CreatedAt:    listing.CreatedAt,
+		})
+	}
+
+	response := &ListListingResponse{
+		Listings: listingsInfo,
+		Total:    total,
 	}
 
 	return response, nil

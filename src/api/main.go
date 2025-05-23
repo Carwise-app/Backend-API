@@ -79,33 +79,17 @@ func main() {
 	{
 		listing.POST("/", AuthMiddleware(), CreateListing)
 		listing.GET("/:id", GetListing)
-		/*listing.PUT("/:id", AuthMiddleware(), UpdateListing)
-		listing.DELETE("/:id", AuthMiddleware(), DeleteListing)*/
+		listing.PUT("/:id", AuthMiddleware(), UpdateListing)
+		listing.DELETE("/:id", AuthMiddleware(), DeleteListing)
+		listing.PATCH("/:id/status", AuthMiddleware(), UpdateListingStatus)
+		listing.GET("/", ListListing)
 	}
 
-	/*
-		aux := app.Group("/aux")
-		{
-			aux.GET("/brands", getBrands)
-		}
-
-		cars := app.Group("/cars")
-		{
-			cars.GET("/", listCars)
-			cars.GET("/:id", getCarByID)
-			cars.POST("/", AuthMiddleware(), createCar)
-			cars.PUT("/:id", AuthMiddleware(), updateCar)
-			cars.DELETE("/:id", AuthMiddleware(), deleteCar)
-		}
-
-		model := app.Group("/model")
-		{
-			model.POST("/predicts", predictPrice)
-			model.GET("/predicts/history", AuthMiddleware(), getPredictionHistory)
-			model.POST("/suggestions", suggestCar)
-			model.GET("/suggestions/history", AuthMiddleware(), getSuggestionHistory)
-		}
-	*/
+	upload := app.Group("/upload")
+	{
+		upload.POST("/", AuthMiddleware(), UploadImage)
+		
+	}
 
 	app.Run(os.Getenv("HOST") + ":" + os.Getenv("PORT"))
 }
