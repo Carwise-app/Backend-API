@@ -37,10 +37,10 @@ func main() {
 			TokenRepo:         infra.NewTokenRepository(),
 			MailGW:            infra.NewMailGateway(),
 			PasswordResetRepo: infra.NewPasswordResetRepository(),
-			MessageRepo:       infra.NewMessageRepository(),
 			BrandRepo:         infra.NewBrandRepository(),
 			ListingRepo:       infra.NewListingRepository(),
 			ImageRepo:         infra.NewImageRepository(),
+			MessageRepo:       infra.NewMessageRepository(),
 		},
 	)
 
@@ -89,6 +89,13 @@ func main() {
 	{
 		upload.POST("/", AuthMiddleware(), UploadImage)
 		upload.DELETE("/:id", AuthMiddleware(), DeleteImage)
+	}
+
+	chat := app.Group("/chat")
+	{
+		chat.GET("/", AuthMiddleware(), GetChats)
+		chat.POST("/:receiver_id", AuthMiddleware(), SendMessage)
+		chat.GET("/:receiver_id", AuthMiddleware(), GetMessages)
 	}
 
 	app.Run(os.Getenv("HOST") + ":" + os.Getenv("PORT"))

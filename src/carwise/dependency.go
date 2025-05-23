@@ -28,11 +28,6 @@ type PasswordResetRepository interface {
 	DeleteResetCode(email string) error
 }
 
-type MessageRepository interface {
-	SaveMessage(message *Message) error
-	GetMessagesBetween(senderId, receiverId string, limit, offset int) ([]Message, error)
-}
-
 type BrandRepository interface {
 	GetAll() ([]Brand, error)
 	GetAllWithDetails() ([]BrandWithDetails, error)
@@ -70,13 +65,22 @@ type ImageRepository interface {
 	DeleteImage(id string) error
 }
 
+type MessageRepository interface {
+	SaveMessage(message *Message) error
+	GetMessagesByUserId(userId string, limit, offset int) ([]Message, error)
+	CountMessagesByUserId(userId string) (int, error)
+	GetChats(userId string, limit, offset int) ([]Chat, error)
+	CountChats(userId string) (int, error)
+	ReadMessage(messageId string) error
+}
+
 type Services struct {
 	UserRepo          UserRepository
 	TokenRepo         TokenRepository
 	MailGW            MailGateway
 	PasswordResetRepo PasswordResetRepository
-	MessageRepo       MessageRepository
 	BrandRepo         BrandRepository
 	ListingRepo       ListingRepository
 	ImageRepo         ImageRepository
+	MessageRepo       MessageRepository
 }

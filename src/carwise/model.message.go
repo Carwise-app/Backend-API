@@ -5,5 +5,11 @@ type Message struct {
 	SenderId   string
 	ReceiverId string
 	Message    string
+	Read       bool
 	CreatedAt  int64
+}
+
+type Chat struct {
+	OtherUserId     string
+	LastMessageTime int64
 }

@@ -38,6 +38,7 @@ CREATE TABLE IF NOT EXISTS messages (
     sender_id UUID NOT NULL REFERENCES users(id),
     receiver_id UUID NOT NULL REFERENCES users(id),
     message TEXT NOT NULL DEFAULT '',
+    read BOOLEAN NOT NULL DEFAULT false,
     created_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP)
 );
 
