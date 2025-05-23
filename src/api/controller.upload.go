@@ -62,3 +62,25 @@ func DeleteImage(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "image deleted successfully"})
 }
+
+func PredictImage(ctx *gin.Context) {
+	userContext, exists := ctx.Get("user")
+	if !exists {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
+		return
+	}
+	claim := userContext.(*UserClaims)
+
+	var request carwise.PredictImageRequest
+	request.ImageId = ctx.Param("id")
+	request.UserId = claim.UserId
+	request.Role = claim.Role
+
+	response, err := interactor.PredictImage(&request)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"prediction": response})
+}

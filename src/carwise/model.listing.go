@@ -46,3 +46,10 @@ type Image struct {
 	CreatedBy string `json:"created_by"`
 	CreatedAt int64  `json:"created_at"`
 }
+
+type ImagePrediction struct {
+	ImageId    string  `json:"image_id"`
+	Prediction bool    `json:"prediction"`
+	Confidence float64 `json:"confidence"`
+	CreatedAt  int64   `json:"created_at"`
+}

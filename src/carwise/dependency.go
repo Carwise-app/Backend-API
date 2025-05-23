@@ -74,6 +74,11 @@ type MessageRepository interface {
 	ReadMessage(messageId string) error
 }
 
+type PredictionRepository interface {
+	SaveImagePrediction(prediction *ImagePrediction) error
+	GetImagePredictionsByImageId(imageId string) (*ImagePrediction, error)
+}
+
 type Services struct {
 	UserRepo          UserRepository
 	TokenRepo         TokenRepository
@@ -83,4 +88,5 @@ type Services struct {
 	ListingRepo       ListingRepository
 	ImageRepo         ImageRepository
 	MessageRepo       MessageRepository
+	PredictionRepo    PredictionRepository
 }

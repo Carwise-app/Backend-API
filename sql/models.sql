@@ -88,3 +88,11 @@ CREATE TABLE IF NOT EXISTS images (
     created_by UUID NOT NULL REFERENCES users(id),
     created_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP)
 );
+
+CREATE TABLE IF NOT EXISTS image_predictions (
+    image_id UUID PRIMARY KEY REFERENCES images(id),
+    prediction BOOLEAN NOT NULL DEFAULT false,
+    confidence FLOAT NOT NULL DEFAULT 0.0,
+    created_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP)
+);
+

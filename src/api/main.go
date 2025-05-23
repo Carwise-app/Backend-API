@@ -41,6 +41,7 @@ func main() {
 			ListingRepo:       infra.NewListingRepository(),
 			ImageRepo:         infra.NewImageRepository(),
 			MessageRepo:       infra.NewMessageRepository(),
+			PredictionRepo:    infra.NewPredictionRepository(),
 		},
 	)
 
@@ -92,6 +93,7 @@ func main() {
 	{
 		upload.POST("/", AuthMiddleware(), UploadImage)
 		upload.DELETE("/:id", AuthMiddleware(), DeleteImage)
+		upload.GET("/:id/predict", AuthMiddleware(), PredictImage)
 	}
 
 	chat := app.Group("/chat")

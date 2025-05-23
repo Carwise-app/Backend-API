@@ -13,3 +13,16 @@ type DeleteImageRequest struct {
 	UserId  string `json:"-"`
 	Role    int    `json:"-"`
 }
+
+type PredictImageRequest struct {
+	ImageId string `json:"image_id"`
+	UserId  string `json:"-"`
+	Role    int    `json:"-"`
+}
+
+type PredictImageResponse struct {
+	Image      Image   `json:"image"`
+	Prediction bool    `json:"prediction"`
+	Confidence float64 `json:"confidence"`
+	CreatedAt  int64   `json:"created_at"`
+}
