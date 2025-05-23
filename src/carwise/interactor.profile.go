@@ -44,20 +44,13 @@ func (i *Interactor) EditProfile(userId string, request ProfileEditRequest, avat
 	}
 
 	if avatar != nil {
-		file, err := avatar.Open()
-		if err != nil {
-			errors = append(errors, fmt.Sprintf("Failed to open avatar file: %v", err))
-			return errors
-		}
-		defer file.Close()
-
-		avatarURL, err := i.services.CDNRepo.SaveUserAvatar(userId, file)
+		image, err := i.services.ImageRepo.SaveImage(avatar, userId)
 		if err != nil {
 			errors = append(errors, fmt.Sprintf("Failed to upload avatar: %v", err))
 			return errors
 		}
 
-		user.ImageUrl = avatarURL
+		user.ImageUrl = image.Path
 		err = i.services.UserRepo.Update(user)
 		if err != nil {
 			errors = append(errors, fmt.Sprintf("Failed to update user avatar URL: %v", err))

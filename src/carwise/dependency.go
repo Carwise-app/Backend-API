@@ -1,7 +1,6 @@
 package carwise
 
 import (
-	"io"
 	"mime/multipart"
 	"time"
 )
@@ -27,10 +26,6 @@ type PasswordResetRepository interface {
 	SaveResetCode(email, code string, ttl time.Duration) error
 	VerifyResetCode(email, code string) (bool, error)
 	DeleteResetCode(email string) error
-}
-
-type CDNRepository interface {
-	SaveUserAvatar(userID string, image io.Reader) (string, error)
 }
 
 type MessageRepository interface {
@@ -80,7 +75,6 @@ type Services struct {
 	TokenRepo         TokenRepository
 	MailGW            MailGateway
 	PasswordResetRepo PasswordResetRepository
-	CDNRepo           CDNRepository
 	MessageRepo       MessageRepository
 	BrandRepo         BrandRepository
 	ListingRepo       ListingRepository

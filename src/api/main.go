@@ -37,7 +37,6 @@ func main() {
 			TokenRepo:         infra.NewTokenRepository(),
 			MailGW:            infra.NewMailGateway(),
 			PasswordResetRepo: infra.NewPasswordResetRepository(),
-			CDNRepo:           infra.NewCDNRepository(),
 			MessageRepo:       infra.NewMessageRepository(),
 			BrandRepo:         infra.NewBrandRepository(),
 			ListingRepo:       infra.NewListingRepository(),
