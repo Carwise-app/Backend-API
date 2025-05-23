@@ -41,8 +41,8 @@ type Listing struct {
 }
 
 type Image struct {
-	Id        string
-	Path      string
-	CreatedBy string
-	CreatedAt int64
+	Id        string `json:"id"`
+	Path      string `json:"path"`
+	CreatedBy string `json:"created_by"`
+	CreatedAt int64  `json:"created_at"`
 }

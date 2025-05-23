@@ -117,6 +117,17 @@ func (i *Interactor) GetListingById(idOrSlug string) (*GetListingResponse, error
 	if err != nil {
 		return nil, err
 	}
+	log.Println(listing.Images)
+	images := make([]Image, 0, len(listing.Images))
+	for _, imageId := range listing.Images {
+		log.Println(imageId)
+		image, err := i.services.ImageRepo.GetImageById(imageId)
+		if err != nil {
+			return nil, err
+		}
+		images = append(images, *image)
+
+	}
 
 	response := &GetListingResponse{
 		Id:           listing.Id,
@@ -132,7 +143,7 @@ func (i *Interactor) GetListingById(idOrSlug string) (*GetListingResponse, error
 		City:         listing.City,
 		District:     listing.District,
 		Neighborhood: listing.Neighborhood,
-		Images:       []Image{},
+		Images:       images,
 		DetailInfo: ListingDetailInfo{
 			FuelType:          listing.FuelType,
 			TransmissionType:  listing.TransmissionType,
@@ -285,8 +296,7 @@ func (i *Interactor) ListListing(request *ListListingRequest) (*ListListingRespo
 	if err != nil {
 		return nil, err
 	}
-	log.Println(total)
-	log.Println(len(listings))
+
 	listingsInfo := make([]ListListingInfo, 0, len(listings))
 	for _, listing := range listings {
 		brand, err := i.services.BrandRepo.GetById(listing.BrandId)
@@ -304,6 +314,17 @@ func (i *Interactor) ListListing(request *ListListingRequest) (*ListListingRespo
 			return nil, err
 		}
 
+		// Create a default empty image
+		image := Image{}
+
+		// Only try to get the first image if the listing has images
+		if len(listing.Images) > 0 {
+			firstImage, err := i.services.ImageRepo.GetImageById(listing.Images[0])
+			if err == nil {
+				image = *firstImage
+			}
+		}
+
 		listingsInfo = append(listingsInfo, ListListingInfo{
 			Id:           listing.Id,
 			Slug:         listing.Slug,
@@ -317,7 +338,7 @@ func (i *Interactor) ListListing(request *ListListingRequest) (*ListListingRespo
 			City:         listing.City,
 			District:     listing.District,
 			Neighborhood: listing.Neighborhood,
-			Image:        Image{},
+			Image:        image,
 			CreatedAt:    listing.CreatedAt,
 		})
 	}
