@@ -2,6 +2,7 @@ package main
 
 import (
 	"carwise"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -82,4 +83,32 @@ func GetChats(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, response)
+}
+
+func WebSocketHandler(ctx *gin.Context) {
+	userContext, exists := ctx.Get("user")
+	if !exists {
+		ctx.String(http.StatusUnauthorized, "No User found in request context")
+		return
+	}
+	claim := userContext.(*UserClaims)
+
+	conn, err := upgrader.Upgrade(ctx.Writer, ctx.Request, nil)
+	if err != nil {
+		log.Printf("Error upgrading to websocket: %v", err)
+		return
+	}
+
+	client := &Client{
+		Hub:    hub,
+		Conn:   conn,
+		Send:   make(chan []byte, 256),
+		UserId: claim.UserId,
+		Role:   claim.Role,
+	}
+
+	client.Hub.register <- client
+
+	go client.WritePump()
+	go client.ReadPump()
 }

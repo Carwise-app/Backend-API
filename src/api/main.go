@@ -44,6 +44,9 @@ func main() {
 		},
 	)
 
+	// WebSocket hub'ı başlat
+	go hub.Run()
+
 	auth := app.Group("/auth")
 	{
 		auth.POST("/register", Register)
@@ -96,6 +99,7 @@ func main() {
 		chat.GET("/", AuthMiddleware(), GetChats)
 		chat.POST("/:receiver_id", AuthMiddleware(), SendMessage)
 		chat.GET("/:receiver_id", AuthMiddleware(), GetMessages)
+		chat.GET("/ws", WebSocketAuthMiddleware(), WebSocketHandler)
 	}
 
 	app.Run(os.Getenv("HOST") + ":" + os.Getenv("PORT"))
