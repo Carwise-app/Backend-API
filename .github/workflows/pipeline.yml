@@ -2,6 +2,30 @@ name: Deploy Container
 on:
   push:
     branches: [ development ]
+
+env:
+  GIN_MODE=release
+  HOST: ${{ secrets.HOST }}
+  PORT: ${{ secrets.PORT }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
+  DB_USER: ${{ secrets.DB_USER }}
+  DB_PASSWD: ${{ secrets.DB_PASSWD }}
+  DB_NAME: ${{ secrets.DB_NAME }}
+  DB_PORT: ${{ secrets.DB_PORT }}
+  DB_HOST: ${{ secrets.DB_HOST }}
+  REDIS_HOST: ${{ secrets.REDIS_HOST }}
+  REDIS_PORT: ${{ secrets.REDIS_PORT }}
+  SMTP_HOST: ${{ secrets.SMTP_HOST }}
+  SMTP_PORT: ${{ secrets.SMTP_PORT }}
+  SMTP_USER: ${{ secrets.SMTP_USER }}
+  SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+  CAR_RECOGNITION_API_URL: ${{ secrets.CAR_RECOGNITION_API_URL }}
+  GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+  GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+  GOOGLE_REDIRECT_URL: ${{ secrets.GOOGLE_REDIRECT_URL }}
+  GOOGLE_SCOPES: ${{ secrets.GOOGLE_SCOPES }}
+  OAUTH2_STATE: ${{ secrets.OAUTH2_STATE }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
