@@ -549,7 +549,7 @@ definitions:
         example: Operation completed successfully
         type: string
     type: object
-host: 213.142.159.50:4040
+host: carwisegw.yusuftalhaklc.com
 info:
   contact:
     email: support@carwise.com
