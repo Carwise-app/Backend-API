@@ -7,6 +7,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Upload an image
+// @Description Upload an image file (max 5MB, jpeg/png/gif)
+// @Tags images
+// @Accept multipart/form-data
+// @Produce json
+// @Param file formData file true "Image file to upload"
+// @Security BearerAuth
+// @Success 200 {object} carwise.Image "Successfully uploaded image"
+// @Failure 400 {object} ErrorResponse "Invalid request"
+// @Failure 401 {object} ErrorResponse "Unauthorized"
+// @Router /upload/ [post]
 func UploadImage(ctx *gin.Context) {
 	userContext, exists := ctx.Get("user")
 	if !exists {
@@ -35,6 +46,16 @@ func UploadImage(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"image": image})
 }
 
+// @Summary Delete an image
+// @Description Delete an image by its ID
+// @Tags images
+// @Produce json
+// @Param id path string true "Image ID"
+// @Security BearerAuth
+// @Success 200 {object} SuccessResponse "Successfully deleted image"
+// @Failure 400 {object} ErrorResponse "Invalid request"
+// @Failure 401 {object} ErrorResponse "Unauthorized"
+// @Router /upload/{id} [delete]
 func DeleteImage(ctx *gin.Context) {
 	userContext, exists := ctx.Get("user")
 	if !exists {
@@ -63,6 +84,16 @@ func DeleteImage(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "image deleted successfully"})
 }
 
+// @Summary Predict car damage from image
+// @Description Use AI to predict if an image shows car damage
+// @Tags images
+// @Produce json
+// @Param id path string true "Image ID"
+// @Security BearerAuth
+// @Success 200 {object} carwise.PredictImageResponse "Prediction results"
+// @Failure 400 {object} ErrorResponse "Invalid request"
+// @Failure 401 {object} ErrorResponse "Unauthorized"
+// @Router /upload/{id}/predict [get]
 func PredictImage(ctx *gin.Context) {
 	userContext, exists := ctx.Get("user")
 	if !exists {
@@ -83,4 +114,16 @@ func PredictImage(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"prediction": response})
+}
+
+// @model ErrorResponse
+// @Description Error response
+type ErrorResponse struct {
+	Error string `json:"error" example:"Invalid request"`
+}
+
+// @model SuccessResponse
+// @Description Success response
+type SuccessResponse struct {
+	Message string `json:"message" example:"Operation completed successfully"`
 }

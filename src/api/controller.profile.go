@@ -8,6 +8,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Get user profile
+// @Description Get the profile information of the authenticated user
+// @Tags profile
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} carwise.ProfileResponse "User profile information"
+// @Failure 401 {object} map[string]interface{} "Unauthorized"
+// @Failure 500 {object} map[string]interface{} "Server error"
+// @Router /profile [get]
 func Profile(ctx *gin.Context) {
 	userContext, exists := ctx.Get("user")
 	if !exists {
@@ -26,6 +35,22 @@ func Profile(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, profile)
 }
 
+// @Summary Edit user profile
+// @Description Update the profile information of the authenticated user
+// @Tags profile
+// @Security BearerAuth
+// @Accept multipart/form-data
+// @Produce json
+// @Param first_name formData string true "First name" example:"John"
+// @Param last_name formData string true "Last name" example:"Doe"
+// @Param country_code formData string true "Country code" example:"+90"
+// @Param phone_number formData string true "Phone number" example:"5551234567"
+// @Param avatar formData file false "Profile picture"
+// @Success 200 "Profile updated successfully"
+// @Failure 400 {object} map[string]interface{} "Validation error"
+// @Failure 401 {object} map[string]interface{} "Unauthorized"
+// @Failure 500 {object} map[string]interface{} "Server error"
+// @Router /profile [put]
 func ProfileEdit(ctx *gin.Context) {
 	userContext, exists := ctx.Get("user")
 	if !exists {

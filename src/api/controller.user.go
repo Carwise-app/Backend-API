@@ -7,6 +7,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Register a new user
+// @Description Register a new user and return JWT token
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param request body carwise.UserCreateRequest true "User registration request"
+// @Success 200 {object} carwise.TokenResponse "Returns access token"
+// @Failure 400 {object} map[string]interface{} "Validation or creation error"
+// @Failure 500 {object} map[string]interface{} "Server error"
+// @Router /auth/register [post]
 func Register(ctx *gin.Context) {
 	var request carwise.UserCreateRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {
@@ -36,10 +46,24 @@ func Register(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"access_token": token})
+	response := carwise.TokenResponse{
+		AccessToken: token,
+	}
+
+	ctx.JSON(http.StatusOK, response)
 
 }
 
+// @Summary Login user
+// @Description Login user and return JWT token
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param request body carwise.UserLoginRequest true "User login request"
+// @Success 200 {object} carwise.TokenResponse "Returns access token"
+// @Failure 400 {object} map[string]interface{} "Validation or login error"
+// @Failure 500 {object} map[string]interface{} "Server error"
+// @Router /auth/login [post]
 func Login(ctx *gin.Context) {
 	var request carwise.UserLoginRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {
@@ -69,10 +93,23 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"access_token": token})
+	response := carwise.TokenResponse{
+		AccessToken: token,
+	}
+
+	ctx.JSON(http.StatusOK, response)
 
 }
 
+// @Summary Logout user
+// @Description Logout user by blacklisting their token
+// @Tags auth
+// @Security BearerAuth
+// @Produce json
+// @Success 200 "Successfully logged out"
+// @Failure 401 {object} map[string]interface{} "Unauthorized"
+// @Failure 500 {object} map[string]interface{} "Server error"
+// @Router /auth/logout [post]
 func Logout(ctx *gin.Context) {
 	token, exists := ctx.Get("token")
 	if !exists {
@@ -91,6 +128,15 @@ func Logout(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 }
 
+// @Summary Request password reset
+// @Description Send password reset email to user
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param request body carwise.ResetPasswordRequest true "Password reset request"
+// @Success 200 "Reset email sent successfully"
+// @Failure 400 {object} map[string]interface{} "Validation error"
+// @Router /auth/forgot-password [post]
 func ForgotPassword(ctx *gin.Context) {
 	var request carwise.ResetPasswordRequest
 
@@ -119,6 +165,17 @@ func ForgotPassword(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 }
 
+// @Summary Reset password
+// @Description Reset user password using token and email
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param token query string true "Reset token"
+// @Param email query string true "User email"
+// @Param request body carwise.ChangePasswordRequest true "New password request"
+// @Success 200 "Password reset successful"
+// @Failure 400 {object} map[string]interface{} "Validation error"
+// @Router /auth/reset-password [post]
 func ResetPassword(ctx *gin.Context) {
 	var request carwise.ChangePasswordRequest
 

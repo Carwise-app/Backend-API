@@ -1,0 +1,1124 @@
+basePath: /
+definitions:
+  carwise.BrandCreateRequest:
+    description: Request body for creating a new brand
+    properties:
+      image_id:
+        example: img_123456
+        type: string
+      name:
+        example: BMW
+        type: string
+    required:
+    - name
+    type: object
+  carwise.BrandUpdateRequest:
+    description: Request body for updating an existing brand
+    properties:
+      image_id:
+        example: img_123456
+        type: string
+      name:
+        example: BMW
+        type: string
+    required:
+    - name
+    type: object
+  carwise.BrandWithDetails:
+    properties:
+      id:
+        type: string
+      image_id:
+        type: string
+      name:
+        type: string
+      series:
+        items:
+          $ref: '#/definitions/carwise.SeriesDetail'
+        type: array
+    type: object
+  carwise.ChangePasswordRequest:
+    description: Change password request
+    properties:
+      password:
+        example: NewStrongP@ss123
+        type: string
+      re_password:
+        example: NewStrongP@ss123
+        type: string
+    required:
+    - password
+    - re_password
+    type: object
+  carwise.Image:
+    description: Image information
+    properties:
+      created_at:
+        description: Timestamp when the image was uploaded
+        example: 1646092800
+        type: integer
+      created_by:
+        description: ID of the user who uploaded the image
+        example: user_123
+        type: string
+      id:
+        description: Unique identifier of the image
+        example: img_123456
+        type: string
+      path:
+        description: Path where the image is stored
+        example: /uploads/img123.jpg
+        type: string
+    type: object
+  carwise.Model:
+    properties:
+      brand_id:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      series_id:
+        type: string
+    type: object
+  carwise.ModelCreateRequest:
+    description: Request body for creating a new model
+    properties:
+      name:
+        example: 320i
+        type: string
+    required:
+    - name
+    type: object
+  carwise.ModelUpdateRequest:
+    description: Request body for updating an existing model
+    properties:
+      name:
+        example: 320i
+        type: string
+    required:
+    - name
+    type: object
+  carwise.PredictImageResponse:
+    description: Response containing the prediction results for an image
+    properties:
+      confidence:
+        description: Confidence score of the prediction
+        example: 0.95
+        type: number
+      created_at:
+        description: Timestamp of the prediction
+        example: 1646092800
+        type: integer
+      image:
+        allOf:
+        - $ref: '#/definitions/carwise.Image'
+        description: Image information
+      prediction:
+        description: Whether the image shows car damage
+        example: true
+        type: boolean
+    type: object
+  carwise.ProfileResponse:
+    description: User profile response
+    properties:
+      country_code:
+        example: "+90"
+        type: string
+      created_at:
+        example: 1646092800
+        type: integer
+      email:
+        example: john.doe@example.com
+        type: string
+      first_name:
+        example: John
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      image_url:
+        example: https://example.com/avatar.jpg
+        type: string
+      last_name:
+        example: Doe
+        type: string
+      phone_number:
+        example: "5551234567"
+        type: string
+      role:
+        example: 1
+        type: integer
+      status:
+        example: 1
+        type: integer
+    type: object
+  carwise.ResetPasswordRequest:
+    description: Password reset request
+    properties:
+      email:
+        example: john.doe@example.com
+        type: string
+    required:
+    - email
+    type: object
+  carwise.SeriesCreateRequest:
+    description: Request body for creating a new series
+    properties:
+      name:
+        example: 3 Series
+        type: string
+    required:
+    - name
+    type: object
+  carwise.SeriesDetail:
+    properties:
+      id:
+        type: string
+      models:
+        items:
+          $ref: '#/definitions/carwise.Model'
+        type: array
+      name:
+        type: string
+    type: object
+  carwise.SeriesUpdateRequest:
+    description: Request body for updating an existing series
+    properties:
+      name:
+        example: 3 Series
+        type: string
+    required:
+    - name
+    type: object
+  carwise.TokenResponse:
+    description: JWT token response
+    properties:
+      access_token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+    type: object
+  carwise.UserCreateRequest:
+    description: User registration request
+    properties:
+      country_code:
+        example: "+90"
+        maxLength: 10
+        type: string
+      email:
+        example: john.doe@example.com
+        type: string
+      first_name:
+        example: John
+        maxLength: 50
+        minLength: 2
+        type: string
+      last_name:
+        example: Doe
+        maxLength: 50
+        minLength: 2
+        type: string
+      password:
+        example: StrongP@ss123
+        type: string
+      phone_number:
+        example: "5551234567"
+        type: string
+    required:
+    - country_code
+    - email
+    - first_name
+    - last_name
+    - password
+    - phone_number
+    type: object
+  carwise.UserLoginRequest:
+    description: User login request
+    properties:
+      email:
+        example: john.doe@example.com
+        type: string
+      password:
+        example: StrongP@ss123
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  main.ErrorResponse:
+    description: Error response
+    properties:
+      error:
+        example: Invalid request
+        type: string
+    type: object
+  main.SuccessResponse:
+    description: Success response
+    properties:
+      message:
+        example: Operation completed successfully
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@carwise.com
+    name: API Support
+  description: Carwise API documentation with Swagger
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Carwise API
+  version: "1.0"
+paths:
+  /auth/forgot-password:
+    post:
+      consumes:
+      - application/json
+      description: Send password reset email to user
+      parameters:
+      - description: Password reset request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.ResetPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Reset email sent successfully
+        "400":
+          description: Validation error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Request password reset
+      tags:
+      - auth
+  /auth/google/callback:
+    get:
+      consumes:
+      - application/json
+      description: Handle Google OAuth callback and return JWT token
+      parameters:
+      - description: OAuth state parameter
+        in: query
+        name: state
+        required: true
+        type: string
+      - description: OAuth authorization code
+        in: query
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns access token
+          schema:
+            $ref: '#/definitions/carwise.TokenResponse'
+        "400":
+          description: Invalid state or code
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Google OAuth Callback
+      tags:
+      - auth
+  /auth/google/id-token:
+    get:
+      consumes:
+      - application/json
+      description: Verify Google ID token and return JWT token
+      parameters:
+      - description: Google ID Token
+        in: query
+        name: idToken
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns access token
+          schema:
+            $ref: '#/definitions/carwise.TokenResponse'
+        "400":
+          description: Invalid token or validation error
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Verify Google ID Token
+      tags:
+      - auth
+  /auth/google/login:
+    get:
+      description: Redirect to Google OAuth login page
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: Redirect to Google login page
+      summary: Initiate Google Login
+      tags:
+      - auth
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user and return JWT token
+      parameters:
+      - description: User login request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.UserLoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns access token
+          schema:
+            $ref: '#/definitions/carwise.TokenResponse'
+        "400":
+          description: Validation or login error
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Login user
+      tags:
+      - auth
+  /auth/logout:
+    post:
+      description: Logout user by blacklisting their token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully logged out
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Logout user
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user and return JWT token
+      parameters:
+      - description: User registration request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.UserCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns access token
+          schema:
+            $ref: '#/definitions/carwise.TokenResponse'
+        "400":
+          description: Validation or creation error
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Register a new user
+      tags:
+      - auth
+  /auth/reset-password:
+    post:
+      consumes:
+      - application/json
+      description: Reset user password using token and email
+      parameters:
+      - description: Reset token
+        in: query
+        name: token
+        required: true
+        type: string
+      - description: User email
+        in: query
+        name: email
+        required: true
+        type: string
+      - description: New password request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.ChangePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password reset successful
+        "400":
+          description: Validation error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Reset password
+      tags:
+      - auth
+  /brands:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all brands with their associated details
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/carwise.BrandWithDetails'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Get all brands with details
+      tags:
+      - brands
+    post:
+      consumes:
+      - application/json
+      description: Create a new brand with the provided details
+      parameters:
+      - description: Brand creation request
+        in: body
+        name: brand
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.BrandCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Brand created successfully
+          schema:
+            additionalProperties:
+              allOf:
+              - type: string
+              - properties:
+                  message:
+                    type: string
+                type: object
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new brand
+      tags:
+      - brands
+  /brands/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a brand by its ID
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Brand deleted successfully
+          schema:
+            additionalProperties:
+              allOf:
+              - type: string
+              - properties:
+                  message:
+                    type: string
+                type: object
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete a brand
+      tags:
+      - brands
+    put:
+      consumes:
+      - application/json
+      description: Update a brand with the provided details
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Brand update request
+        in: body
+        name: brand
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.BrandUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Brand updated successfully
+          schema:
+            additionalProperties:
+              allOf:
+              - type: string
+              - properties:
+                  message:
+                    type: string
+                type: object
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update an existing brand
+      tags:
+      - brands
+  /brands/{id}/series:
+    post:
+      consumes:
+      - application/json
+      description: Create a new series for a specific brand
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Series creation request
+        in: body
+        name: series
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.SeriesCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Series created successfully
+          schema:
+            additionalProperties:
+              allOf:
+              - type: string
+              - properties:
+                  message:
+                    type: string
+                type: object
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new series
+      tags:
+      - series
+  /brands/{id}/series/{sid}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a series by its ID
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Series ID
+        in: path
+        name: sid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Series deleted successfully
+          schema:
+            additionalProperties:
+              allOf:
+              - type: string
+              - properties:
+                  message:
+                    type: string
+                type: object
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete a series
+      tags:
+      - series
+    put:
+      consumes:
+      - application/json
+      description: Update a series with the provided details
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Series ID
+        in: path
+        name: sid
+        required: true
+        type: string
+      - description: Series update request
+        in: body
+        name: series
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.SeriesUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Series updated successfully
+          schema:
+            additionalProperties:
+              allOf:
+              - type: string
+              - properties:
+                  message:
+                    type: string
+                type: object
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update an existing series
+      tags:
+      - series
+  /brands/{id}/series/{sid}/models:
+    post:
+      consumes:
+      - application/json
+      description: Create a new model for a specific series
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Series ID
+        in: path
+        name: sid
+        required: true
+        type: string
+      - description: Model creation request
+        in: body
+        name: model
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.ModelCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Model created successfully
+          schema:
+            additionalProperties:
+              allOf:
+              - type: string
+              - properties:
+                  message:
+                    type: string
+                type: object
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new model
+      tags:
+      - models
+  /brands/{id}/series/{sid}/models/{mid}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a model by its ID
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Series ID
+        in: path
+        name: sid
+        required: true
+        type: string
+      - description: Model ID
+        in: path
+        name: mid
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Model deleted successfully
+          schema:
+            additionalProperties:
+              allOf:
+              - type: string
+              - properties:
+                  message:
+                    type: string
+                type: object
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete a model
+      tags:
+      - models
+    put:
+      consumes:
+      - application/json
+      description: Update a model with the provided details
+      parameters:
+      - description: Brand ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Series ID
+        in: path
+        name: sid
+        required: true
+        type: string
+      - description: Model ID
+        in: path
+        name: mid
+        required: true
+        type: string
+      - description: Model update request
+        in: body
+        name: model
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.ModelUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Model updated successfully
+          schema:
+            additionalProperties:
+              allOf:
+              - type: string
+              - properties:
+                  message:
+                    type: string
+                type: object
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update an existing model
+      tags:
+      - models
+  /profile:
+    get:
+      description: Get the profile information of the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User profile information
+          schema:
+            $ref: '#/definitions/carwise.ProfileResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get user profile
+      tags:
+      - profile
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update the profile information of the authenticated user
+      parameters:
+      - description: First name
+        in: formData
+        name: first_name
+        required: true
+        type: string
+      - description: Last name
+        in: formData
+        name: last_name
+        required: true
+        type: string
+      - description: Country code
+        in: formData
+        name: country_code
+        required: true
+        type: string
+      - description: Phone number
+        in: formData
+        name: phone_number
+        required: true
+        type: string
+      - description: Profile picture
+        in: formData
+        name: avatar
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Profile updated successfully
+        "400":
+          description: Validation error
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Edit user profile
+      tags:
+      - profile
+  /upload/:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload an image file (max 5MB, jpeg/png/gif)
+      parameters:
+      - description: Image file to upload
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully uploaded image
+          schema:
+            $ref: '#/definitions/carwise.Image'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Upload an image
+      tags:
+      - images
+  /upload/{id}:
+    delete:
+      description: Delete an image by its ID
+      parameters:
+      - description: Image ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully deleted image
+          schema:
+            $ref: '#/definitions/main.SuccessResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete an image
+      tags:
+      - images
+  /upload/{id}/predict:
+    get:
+      description: Use AI to predict if an image shows car damage
+      parameters:
+      - description: Image ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Prediction results
+          schema:
+            $ref: '#/definitions/carwise.PredictImageResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Predict car damage from image
+      tags:
+      - images
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

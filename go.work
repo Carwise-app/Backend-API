@@ -3,3 +3,4 @@ go 1.24.0
 use ./src/api
 use ./src/carwise
 use ./src/infra
+use ./src/docs

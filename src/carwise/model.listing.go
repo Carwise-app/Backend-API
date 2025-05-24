@@ -1,5 +1,7 @@
 package carwise
 
+// @model Listing
+// @Description Listing information
 type Listing struct {
 	Id                string
 	BrandId           string
@@ -40,11 +42,13 @@ type Listing struct {
 	UpdatedAt         int64
 }
 
+// @model Image
+// @Description Image information
 type Image struct {
-	Id        string `json:"id"`
-	Path      string `json:"path"`
-	CreatedBy string `json:"created_by"`
-	CreatedAt int64  `json:"created_at"`
+	Id        string `json:"id" example:"img_123456"`            // Unique identifier of the image
+	Path      string `json:"path" example:"/uploads/img123.jpg"` // Path where the image is stored
+	CreatedBy string `json:"created_by" example:"user_123"`      // ID of the user who uploaded the image
+	CreatedAt int64  `json:"created_at" example:"1646092800"`    // Timestamp when the image was uploaded
 }
 
 type ImagePrediction struct {

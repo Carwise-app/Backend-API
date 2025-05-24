@@ -1,7 +1,17 @@
+// Package main is the entry point for the Carwise API server
+// @title Carwise API
+// @version 1.0
+// @description Carwise API documentation
+// @host localhost:8080
+// @BasePath /
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 package main
 
 import (
 	"carwise"
+	_ "docs" // Import the generated docs package with blank identifier
 	"infra"
 	"log"
 	"os"
@@ -10,7 +20,20 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	ginSwaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
+
+// @title           Carwise API
+// @version         1.0
+// @description     Carwise API documentation with Swagger
+// @termsOfService  http://swagger.io/terms/
+// @contact.name   API Support
+// @contact.email  support@carwise.com
+// @license.name  Apache 2.0
+// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
+// @host      localhost:8080
+// @BasePath  /
 
 func main() {
 	if _, err := os.Stat(".env"); err == nil {
@@ -94,7 +117,7 @@ func main() {
 
 	upload := app.Group("/upload")
 	{
-		upload.POST("/", AuthMiddleware(), UploadImage)
+		upload.POST("", AuthMiddleware(), UploadImage)
 		upload.DELETE("/:id", AuthMiddleware(), DeleteImage)
 		upload.GET("/:id/predict", AuthMiddleware(), PredictImage)
 	}
@@ -106,6 +129,8 @@ func main() {
 		chat.GET("/:receiver_id", AuthMiddleware(), GetMessages)
 		chat.GET("/ws", WebSocketAuthMiddleware(), WebSocketHandler)
 	}
+
+	app.GET("/swagger/*any", ginSwagger.WrapHandler(ginSwaggerFiles.Handler))
 
 	app.Run(os.Getenv("HOST") + ":" + os.Getenv("PORT"))
 }
