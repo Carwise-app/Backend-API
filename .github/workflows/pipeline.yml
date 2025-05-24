@@ -88,7 +88,7 @@ jobs:
             # 'cat' ile dosyayı oluşturup, 'chmod 600' ile sadece dosya sahibinin okuma/yazma izni olmasını sağlıyoruz.
             echo "📝 Creating .env file with restricted permissions..."
             cat <<EOF > ~/.carwisegw/carwisegw.env
-            GIN_MODE=release
+            GIN_MODE=debug
             HOST=${{ env.HOST }}
             PORT=${{ env.PORT }}
             JWT_SECRET=${{ env.JWT_SECRET }}
