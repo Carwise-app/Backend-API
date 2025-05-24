@@ -4,7 +4,7 @@ on:
     branches: [ development ]
 
 env:
-  GIN_MODE: release
+  GIN_MODE: debug
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
   DOCKERHUB_REPOSITORY: ${{ secrets.DOCKERHUB_REPOSITORY }}
@@ -80,7 +80,39 @@ jobs:
             echo "🗑️ Pruning old images..."
             docker image prune -f
 
+             echo "📁 Creating secure directory for .env file..."
+            mkdir -p ~/.carwisegw/
+            
+            # Create the .env file with restricted permissions
+            # 'cat' ile dosyayı oluşturup, 'chmod 600' ile sadece dosya sahibinin okuma/yazma izni olmasını sağlıyoruz.
+            echo "📝 Creating .env file with restricted permissions..."
+            cat <<EOF > ~/.carwisegw/carwisegw.env
+            GIN_MODE=release
+            HOST=${{ env.HOST }}
+            PORT=${{ env.PORT }}
+            JWT_SECRET=${{ env.JWT_SECRET }}
+            DB_USER=${{ env.DB_USER }}
+            DB_PASSWD=${{ env.DB_PASSWD }}
+            DB_NAME=${{ env.DB_NAME }}
+            DB_PORT=${{ env.DB_PORT }}
+            DB_HOST=${{ env.DB_HOST }}
+            REDIS_HOST=${{ env.REDIS_HOST }}
+            REDIS_PORT=${{ env.REDIS_PORT }}
+            SMTP_HOST=${{ env.SMTP_HOST }}
+            SMTP_PORT=${{ env.SMTP_PORT }}
+            SMTP_USER=${{ env.SMTP_USER }}
+            SMTP_PASSWORD=${{ env.SMTP_PASSWORD }}
+            CAR_RECOGNITION_API_URL=${{ env.CAR_RECOGNITION_API_URL }}
+            GOOGLE_CLIENT_ID=${{ env.GOOGLE_CLIENT_ID }}
+            GOOGLE_CLIENT_SECRET=${{ env.GOOGLE_CLIENT_SECRET }}
+            GOOGLE_REDIRECT_URL=${{ env.GOOGLE_REDIRECT_URL }}
+            GOOGLE_SCOPES=${{ env.GOOGLE_SCOPES }}
+            OAUTH2_STATE=${{ env.OAUTH2_STATE }}
+            EOF
+            chmod 600 ~/.carwisegw/carwisegw.env
+            echo "✅ .env file created securely."
+
             echo "🚀 Running new container..."
             docker run -d --name carwisegw --restart always -p 4040:4040 \
-              -e GIN_MODE=debug \
+              --env-file ~/.carwisegw/carwisegw.env \
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
