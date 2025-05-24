@@ -62,6 +62,8 @@ jobs:
   deploy:
     needs: docker_deploy
     runs-on: ubuntu-latest
+    env:
+      IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
     steps:
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
@@ -70,42 +72,37 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
-
             echo "🚀 Pulling image: $IMAGE"
             docker pull $IMAGE
-            
+
             echo "🧹 Stopping and removing old container if exists..."
             docker stop carwisegw || true
             docker rm carwisegw || true
-            
+
             echo "🗑️ Pruning old images..."
             docker image prune -f
 
             echo "🚀 Running new container..."
-            docker run -d \
-              --name carwisegw \
-              --restart always \
-              -p 4040:4040 \
+            docker run -d --name carwisegw --restart always -p 4040:4040 \
               -e GIN_MODE=release \
-              -e HOST=${{ secrets.HOST }} \
-              -e PORT=${{ secrets.PORT }} \
-              -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
-              -e DB_USER=${{ secrets.DB_USER }} \
-              -e DB_PASSWD=${{ secrets.DB_PASSWD }} \
-              -e DB_NAME=${{ secrets.DB_NAME }} \
-              -e DB_PORT=${{ secrets.DB_PORT }} \
-              -e DB_HOST=${{ secrets.DB_HOST }} \
-              -e REDIS_HOST=${{ secrets.REDIS_HOST }} \
-              -e REDIS_PORT=${{ secrets.REDIS_PORT }} \
-              -e SMTP_HOST=${{ secrets.SMTP_HOST }} \
-              -e SMTP_PORT=${{ secrets.SMTP_PORT }} \
-              -e SMTP_USER=${{ secrets.SMTP_USER }} \
-              -e SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }} \
-              -e CAR_RECOGNITION_API_URL=${{ secrets.CAR_RECOGNITION_API_URL }} \
-              -e GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
-              -e GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} \
-              -e GOOGLE_REDIRECT_URL=${{ secrets.GOOGLE_REDIRECT_URL }} \
-              -e GOOGLE_SCOPES=${{ secrets.GOOGLE_SCOPES }} \
-              -e OAUTH2_STATE=${{ secrets.OAUTH2_STATE }} \
+              -e HOST=${{ env.HOST }} \
+              -e PORT=${{ env.PORT }} \
+              -e JWT_SECRET=${{ env.JWT_SECRET }} \
+              -e DB_USER=${{ env.DB_USER }} \
+              -e DB_PASSWD=${{ env.DB_PASSWD }} \
+              -e DB_NAME=${{ env.DB_NAME }} \
+              -e DB_PORT=${{ env.DB_PORT }} \
+              -e DB_HOST=${{ env.DB_HOST }} \
+              -e REDIS_HOST=${{ env.REDIS_HOST }} \
+              -e REDIS_PORT=${{ env.REDIS_PORT }} \
+              -e SMTP_HOST=${{ env.SMTP_HOST }} \
+              -e SMTP_PORT=${{ env.SMTP_PORT }} \
+              -e SMTP_USER=${{ env.SMTP_USER }} \
+              -e SMTP_PASSWORD=${{ env.SMTP_PASSWORD }} \
+              -e CAR_RECOGNITION_API_URL=${{ env.CAR_RECOGNITION_API_URL }} \
+              -e GOOGLE_CLIENT_ID=${{ env.GOOGLE_CLIENT_ID }} \
+              -e GOOGLE_CLIENT_SECRET=${{ env.GOOGLE_CLIENT_SECRET }} \
+              -e GOOGLE_REDIRECT_URL=${{ env.GOOGLE_REDIRECT_URL }} \
+              -e GOOGLE_SCOPES=${{ env.GOOGLE_SCOPES }} \
+              -e OAUTH2_STATE=${{ env.OAUTH2_STATE }} \
               $IMAGE
