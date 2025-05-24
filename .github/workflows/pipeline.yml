@@ -31,6 +31,7 @@ jobs:
           context: .
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/carwise-backend:latest
+  
   deploy:
   needs: docker_deploy
   runs-on: ubuntu-latest
