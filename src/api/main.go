@@ -15,6 +15,8 @@ import (
 	"infra"
 	"log"
 	"os"
+	"os/exec"
+	"runtime"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -131,6 +133,30 @@ func main() {
 	}
 
 	app.GET("/swagger/*any", ginSwagger.WrapHandler(ginSwaggerFiles.Handler))
-
+	openBrowser(getSwaggerURL())
 	app.Run(os.Getenv("HOST") + ":" + os.Getenv("PORT"))
+}
+
+func openBrowser(url string) {
+	var err error
+
+	switch runtime.GOOS {
+	case "linux":
+		err = exec.Command("xdg-open", url).Start()
+	case "windows":
+		err = exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
+	case "darwin":
+		err = exec.Command("open", url).Start()
+	}
+
+	if err != nil {
+		log.Printf("Failed to open browser: %v\n", err)
+	}
+}
+
+func getSwaggerURL() string {
+	host := os.Getenv("HOST")
+	port := os.Getenv("PORT")
+	swaggerURL := "http://" + host + ":" + port + "/swagger/index.html"
+	return swaggerURL
 }
