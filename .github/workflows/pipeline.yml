@@ -48,32 +48,34 @@ jobs:
             # Stop and remove the existing container if it exists
             docker stop carwise-backend || true
             docker rm carwise-backend || true
+            
             # Remove old unused Docker images
             docker image prune -f
+
             # Run the new container with environment variables
             docker run -d \
               --name carwise-backend \
               --restart always \
               -p 4040:4040 \
-               -e GIN_MODE=release \
-            -e HOST=${{ secrets.HOST }} \
-            -e PORT=${{ secrets.PORT }} \
-            -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
-            -e DB_USER=${{ secrets.DB_USER }} \
-            -e DB_PASSWD=${{ secrets.DB_PASSWD }} \
-            -e DB_NAME=${{ secrets.DB_NAME }} \
-            -e DB_PORT=${{ secrets.DB_PORT }} \
-            -e DB_HOST=${{ secrets.DB_HOST }} \
-            -e REDIS_HOST=${{ secrets.REDIS_HOST }} \
-            -e REDIS_PORT=${{ secrets.REDIS_PORT }} \
-            -e SMTP_HOST=${{ secrets.SMTP_HOST }} \
-            -e SMTP_PORT=${{ secrets.SMTP_PORT }} \
-            -e SMTP_USER=${{ secrets.SMTP_USER }} \
-            -e SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }} \
-            -e CAR_RECOGNITION_API_URL=${{ secrets.CAR_RECOGNITION_API_URL }} \
-            -e GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
-            -e GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} \
-            -e GOOGLE_REDIRECT_URL=${{ secrets.GOOGLE_REDIRECT_URL }} \
-            -e GOOGLE_SCOPES=${{ secrets.GOOGLE_SCOPES }} \
-            -e OAUTH2_STATE=${{ secrets.OAUTH2_STATE }} \
+              -e GIN_MODE=release \
+              -e HOST=${{ secrets.HOST }} \
+              -e PORT=${{ secrets.PORT }} \
+              -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+              -e DB_USER=${{ secrets.DB_USER }} \
+              -e DB_PASSWD=${{ secrets.DB_PASSWD }} \
+              -e DB_NAME=${{ secrets.DB_NAME }} \
+              -e DB_PORT=${{ secrets.DB_PORT }} \
+              -e DB_HOST=${{ secrets.DB_HOST }} \
+              -e REDIS_HOST=${{ secrets.REDIS_HOST }} \
+              -e REDIS_PORT=${{ secrets.REDIS_PORT }} \
+              -e SMTP_HOST=${{ secrets.SMTP_HOST }} \
+              -e SMTP_PORT=${{ secrets.SMTP_PORT }} \
+              -e SMTP_USER=${{ secrets.SMTP_USER }} \
+              -e SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }} \
+              -e CAR_RECOGNITION_API_URL=${{ secrets.CAR_RECOGNITION_API_URL }} \
+              -e GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
+              -e GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }} \
+              -e GOOGLE_REDIRECT_URL=${{ secrets.GOOGLE_REDIRECT_URL }} \
+              -e GOOGLE_SCOPES=${{ secrets.GOOGLE_SCOPES }} \
+              -e OAUTH2_STATE=${{ secrets.OAUTH2_STATE }} \
               ${{ secrets.DOCKERHUB_USERNAME }}/carwise-backend:latest
