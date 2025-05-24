@@ -33,7 +33,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Authentication"
                 ],
                 "summary": "Request password reset",
                 "parameters": [
@@ -71,7 +71,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Authentication - Google"
                 ],
                 "summary": "Google OAuth Callback",
                 "parameters": [
@@ -124,7 +124,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Authentication - Google"
                 ],
                 "summary": "Verify Google ID Token",
                 "parameters": [
@@ -167,7 +167,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Authentication - Google"
                 ],
                 "summary": "Initiate Google Login",
                 "responses": {
@@ -187,7 +187,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Authentication"
                 ],
                 "summary": "Login user",
                 "parameters": [
@@ -237,7 +237,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Authentication"
                 ],
                 "summary": "Logout user",
                 "responses": {
@@ -271,7 +271,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Authentication"
                 ],
                 "summary": "Register a new user",
                 "parameters": [
@@ -319,7 +319,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Authentication"
                 ],
                 "summary": "Reset password",
                 "parameters": [
@@ -371,7 +371,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Get all brands with details",
                 "responses": {
@@ -409,7 +409,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Create a new brand",
                 "parameters": [
@@ -481,7 +481,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Update an existing brand",
                 "parameters": [
@@ -567,7 +567,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Delete a brand",
                 "parameters": [
@@ -628,7 +628,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Create a new series",
                 "parameters": [
@@ -707,7 +707,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Update an existing series",
                 "parameters": [
@@ -791,7 +791,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Delete a series",
                 "parameters": [
@@ -859,7 +859,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Create a new model",
                 "parameters": [
@@ -945,7 +945,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Update an existing model",
                 "parameters": [
@@ -1036,7 +1036,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Delete a model",
                 "parameters": [
@@ -1111,7 +1111,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "messages"
+                    "Message"
                 ],
                 "summary": "Get chats",
                 "parameters": [
@@ -1171,7 +1171,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "messages"
+                    "Message"
                 ],
                 "summary": "Get messages",
                 "parameters": [
@@ -1236,7 +1236,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "messages"
+                    "Message"
                 ],
                 "summary": "Send a message",
                 "parameters": [
@@ -1301,7 +1301,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "favorites"
+                    "Favorite"
                 ],
                 "summary": "Get favorites",
                 "parameters": [
@@ -1355,7 +1355,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "favorites"
+                    "Favorite"
                 ],
                 "summary": "Create a favorite",
                 "parameters": [
@@ -1403,7 +1403,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "favorites"
+                    "Favorite"
                 ],
                 "summary": "Delete a favorite",
                 "parameters": [
@@ -1445,7 +1445,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "listings"
+                    "Listing Car"
                 ],
                 "summary": "List listings",
                 "parameters": [
@@ -1663,7 +1663,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "listings"
+                    "Listing Car"
                 ],
                 "summary": "Create a new listing",
                 "parameters": [
@@ -1707,7 +1707,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "listings"
+                    "Listing Car"
                 ],
                 "summary": "Get a listing by ID",
                 "parameters": [
@@ -1754,7 +1754,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "listings"
+                    "Listing Car"
                 ],
                 "summary": "Update a listing",
                 "parameters": [
@@ -1811,7 +1811,7 @@ const docTemplate = `{
                 ],
                 "description": "Delete a listing by its unique identifier",
                 "tags": [
-                    "listings"
+                    "Listing Car"
                 ],
                 "summary": "Delete a listing",
                 "parameters": [
@@ -1861,7 +1861,7 @@ const docTemplate = `{
                 ],
                 "description": "Update the status of a listing",
                 "tags": [
-                    "listings"
+                    "Listing Car"
                 ],
                 "summary": "Update a listing status",
                 "parameters": [
@@ -1923,7 +1923,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "profile"
+                    "Profile"
                 ],
                 "summary": "Get user profile",
                 "responses": {
@@ -1963,7 +1963,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "profile"
+                    "Profile"
                 ],
                 "summary": "Edit user profile",
                 "parameters": [
@@ -2045,7 +2045,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "images"
+                    "Upload"
                 ],
                 "summary": "Upload an image",
                 "parameters": [
@@ -2091,7 +2091,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "images"
+                    "Upload"
                 ],
                 "summary": "Delete an image",
                 "parameters": [
@@ -2137,7 +2137,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "images"
+                    "Upload"
                 ],
                 "summary": "Predict car damage from image",
                 "parameters": [

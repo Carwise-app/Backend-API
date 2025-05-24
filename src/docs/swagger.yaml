@@ -586,7 +586,7 @@ paths:
             type: object
       summary: Request password reset
       tags:
-      - auth
+      - Authentication
   /auth/google/callback:
     get:
       consumes:
@@ -622,7 +622,7 @@ paths:
             type: object
       summary: Google OAuth Callback
       tags:
-      - auth
+      - Authentication - Google
   /auth/google/id-token:
     get:
       consumes:
@@ -653,7 +653,7 @@ paths:
             type: object
       summary: Verify Google ID Token
       tags:
-      - auth
+      - Authentication - Google
   /auth/google/login:
     get:
       description: Redirect to Google OAuth login page
@@ -664,7 +664,7 @@ paths:
           description: Redirect to Google login page
       summary: Initiate Google Login
       tags:
-      - auth
+      - Authentication - Google
   /auth/login:
     post:
       consumes:
@@ -696,7 +696,7 @@ paths:
             type: object
       summary: Login user
       tags:
-      - auth
+      - Authentication
   /auth/logout:
     post:
       description: Logout user by blacklisting their token
@@ -719,7 +719,7 @@ paths:
       - BearerAuth: []
       summary: Logout user
       tags:
-      - auth
+      - Authentication
   /auth/register:
     post:
       consumes:
@@ -751,7 +751,7 @@ paths:
             type: object
       summary: Register a new user
       tags:
-      - auth
+      - Authentication
   /auth/reset-password:
     post:
       consumes:
@@ -786,7 +786,7 @@ paths:
             type: object
       summary: Reset password
       tags:
-      - auth
+      - Authentication
   /brands:
     get:
       consumes:
@@ -809,7 +809,7 @@ paths:
             type: object
       summary: Get all brands with details
       tags:
-      - brands
+      - Brands - Series - Models
     post:
       consumes:
       - application/json
@@ -851,7 +851,7 @@ paths:
       - BearerAuth: []
       summary: Create a new brand
       tags:
-      - brands
+      - Brands - Series - Models
   /brands/{id}:
     delete:
       consumes:
@@ -887,7 +887,7 @@ paths:
       - BearerAuth: []
       summary: Delete a brand
       tags:
-      - brands
+      - Brands - Series - Models
     put:
       consumes:
       - application/json
@@ -940,7 +940,7 @@ paths:
       - BearerAuth: []
       summary: Update an existing brand
       tags:
-      - brands
+      - Brands - Series - Models
   /brands/{id}/series:
     post:
       consumes:
@@ -988,7 +988,7 @@ paths:
       - BearerAuth: []
       summary: Create a new series
       tags:
-      - brands
+      - Brands - Series - Models
   /brands/{id}/series/{sid}:
     delete:
       consumes:
@@ -1029,7 +1029,7 @@ paths:
       - BearerAuth: []
       summary: Delete a series
       tags:
-      - brands
+      - Brands - Series - Models
     put:
       consumes:
       - application/json
@@ -1081,7 +1081,7 @@ paths:
       - BearerAuth: []
       summary: Update an existing series
       tags:
-      - brands
+      - Brands - Series - Models
   /brands/{id}/series/{sid}/models:
     post:
       consumes:
@@ -1134,7 +1134,7 @@ paths:
       - BearerAuth: []
       summary: Create a new model
       tags:
-      - brands
+      - Brands - Series - Models
   /brands/{id}/series/{sid}/models/{mid}:
     delete:
       consumes:
@@ -1180,7 +1180,7 @@ paths:
       - BearerAuth: []
       summary: Delete a model
       tags:
-      - brands
+      - Brands - Series - Models
     put:
       consumes:
       - application/json
@@ -1237,7 +1237,7 @@ paths:
       - BearerAuth: []
       summary: Update an existing model
       tags:
-      - brands
+      - Brands - Series - Models
   /chat:
     get:
       consumes:
@@ -1275,7 +1275,7 @@ paths:
       - BearerAuth: []
       summary: Get chats
       tags:
-      - messages
+      - Message
   /chat/{receiver_id}:
     get:
       consumes:
@@ -1318,7 +1318,7 @@ paths:
       - BearerAuth: []
       summary: Get messages
       tags:
-      - messages
+      - Message
     post:
       consumes:
       - application/json
@@ -1359,7 +1359,7 @@ paths:
       - BearerAuth: []
       summary: Send a message
       tags:
-      - messages
+      - Message
   /favorite:
     get:
       consumes:
@@ -1393,7 +1393,7 @@ paths:
       - BearerAuth: []
       summary: Get favorites
       tags:
-      - favorites
+      - Favorite
   /favorite/{listing_id}:
     delete:
       consumes:
@@ -1425,7 +1425,7 @@ paths:
       - BearerAuth: []
       summary: Delete a favorite
       tags:
-      - favorites
+      - Favorite
     post:
       consumes:
       - application/json
@@ -1456,7 +1456,7 @@ paths:
       - BearerAuth: []
       summary: Create a favorite
       tags:
-      - favorites
+      - Favorite
   /listing:
     get:
       description: List all listings with optional filtering
@@ -1598,7 +1598,7 @@ paths:
             $ref: '#/definitions/main.ErrorResponse'
       summary: List listings
       tags:
-      - listings
+      - Listing Car
     post:
       consumes:
       - application/json
@@ -1630,7 +1630,7 @@ paths:
       - BearerAuth: []
       summary: Create a new listing
       tags:
-      - listings
+      - Listing Car
   /listing/{id}:
     delete:
       description: Delete a listing by its unique identifier
@@ -1662,7 +1662,7 @@ paths:
       - BearerAuth: []
       summary: Delete a listing
       tags:
-      - listings
+      - Listing Car
     get:
       description: Get a listing by its unique identifier
       parameters:
@@ -1688,7 +1688,7 @@ paths:
             $ref: '#/definitions/main.ErrorResponse'
       summary: Get a listing by ID
       tags:
-      - listings
+      - Listing Car
     put:
       consumes:
       - application/json
@@ -1729,7 +1729,7 @@ paths:
       - BearerAuth: []
       summary: Update a listing
       tags:
-      - listings
+      - Listing Car
   /listing/{id}/status:
     patch:
       description: Update the status of a listing
@@ -1767,7 +1767,7 @@ paths:
       - BearerAuth: []
       summary: Update a listing status
       tags:
-      - listings
+      - Listing Car
   /profile:
     get:
       description: Get the profile information of the authenticated user
@@ -1792,7 +1792,7 @@ paths:
       - BearerAuth: []
       summary: Get user profile
       tags:
-      - profile
+      - Profile
     put:
       consumes:
       - multipart/form-data
@@ -1846,7 +1846,7 @@ paths:
       - BearerAuth: []
       summary: Edit user profile
       tags:
-      - profile
+      - Profile
   /upload/:
     post:
       consumes:
@@ -1877,7 +1877,7 @@ paths:
       - BearerAuth: []
       summary: Upload an image
       tags:
-      - images
+      - Upload
   /upload/{id}:
     delete:
       description: Delete an image by its ID
@@ -1906,7 +1906,7 @@ paths:
       - BearerAuth: []
       summary: Delete an image
       tags:
-      - images
+      - Upload
   /upload/{id}/predict:
     get:
       description: Use AI to predict if an image shows car damage
@@ -1935,7 +1935,7 @@ paths:
       - BearerAuth: []
       summary: Predict car damage from image
       tags:
-      - images
+      - Upload
 securityDefinitions:
   BearerAuth:
     in: header

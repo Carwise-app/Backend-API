@@ -9,7 +9,7 @@ import (
 
 // @Summary Upload an image
 // @Description Upload an image file (max 5MB, jpeg/png/gif)
-// @Tags images
+// @Tags Upload
 // @Accept multipart/form-data
 // @Produce json
 // @Param file formData file true "Image file to upload"
@@ -48,7 +48,7 @@ func UploadImage(ctx *gin.Context) {
 
 // @Summary Delete an image
 // @Description Delete an image by its ID
-// @Tags images
+// @Tags Upload
 // @Produce json
 // @Param id path string true "Image ID"
 // @Security BearerAuth
@@ -86,7 +86,7 @@ func DeleteImage(ctx *gin.Context) {
 
 // @Summary Predict car damage from image
 // @Description Use AI to predict if an image shows car damage
-// @Tags images
+// @Tags Upload
 // @Produce json
 // @Param id path string true "Image ID"
 // @Security BearerAuth

@@ -9,7 +9,7 @@ import (
 
 // @Summary Get all brands with details
 // @Description Retrieve all brands with their associated details
-// @Tags brands
+// @Tags Brands - Series - Models
 // @Accept json
 // @Produce json
 // @Success 200 {object} []carwise.BrandWithDetails
@@ -27,7 +27,7 @@ func GetAllBrands(ctx *gin.Context) {
 
 // @Summary Create a new brand
 // @Description Create a new brand with the provided details
-// @Tags brands
+// @Tags Brands - Series - Models
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -63,7 +63,7 @@ func CreateBrand(ctx *gin.Context) {
 
 // @Summary Update an existing brand
 // @Description Update a brand with the provided details
-// @Tags brands
+// @Tags Brands - Series - Models
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -104,7 +104,7 @@ func UpdateBrand(ctx *gin.Context) {
 
 // @Summary Delete a brand
 // @Description Delete a brand by its ID
-// @Tags brands
+// @Tags Brands - Series - Models
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -138,7 +138,7 @@ func DeleteBrand(ctx *gin.Context) {
 
 // @Summary Create a new series
 // @Description Create a new series for a specific brand
-// @Tags brands
+// @Tags Brands - Series - Models
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -178,7 +178,7 @@ func CreateSeries(ctx *gin.Context) {
 
 // @Summary Update an existing series
 // @Description Update a series with the provided details
-// @Tags brands
+// @Tags Brands - Series - Models
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -222,7 +222,7 @@ func UpdateSeries(ctx *gin.Context) {
 
 // @Summary Delete a series
 // @Description Delete a series by its ID
-// @Tags brands
+// @Tags Brands - Series - Models
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -260,7 +260,7 @@ func DeleteSeries(ctx *gin.Context) {
 
 // @Summary Create a new model
 // @Description Create a new model for a specific series
-// @Tags brands
+// @Tags Brands - Series - Models
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -304,7 +304,7 @@ func CreateModel(ctx *gin.Context) {
 
 // @Summary Update an existing model
 // @Description Update a model with the provided details
-// @Tags brands
+// @Tags Brands - Series - Models
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -349,7 +349,7 @@ func UpdateModel(ctx *gin.Context) {
 
 // @Summary Delete a model
 // @Description Delete a model by its ID
-// @Tags brands
+// @Tags Brands - Series - Models
 // @Accept json
 // @Produce json
 // @Security BearerAuth

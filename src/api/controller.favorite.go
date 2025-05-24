@@ -10,7 +10,7 @@ import (
 
 // @Summary Create a favorite
 // @Description Create a favorite for a listing
-// @Tags favorites
+// @Tags Favorite
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -45,7 +45,7 @@ func CreateFavorite(ctx *gin.Context) {
 
 // @Summary Delete a favorite
 // @Description Delete a favorite for a listing
-// @Tags favorites
+// @Tags Favorite
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -78,7 +78,7 @@ func DeleteFavorite(ctx *gin.Context) {
 
 // @Summary Get favorites
 // @Description Get favorites for a user
-// @Tags favorites
+// @Tags Favorite
 // @Accept json
 // @Produce json
 // @Security BearerAuth

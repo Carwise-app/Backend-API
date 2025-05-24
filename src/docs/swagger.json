@@ -27,7 +27,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Authentication"
                 ],
                 "summary": "Request password reset",
                 "parameters": [
@@ -65,7 +65,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Authentication - Google"
                 ],
                 "summary": "Google OAuth Callback",
                 "parameters": [
@@ -118,7 +118,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Authentication - Google"
                 ],
                 "summary": "Verify Google ID Token",
                 "parameters": [
@@ -161,7 +161,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Authentication - Google"
                 ],
                 "summary": "Initiate Google Login",
                 "responses": {
@@ -181,7 +181,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Authentication"
                 ],
                 "summary": "Login user",
                 "parameters": [
@@ -231,7 +231,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Authentication"
                 ],
                 "summary": "Logout user",
                 "responses": {
@@ -265,7 +265,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Authentication"
                 ],
                 "summary": "Register a new user",
                 "parameters": [
@@ -313,7 +313,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "auth"
+                    "Authentication"
                 ],
                 "summary": "Reset password",
                 "parameters": [
@@ -365,7 +365,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Get all brands with details",
                 "responses": {
@@ -403,7 +403,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Create a new brand",
                 "parameters": [
@@ -475,7 +475,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Update an existing brand",
                 "parameters": [
@@ -561,7 +561,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Delete a brand",
                 "parameters": [
@@ -622,7 +622,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Create a new series",
                 "parameters": [
@@ -701,7 +701,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Update an existing series",
                 "parameters": [
@@ -785,7 +785,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Delete a series",
                 "parameters": [
@@ -853,7 +853,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Create a new model",
                 "parameters": [
@@ -939,7 +939,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Update an existing model",
                 "parameters": [
@@ -1030,7 +1030,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "brands"
+                    "Brands - Series - Models"
                 ],
                 "summary": "Delete a model",
                 "parameters": [
@@ -1105,7 +1105,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "messages"
+                    "Message"
                 ],
                 "summary": "Get chats",
                 "parameters": [
@@ -1165,7 +1165,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "messages"
+                    "Message"
                 ],
                 "summary": "Get messages",
                 "parameters": [
@@ -1230,7 +1230,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "messages"
+                    "Message"
                 ],
                 "summary": "Send a message",
                 "parameters": [
@@ -1295,7 +1295,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "favorites"
+                    "Favorite"
                 ],
                 "summary": "Get favorites",
                 "parameters": [
@@ -1349,7 +1349,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "favorites"
+                    "Favorite"
                 ],
                 "summary": "Create a favorite",
                 "parameters": [
@@ -1397,7 +1397,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "favorites"
+                    "Favorite"
                 ],
                 "summary": "Delete a favorite",
                 "parameters": [
@@ -1439,7 +1439,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "listings"
+                    "Listing Car"
                 ],
                 "summary": "List listings",
                 "parameters": [
@@ -1657,7 +1657,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "listings"
+                    "Listing Car"
                 ],
                 "summary": "Create a new listing",
                 "parameters": [
@@ -1701,7 +1701,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "listings"
+                    "Listing Car"
                 ],
                 "summary": "Get a listing by ID",
                 "parameters": [
@@ -1748,7 +1748,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "listings"
+                    "Listing Car"
                 ],
                 "summary": "Update a listing",
                 "parameters": [
@@ -1805,7 +1805,7 @@
                 ],
                 "description": "Delete a listing by its unique identifier",
                 "tags": [
-                    "listings"
+                    "Listing Car"
                 ],
                 "summary": "Delete a listing",
                 "parameters": [
@@ -1855,7 +1855,7 @@
                 ],
                 "description": "Update the status of a listing",
                 "tags": [
-                    "listings"
+                    "Listing Car"
                 ],
                 "summary": "Update a listing status",
                 "parameters": [
@@ -1917,7 +1917,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "profile"
+                    "Profile"
                 ],
                 "summary": "Get user profile",
                 "responses": {
@@ -1957,7 +1957,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "profile"
+                    "Profile"
                 ],
                 "summary": "Edit user profile",
                 "parameters": [
@@ -2039,7 +2039,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "images"
+                    "Upload"
                 ],
                 "summary": "Upload an image",
                 "parameters": [
@@ -2085,7 +2085,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "images"
+                    "Upload"
                 ],
                 "summary": "Delete an image",
                 "parameters": [
@@ -2131,7 +2131,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "images"
+                    "Upload"
                 ],
                 "summary": "Predict car damage from image",
                 "parameters": [

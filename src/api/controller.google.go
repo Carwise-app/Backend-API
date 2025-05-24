@@ -15,7 +15,7 @@ type TokenResponse struct {
 
 // @Summary Verify Google ID Token
 // @Description Verify Google ID token and return JWT token
-// @Tags auth
+// @Tags Authentication - Google 
 // @Accept json
 // @Produce json
 // @Param idToken query string true "Google ID Token"
@@ -46,7 +46,7 @@ func GoogleIdToken(c *gin.Context) {
 
 // @Summary Initiate Google Login
 // @Description Redirect to Google OAuth login page
-// @Tags auth
+// @Tags Authentication - Google 
 // @Produce json
 // @Success 302 "Redirect to Google login page"
 // @Router /auth/google/login [get]
@@ -57,7 +57,7 @@ func GoogleLogin(c *gin.Context) {
 
 // @Summary Google OAuth Callback
 // @Description Handle Google OAuth callback and return JWT token
-// @Tags auth
+// @Tags Authentication - Google 
 // @Accept json
 // @Produce json
 // @Param state query string true "OAuth state parameter"

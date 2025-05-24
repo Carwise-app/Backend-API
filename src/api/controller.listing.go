@@ -12,7 +12,7 @@ import (
 
 // @Summary Create a new listing
 // @Description Create a new listing with the given details
-// @Tags listings
+// @Tags Listing Car
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -48,7 +48,7 @@ func CreateListing(ctx *gin.Context) {
 
 // @Summary Get a listing by ID
 // @Description Get a listing by its unique identifier
-// @Tags listings
+// @Tags Listing Car
 // @Produce json
 // @Param id path string true "Listing ID"
 // @Success 200 {object} carwise.GetListingResponse "Listing details"
@@ -69,7 +69,7 @@ func GetListing(ctx *gin.Context) {
 
 // @Summary List listings
 // @Description List all listings with optional filtering
-// @Tags listings
+// @Tags Listing Car
 // @Produce json
 // @Param page query int false "Page number" default(1)
 // @Param limit query int false "Number of listings per page" default(10)
@@ -326,7 +326,7 @@ func ListListing(ctx *gin.Context) {
 
 // @Summary Update a listing
 // @Description Update the details of a listing
-// @Tags listings
+// @Tags Listing Car
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -372,7 +372,7 @@ func UpdateListing(ctx *gin.Context) {
 
 // @Summary Delete a listing
 // @Description Delete a listing by its unique identifier
-// @Tags listings
+// @Tags Listing Car
 // @Security BearerAuth
 // @Param id path string true "Listing ID"
 // @Success 200 {object} map[string]interface{} "Listing deleted successfully"
@@ -410,7 +410,7 @@ func DeleteListing(ctx *gin.Context) {
 
 // @Summary Update a listing status
 // @Description Update the status of a listing
-// @Tags listings
+// @Tags Listing Car
 // @Security BearerAuth
 // @Param id path string true "Listing ID"
 // @Param status body carwise.UpdateListingStatusRequest true "Listing status"

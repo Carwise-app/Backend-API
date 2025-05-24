@@ -9,7 +9,7 @@ import (
 
 // @Summary Register a new user
 // @Description Register a new user and return JWT token
-// @Tags auth
+// @Tags Authentication
 // @Accept json
 // @Produce json
 // @Param request body carwise.UserCreateRequest true "User registration request"
@@ -56,7 +56,7 @@ func Register(ctx *gin.Context) {
 
 // @Summary Login user
 // @Description Login user and return JWT token
-// @Tags auth
+// @Tags Authentication
 // @Accept json
 // @Produce json
 // @Param request body carwise.UserLoginRequest true "User login request"
@@ -103,7 +103,7 @@ func Login(ctx *gin.Context) {
 
 // @Summary Logout user
 // @Description Logout user by blacklisting their token
-// @Tags auth
+// @Tags Authentication
 // @Security BearerAuth
 // @Produce json
 // @Success 200 "Successfully logged out"
@@ -130,7 +130,7 @@ func Logout(ctx *gin.Context) {
 
 // @Summary Request password reset
 // @Description Send password reset email to user
-// @Tags auth
+// @Tags Authentication
 // @Accept json
 // @Produce json
 // @Param request body carwise.ResetPasswordRequest true "Password reset request"
@@ -167,7 +167,7 @@ func ForgotPassword(ctx *gin.Context) {
 
 // @Summary Reset password
 // @Description Reset user password using token and email
-// @Tags auth
+// @Tags Authentication
 // @Accept json
 // @Produce json
 // @Param token query string true "Reset token"

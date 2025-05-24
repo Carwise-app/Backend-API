@@ -10,7 +10,7 @@ import (
 
 // @Summary Get user profile
 // @Description Get the profile information of the authenticated user
-// @Tags profile
+// @Tags Profile
 // @Security BearerAuth
 // @Produce json
 // @Success 200 {object} carwise.ProfileResponse "User profile information"
@@ -37,7 +37,7 @@ func Profile(ctx *gin.Context) {
 
 // @Summary Edit user profile
 // @Description Update the profile information of the authenticated user
-// @Tags profile
+// @Tags Profile
 // @Security BearerAuth
 // @Accept multipart/form-data
 // @Produce json

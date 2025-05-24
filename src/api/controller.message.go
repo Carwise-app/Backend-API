@@ -11,7 +11,7 @@ import (
 
 // @Summary Send a message
 // @Description Send a message to a user
-// @Tags messages
+// @Tags Message
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -51,7 +51,7 @@ func SendMessage(ctx *gin.Context) {
 
 // @Summary Get messages
 // @Description Get messages between two users
-// @Tags messages
+// @Tags Message
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -91,7 +91,7 @@ func GetMessages(ctx *gin.Context) {
 
 // @Summary Get chats
 // @Description Get all chats for a user
-// @Tags messages
+// @Tags Message
 // @Accept json
 // @Produce json
 // @Security BearerAuth
