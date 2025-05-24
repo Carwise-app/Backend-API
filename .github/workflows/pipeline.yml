@@ -17,6 +17,7 @@ env:
   DB_PORT: ${{ secrets.DB_PORT }}
   DB_HOST: ${{ secrets.DB_HOST }}
   REDIS_HOST: ${{ secrets.REDIS_HOST }}
+  REDIS_PASSWORD: ${{ secrets.REDIS_PASSWORD }}
   REDIS_PORT: ${{ secrets.REDIS_PORT }}
   SMTP_HOST: ${{ secrets.SMTP_HOST }}
   SMTP_PORT: ${{ secrets.SMTP_PORT }}
@@ -97,6 +98,7 @@ jobs:
             DB_PORT=${{ env.DB_PORT }}
             DB_HOST=${{ env.DB_HOST }}
             REDIS_HOST=${{ env.REDIS_HOST }}
+            REDIS_PASSWORD=${{ env.REDIS_PASSWORD }}
             REDIS_PORT=${{ env.REDIS_PORT }}
             SMTP_HOST=${{ env.SMTP_HOST }}
             SMTP_PORT=${{ env.SMTP_PORT }}
