@@ -42,19 +42,15 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/carwise-backend:latest
+            export IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/carwise-backend:latest
 
             echo "🚀 Pulling image: $IMAGE"
             docker pull $IMAGE
-            
-            # Stop and remove the existing container if it exists
+
             docker stop carwise-backend || true
             docker rm carwise-backend || true
-            
-            # Remove old unused Docker images
             docker image prune -f
 
-            # Run the new container with environment variables
             docker run -d \
               --name carwise-backend \
               --restart always \
