@@ -13,7 +13,7 @@ import (
 func ConnectRedis() *redis.Client {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%s", strings.TrimSpace(os.Getenv("REDIS_HOST")), strings.TrimSpace(os.Getenv("REDIS_PORT"))),
-		Password: "",
+		Password: os.Getenv("REDIS_PASSWORD"),
 		DB:       0,
 	})
 
