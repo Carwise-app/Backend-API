@@ -85,6 +85,14 @@ type GoogleAuth interface {
 	Callback(state, code string) (*GoogleResponse, error)
 }
 
+type FavoriteRepository interface {
+	CreateFavorite(favorite *Favorite) error
+	GetFavoriteByUserIdAndListingId(userId, listingId string) (*Favorite, error)
+	GetFavoritesByUserId(userId string, limit, offset int) ([]Favorite, error)
+	CountFavoritesByUserId(userId string) (int, error)
+	DeleteFavorite(favorite *Favorite) error
+}
+
 type Services struct {
 	UserRepo          UserRepository
 	TokenRepo         TokenRepository
@@ -96,4 +104,5 @@ type Services struct {
 	MessageRepo       MessageRepository
 	PredictionRepo    PredictionRepository
 	GoogleAuth        GoogleAuth
+	FavoriteRepo      FavoriteRepository
 }

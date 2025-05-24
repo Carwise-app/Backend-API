@@ -68,6 +68,7 @@ func main() {
 			MessageRepo:       infra.NewMessageRepository(),
 			PredictionRepo:    infra.NewPredictionRepository(),
 			GoogleAuth:        infra.NewGoogleAuth(),
+			FavoriteRepo:      infra.NewFavoriteRepository(),
 		},
 	)
 
@@ -130,6 +131,13 @@ func main() {
 		chat.POST("/:receiver_id", AuthMiddleware(), SendMessage)
 		chat.GET("/:receiver_id", AuthMiddleware(), GetMessages)
 		chat.GET("/ws", WebSocketAuthMiddleware(), WebSocketHandler)
+	}
+
+	favorite := app.Group("/favorite")
+	{
+		favorite.POST("/:listing_id", AuthMiddleware(), CreateFavorite)
+		favorite.DELETE("/:listing_id", AuthMiddleware(), DeleteFavorite)
+		favorite.GET("/", AuthMiddleware(), GetFavorites)
 	}
 
 	app.GET("/swagger/*any", ginSwagger.WrapHandler(ginSwaggerFiles.Handler))

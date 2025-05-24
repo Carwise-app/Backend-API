@@ -1360,6 +1360,103 @@ paths:
       summary: Send a message
       tags:
       - messages
+  /favorite:
+    get:
+      consumes:
+      - application/json
+      description: Get favorites for a user
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Favorites retrieved successfully
+          schema:
+            $ref: '#/definitions/carwise.ListListingResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get favorites
+      tags:
+      - favorites
+  /favorite/{listing_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a favorite for a listing
+      parameters:
+      - description: Listing ID
+        in: path
+        name: listing_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Favorite deleted successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a favorite
+      tags:
+      - favorites
+    post:
+      consumes:
+      - application/json
+      description: Create a favorite for a listing
+      parameters:
+      - description: Listing ID
+        in: path
+        name: listing_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Favorite created successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a favorite
+      tags:
+      - favorites
   /listing:
     get:
       description: List all listings with optional filtering

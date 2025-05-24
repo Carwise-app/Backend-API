@@ -97,3 +97,10 @@ CREATE TABLE IF NOT EXISTS image_predictions (
     created_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP)
 );
 
+CREATE TABLE IF NOT EXISTS favorites (
+    user_id UUID NOT NULL REFERENCES users(id),
+    listing_id UUID NOT NULL REFERENCES listings(id),
+    created_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP),
+    PRIMARY KEY (user_id, listing_id)
+);
+
