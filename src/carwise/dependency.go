@@ -79,6 +79,12 @@ type PredictionRepository interface {
 	GetImagePredictionsByImageId(imageId string) (*ImagePrediction, error)
 }
 
+type GoogleAuth interface {
+	VerifyIDToken(idToken string) (*GoogleResponse, error)
+	GetUrl() string
+	Callback(state, code string) (*GoogleResponse, error)
+}
+
 type Services struct {
 	UserRepo          UserRepository
 	TokenRepo         TokenRepository
@@ -89,4 +95,5 @@ type Services struct {
 	ImageRepo         ImageRepository
 	MessageRepo       MessageRepository
 	PredictionRepo    PredictionRepository
+	GoogleAuth        GoogleAuth
 }

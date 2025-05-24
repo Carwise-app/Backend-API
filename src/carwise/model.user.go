@@ -2,6 +2,7 @@ package carwise
 
 type User struct {
 	Id          string
+	GoogleId    string
 	FirstName   string
 	LastName    string
 	ImageUrl    string

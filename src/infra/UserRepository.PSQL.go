@@ -22,6 +22,7 @@ func (r *UserRepository) GetByID(id string) (*carwise.User, error) {
 	query := `
 		SELECT 
 			id, 
+			google_id,
 			first_name, 
 			last_name, 
 			image_url, 
@@ -38,6 +39,7 @@ func (r *UserRepository) GetByID(id string) (*carwise.User, error) {
 		WHERE id = $1`
 	err := r.db.QueryRow(query, id).Scan(
 		&user.Id,
+		&user.GoogleId,
 		&user.FirstName,
 		&user.LastName,
 		&user.ImageUrl,
@@ -65,6 +67,7 @@ func (r *UserRepository) GetByEmail(email string) (*carwise.User, error) {
 	query := `
 		SELECT 
 			id, 
+			google_id,
 			first_name, 
 			last_name, 
 			image_url, 
@@ -81,6 +84,7 @@ func (r *UserRepository) GetByEmail(email string) (*carwise.User, error) {
 		WHERE email = $1`
 	err := r.db.QueryRow(query, email).Scan(
 		&user.Id,
+		&user.GoogleId,
 		&user.FirstName,
 		&user.LastName,
 		&user.ImageUrl,
@@ -96,7 +100,7 @@ func (r *UserRepository) GetByEmail(email string) (*carwise.User, error) {
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, errors.New("user not found")
+			return nil, nil
 		}
 		return nil, fmt.Errorf("failed to query user by Email: %w", err)
 	}
@@ -118,9 +122,10 @@ func (r *UserRepository) Create(user *carwise.User) error {
 			status, 
 			created_at, 
 			updated_at, 
-			last_login
+			last_login,
+			google_id
 		) VALUES (
-			$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13
+			$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14
 		)`
 	_, err := r.db.Exec(query,
 		user.Id,
@@ -136,6 +141,7 @@ func (r *UserRepository) Create(user *carwise.User) error {
 		user.CreatedAt,
 		user.UpdatedAt,
 		user.LastLogin,
+		user.GoogleId,
 	)
 	if err != nil {
 		return fmt.Errorf("failed to create user: %w", err)

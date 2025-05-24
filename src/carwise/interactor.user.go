@@ -50,8 +50,20 @@ func (i *Interactor) LoginUser(request UserLoginRequest) (*User, []string) {
 		return nil, []string{err.Error()}
 	}
 
+	if user == nil {
+		return nil, []string{"invalid credentials"}
+	}
+
 	if !comparePasswords(user.Password, request.Password) {
 		return nil, []string{"invalid credentials"}
+	}
+
+	if user.GoogleId != "" {
+		return nil, []string{"Please login with Google"}
+	}
+
+	if user.Status == 2 {
+		return nil, []string{"Your account is not active. Please contact support."}
 	}
 
 	return user, nil

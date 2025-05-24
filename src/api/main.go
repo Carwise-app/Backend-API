@@ -42,10 +42,10 @@ func main() {
 			ImageRepo:         infra.NewImageRepository(),
 			MessageRepo:       infra.NewMessageRepository(),
 			PredictionRepo:    infra.NewPredictionRepository(),
+			GoogleAuth:        infra.NewGoogleAuth(),
 		},
 	)
 
-	// WebSocket hub'ı başlat
 	go hub.Run()
 
 	auth := app.Group("/auth")
@@ -55,6 +55,9 @@ func main() {
 		auth.POST("/logout", Logout)
 		auth.POST("/reset-password", ForgotPassword)
 		auth.PUT("/reset-password", ResetPassword)
+		auth.GET("/google", GoogleLogin)
+		auth.GET("/google/callback", GoogleCallback)
+		auth.GET("/google/id-token", GoogleIdToken)
 	}
 
 	profile := app.Group("/profile")
