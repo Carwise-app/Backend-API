@@ -4,7 +4,7 @@ on:
     branches: [ development ]
 
 env:
-  GIN_MODE: release
+  GIN_MODE:release
   HOST: ${{ secrets.HOST }}
   PORT: ${{ secrets.PORT }}
   JWT_SECRET: ${{ secrets.JWT_SECRET }}
@@ -54,7 +54,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/carwise-backend:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/carwisegw:latest
   
   deploy:
     needs: docker_deploy
@@ -67,21 +67,21 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/carwise-backend:latest
+            IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/carwisegw:latest
 
             echo "🚀 Pulling image: $IMAGE"
             docker pull $IMAGE
             
             echo "🧹 Stopping and removing old container if exists..."
-            docker stop carwise-backend || true
-            docker rm carwise-backend || true
+            docker stop carwisegw || true
+            docker rm carwisegw || true
             
             echo "🗑️ Pruning old images..."
             docker image prune -f
 
             echo "🚀 Running new container..."
             docker run -d \
-              --name carwise-backend \
+              --name carwisegw \
               --restart always \
               -p 4040:4040 \
               -e GIN_MODE=release \
