@@ -587,6 +587,17 @@ paths:
       summary: Request password reset
       tags:
       - Authentication
+  /auth/google:
+    get:
+      description: Redirect to Google OAuth login page
+      produces:
+      - application/json
+      responses:
+        "302":
+          description: Redirect to Google login page
+      summary: Initiate Google Login
+      tags:
+      - Authentication - Google
   /auth/google/callback:
     get:
       consumes:
@@ -652,17 +663,6 @@ paths:
             additionalProperties: true
             type: object
       summary: Verify Google ID Token
-      tags:
-      - Authentication - Google
-  /auth/google/login:
-    get:
-      description: Redirect to Google OAuth login page
-      produces:
-      - application/json
-      responses:
-        "302":
-          description: Redirect to Google login page
-      summary: Initiate Google Login
       tags:
       - Authentication - Google
   /auth/login:

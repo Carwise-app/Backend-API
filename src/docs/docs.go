@@ -61,6 +61,23 @@ const docTemplate = `{
                 }
             }
         },
+        "/auth/google": {
+            "get": {
+                "description": "Redirect to Google OAuth login page",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication - Google"
+                ],
+                "summary": "Initiate Google Login",
+                "responses": {
+                    "302": {
+                        "description": "Redirect to Google login page"
+                    }
+                }
+            }
+        },
         "/auth/google/callback": {
             "get": {
                 "description": "Handle Google OAuth callback and return JWT token",
@@ -156,23 +173,6 @@ const docTemplate = `{
                             "type": "object",
                             "additionalProperties": true
                         }
-                    }
-                }
-            }
-        },
-        "/auth/google/login": {
-            "get": {
-                "description": "Redirect to Google OAuth login page",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Authentication - Google"
-                ],
-                "summary": "Initiate Google Login",
-                "responses": {
-                    "302": {
-                        "description": "Redirect to Google login page"
                     }
                 }
             }

@@ -49,7 +49,7 @@ func GoogleIdToken(c *gin.Context) {
 // @Tags Authentication - Google 
 // @Produce json
 // @Success 302 "Redirect to Google login page"
-// @Router /auth/google/login [get]
+// @Router /auth/google [get]
 func GoogleLogin(c *gin.Context) {
 	url := interactor.GoogleAuthUrl()
 	c.Redirect(http.StatusFound, url)
