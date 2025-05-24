@@ -628,7 +628,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "series"
+                    "brands"
                 ],
                 "summary": "Create a new series",
                 "parameters": [
@@ -707,7 +707,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "series"
+                    "brands"
                 ],
                 "summary": "Update an existing series",
                 "parameters": [
@@ -791,7 +791,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "series"
+                    "brands"
                 ],
                 "summary": "Delete a series",
                 "parameters": [
@@ -859,7 +859,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "models"
+                    "brands"
                 ],
                 "summary": "Create a new model",
                 "parameters": [
@@ -945,7 +945,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "models"
+                    "brands"
                 ],
                 "summary": "Update an existing model",
                 "parameters": [
@@ -1036,7 +1036,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "models"
+                    "brands"
                 ],
                 "summary": "Delete a model",
                 "parameters": [
@@ -1091,6 +1091,479 @@ const docTemplate = `{
                             "additionalProperties": {
                                 "type": "string"
                             }
+                        }
+                    }
+                }
+            }
+        },
+        "/listing": {
+            "get": {
+                "description": "List all listings with optional filtering",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "listings"
+                ],
+                "summary": "List listings",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Number of listings per page",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Search query",
+                        "name": "query",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Body type",
+                        "name": "body_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Drive type",
+                        "name": "drive_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Transmission type",
+                        "name": "transmission_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Fuel type",
+                        "name": "fuel_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "City",
+                        "name": "city",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "District",
+                        "name": "district",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Neighborhood",
+                        "name": "neighborhood",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Brand ID",
+                        "name": "brand_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Series ID",
+                        "name": "series_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Model ID",
+                        "name": "model_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Minimum price",
+                        "name": "min_price",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Maximum price",
+                        "name": "max_price",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Minimum year",
+                        "name": "min_year",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Maximum year",
+                        "name": "max_year",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Minimum kilometers",
+                        "name": "min_kilometers",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Maximum kilometers",
+                        "name": "max_kilometers",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Minimum engine power",
+                        "name": "min_engine_power",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Maximum engine power",
+                        "name": "max_engine_power",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Minimum engine volume",
+                        "name": "min_engine_volume",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Maximum engine volume",
+                        "name": "max_engine_volume",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Color",
+                        "name": "color",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Heavy damage",
+                        "name": "heavy_damage",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Created by",
+                        "name": "created_by",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "default": "created_at",
+                        "description": "Sort by",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "default": "asc",
+                        "description": "Order",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Status",
+                        "name": "status",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Listings",
+                        "schema": {
+                            "$ref": "#/definitions/carwise.ListListingResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new listing with the given details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "listings"
+                ],
+                "summary": "Create a new listing",
+                "parameters": [
+                    {
+                        "description": "Listing details",
+                        "name": "listing",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/carwise.CreateListingRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Listing created successfully",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/listing/{id}": {
+            "get": {
+                "description": "Get a listing by its unique identifier",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "listings"
+                ],
+                "summary": "Get a listing by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Listing ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Listing details",
+                        "schema": {
+                            "$ref": "#/definitions/carwise.GetListingResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Listing not found",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update the details of a listing",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "listings"
+                ],
+                "summary": "Update a listing",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Listing ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Listing details",
+                        "name": "listing",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/carwise.UpdateListingRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Listing updated successfully",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete a listing by its unique identifier",
+                "tags": [
+                    "listings"
+                ],
+                "summary": "Delete a listing",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Listing ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Listing deleted successfully",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/listing/{id}/status": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update the status of a listing",
+                "tags": [
+                    "listings"
+                ],
+                "summary": "Update a listing status",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Listing ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Listing status",
+                        "name": "status",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/carwise.UpdateListingStatusRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Listing status updated successfully",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
                         }
                     }
                 }
@@ -1358,6 +1831,20 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "carwise.Brand": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "image_id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "carwise.BrandCreateRequest": {
             "description": "Request body for creating a new brand",
             "type": "object",
@@ -1430,6 +1917,114 @@ const docTemplate = `{
                 }
             }
         },
+        "carwise.CreateListingRequest": {
+            "description": "Request body for creating a new listing",
+            "type": "object",
+            "properties": {
+                "brand_id": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "detail": {
+                    "$ref": "#/definitions/carwise.ListingDetailInfo"
+                },
+                "district": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "model_id": {
+                    "type": "string"
+                },
+                "neighborhood": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "series_id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "carwise.GetListingResponse": {
+            "description": "Response body for getting a listing",
+            "type": "object",
+            "properties": {
+                "brand": {
+                    "$ref": "#/definitions/carwise.Brand"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "integer"
+                },
+                "created_by": {
+                    "$ref": "#/definitions/carwise.UserInfo"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "detail": {
+                    "$ref": "#/definitions/carwise.ListingDetailInfo"
+                },
+                "district": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/carwise.Image"
+                    }
+                },
+                "model": {
+                    "$ref": "#/definitions/carwise.Model"
+                },
+                "neighborhood": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "series": {
+                    "$ref": "#/definitions/carwise.Series"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "integer"
+                }
+            }
+        },
         "carwise.Image": {
             "description": "Image information",
             "type": "object",
@@ -1453,6 +2048,135 @@ const docTemplate = `{
                     "description": "Path where the image is stored",
                     "type": "string",
                     "example": "/uploads/img123.jpg"
+                }
+            }
+        },
+        "carwise.ListListingInfo": {
+            "description": "Information about a listing",
+            "type": "object",
+            "properties": {
+                "brand": {
+                    "$ref": "#/definitions/carwise.Brand"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "integer"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "district": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image": {
+                    "$ref": "#/definitions/carwise.Image"
+                },
+                "model": {
+                    "$ref": "#/definitions/carwise.Model"
+                },
+                "neighborhood": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "series": {
+                    "$ref": "#/definitions/carwise.Series"
+                },
+                "slug": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "carwise.ListListingResponse": {
+            "description": "Response body for listing listings",
+            "type": "object",
+            "properties": {
+                "listings": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/carwise.ListListingInfo"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "carwise.ListingDetailInfo": {
+            "description": "Detailed information about the listing",
+            "type": "object",
+            "properties": {
+                "body_type": {
+                    "type": "string"
+                },
+                "color": {
+                    "type": "string"
+                },
+                "drive_type": {
+                    "type": "string"
+                },
+                "engine_power": {
+                    "type": "integer"
+                },
+                "engine_volume": {
+                    "type": "integer"
+                },
+                "front_bumper": {
+                    "type": "string"
+                },
+                "front_hood": {
+                    "type": "string"
+                },
+                "front_left_door": {
+                    "type": "string"
+                },
+                "front_left_mudguard": {
+                    "type": "string"
+                },
+                "front_right_door": {
+                    "type": "string"
+                },
+                "fuel_type": {
+                    "type": "string"
+                },
+                "heavy_damage": {
+                    "type": "boolean"
+                },
+                "kilometers": {
+                    "type": "integer"
+                },
+                "rear_bumper": {
+                    "type": "string"
+                },
+                "rear_left_door": {
+                    "type": "string"
+                },
+                "rear_left_mudguard": {
+                    "type": "string"
+                },
+                "rear_right_door": {
+                    "type": "string"
+                },
+                "roof": {
+                    "type": "string"
+                },
+                "transmission_type": {
+                    "type": "string"
+                },
+                "year": {
+                    "type": "integer"
                 }
             }
         },
@@ -1587,6 +2311,20 @@ const docTemplate = `{
                 }
             }
         },
+        "carwise.Series": {
+            "type": "object",
+            "properties": {
+                "brand_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "carwise.SeriesCreateRequest": {
             "description": "Request body for creating a new series",
             "type": "object",
@@ -1640,6 +2378,68 @@ const docTemplate = `{
                 }
             }
         },
+        "carwise.UpdateListingRequest": {
+            "description": "Request body for updating a listing",
+            "type": "object",
+            "properties": {
+                "brand_id": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "detail": {
+                    "$ref": "#/definitions/carwise.ListingDetailInfo"
+                },
+                "district": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "model_id": {
+                    "type": "string"
+                },
+                "neighborhood": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "series_id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "carwise.UpdateListingStatusRequest": {
+            "description": "Request body for updating the status of a listing",
+            "type": "object",
+            "required": [
+                "status"
+            ],
+            "properties": {
+                "status": {
+                    "type": "integer",
+                    "maximum": 3,
+                    "minimum": 1
+                }
+            }
+        },
         "carwise.UserCreateRequest": {
             "description": "User registration request",
             "type": "object",
@@ -1676,6 +2476,36 @@ const docTemplate = `{
                 "password": {
                     "type": "string",
                     "example": "StrongP@ss123"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "5551234567"
+                }
+            }
+        },
+        "carwise.UserInfo": {
+            "description": "User information",
+            "type": "object",
+            "properties": {
+                "country_code": {
+                    "type": "string",
+                    "example": "+90"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "john.doe@example.com"
+                },
+                "first_name": {
+                    "type": "string",
+                    "example": "John"
+                },
+                "id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "last_name": {
+                    "type": "string",
+                    "example": "Doe"
                 },
                 "phone_number": {
                     "type": "string",

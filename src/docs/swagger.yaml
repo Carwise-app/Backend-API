@@ -1,5 +1,14 @@
 basePath: /
 definitions:
+  carwise.Brand:
+    properties:
+      id:
+        type: string
+      image_id:
+        type: string
+      name:
+        type: string
+    type: object
   carwise.BrandCreateRequest:
     description: Request body for creating a new brand
     properties:
@@ -50,6 +59,78 @@ definitions:
     - password
     - re_password
     type: object
+  carwise.CreateListingRequest:
+    description: Request body for creating a new listing
+    properties:
+      brand_id:
+        type: string
+      city:
+        type: string
+      currency:
+        type: string
+      description:
+        type: string
+      detail:
+        $ref: '#/definitions/carwise.ListingDetailInfo'
+      district:
+        type: string
+      images:
+        items:
+          type: string
+        type: array
+      model_id:
+        type: string
+      neighborhood:
+        type: string
+      price:
+        type: integer
+      series_id:
+        type: string
+      title:
+        type: string
+    type: object
+  carwise.GetListingResponse:
+    description: Response body for getting a listing
+    properties:
+      brand:
+        $ref: '#/definitions/carwise.Brand'
+      city:
+        type: string
+      created_at:
+        type: integer
+      created_by:
+        $ref: '#/definitions/carwise.UserInfo'
+      currency:
+        type: string
+      description:
+        type: string
+      detail:
+        $ref: '#/definitions/carwise.ListingDetailInfo'
+      district:
+        type: string
+      id:
+        type: string
+      images:
+        items:
+          $ref: '#/definitions/carwise.Image'
+        type: array
+      model:
+        $ref: '#/definitions/carwise.Model'
+      neighborhood:
+        type: string
+      price:
+        type: integer
+      series:
+        $ref: '#/definitions/carwise.Series'
+      slug:
+        type: string
+      status:
+        type: integer
+      title:
+        type: string
+      updated_at:
+        type: integer
+    type: object
   carwise.Image:
     description: Image information
     properties:
@@ -69,6 +150,92 @@ definitions:
         description: Path where the image is stored
         example: /uploads/img123.jpg
         type: string
+    type: object
+  carwise.ListListingInfo:
+    description: Information about a listing
+    properties:
+      brand:
+        $ref: '#/definitions/carwise.Brand'
+      city:
+        type: string
+      created_at:
+        type: integer
+      currency:
+        type: string
+      district:
+        type: string
+      id:
+        type: string
+      image:
+        $ref: '#/definitions/carwise.Image'
+      model:
+        $ref: '#/definitions/carwise.Model'
+      neighborhood:
+        type: string
+      price:
+        type: integer
+      series:
+        $ref: '#/definitions/carwise.Series'
+      slug:
+        type: string
+      status:
+        type: integer
+      title:
+        type: string
+    type: object
+  carwise.ListListingResponse:
+    description: Response body for listing listings
+    properties:
+      listings:
+        items:
+          $ref: '#/definitions/carwise.ListListingInfo'
+        type: array
+      total:
+        type: integer
+    type: object
+  carwise.ListingDetailInfo:
+    description: Detailed information about the listing
+    properties:
+      body_type:
+        type: string
+      color:
+        type: string
+      drive_type:
+        type: string
+      engine_power:
+        type: integer
+      engine_volume:
+        type: integer
+      front_bumper:
+        type: string
+      front_hood:
+        type: string
+      front_left_door:
+        type: string
+      front_left_mudguard:
+        type: string
+      front_right_door:
+        type: string
+      fuel_type:
+        type: string
+      heavy_damage:
+        type: boolean
+      kilometers:
+        type: integer
+      rear_bumper:
+        type: string
+      rear_left_door:
+        type: string
+      rear_left_mudguard:
+        type: string
+      rear_right_door:
+        type: string
+      roof:
+        type: string
+      transmission_type:
+        type: string
+      year:
+        type: integer
     type: object
   carwise.Model:
     properties:
@@ -162,6 +329,15 @@ definitions:
     required:
     - email
     type: object
+  carwise.Series:
+    properties:
+      brand_id:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
   carwise.SeriesCreateRequest:
     description: Request body for creating a new series
     properties:
@@ -198,6 +374,48 @@ definitions:
         example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
         type: string
     type: object
+  carwise.UpdateListingRequest:
+    description: Request body for updating a listing
+    properties:
+      brand_id:
+        type: string
+      city:
+        type: string
+      currency:
+        type: string
+      description:
+        type: string
+      detail:
+        $ref: '#/definitions/carwise.ListingDetailInfo'
+      district:
+        type: string
+      id:
+        type: string
+      images:
+        items:
+          type: string
+        type: array
+      model_id:
+        type: string
+      neighborhood:
+        type: string
+      price:
+        type: integer
+      series_id:
+        type: string
+      title:
+        type: string
+    type: object
+  carwise.UpdateListingStatusRequest:
+    description: Request body for updating the status of a listing
+    properties:
+      status:
+        maximum: 3
+        minimum: 1
+        type: integer
+    required:
+    - status
+    type: object
   carwise.UserCreateRequest:
     description: User registration request
     properties:
@@ -231,6 +449,28 @@ definitions:
     - last_name
     - password
     - phone_number
+    type: object
+  carwise.UserInfo:
+    description: User information
+    properties:
+      country_code:
+        example: "+90"
+        type: string
+      email:
+        example: john.doe@example.com
+        type: string
+      first_name:
+        example: John
+        type: string
+      id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      last_name:
+        example: Doe
+        type: string
+      phone_number:
+        example: "5551234567"
+        type: string
     type: object
   carwise.UserLoginRequest:
     description: User login request
@@ -698,7 +938,7 @@ paths:
       - BearerAuth: []
       summary: Create a new series
       tags:
-      - series
+      - brands
   /brands/{id}/series/{sid}:
     delete:
       consumes:
@@ -739,7 +979,7 @@ paths:
       - BearerAuth: []
       summary: Delete a series
       tags:
-      - series
+      - brands
     put:
       consumes:
       - application/json
@@ -791,7 +1031,7 @@ paths:
       - BearerAuth: []
       summary: Update an existing series
       tags:
-      - series
+      - brands
   /brands/{id}/series/{sid}/models:
     post:
       consumes:
@@ -844,7 +1084,7 @@ paths:
       - BearerAuth: []
       summary: Create a new model
       tags:
-      - models
+      - brands
   /brands/{id}/series/{sid}/models/{mid}:
     delete:
       consumes:
@@ -890,7 +1130,7 @@ paths:
       - BearerAuth: []
       summary: Delete a model
       tags:
-      - models
+      - brands
     put:
       consumes:
       - application/json
@@ -947,7 +1187,318 @@ paths:
       - BearerAuth: []
       summary: Update an existing model
       tags:
-      - models
+      - brands
+  /listing:
+    get:
+      description: List all listings with optional filtering
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Number of listings per page
+        in: query
+        name: limit
+        type: integer
+      - description: Search query
+        in: query
+        name: query
+        type: string
+      - description: Body type
+        in: query
+        name: body_type
+        type: string
+      - description: Drive type
+        in: query
+        name: drive_type
+        type: string
+      - description: Transmission type
+        in: query
+        name: transmission_type
+        type: string
+      - description: Fuel type
+        in: query
+        name: fuel_type
+        type: string
+      - description: City
+        in: query
+        name: city
+        type: string
+      - description: District
+        in: query
+        name: district
+        type: string
+      - description: Neighborhood
+        in: query
+        name: neighborhood
+        type: string
+      - description: Brand ID
+        in: query
+        name: brand_id
+        type: string
+      - description: Series ID
+        in: query
+        name: series_id
+        type: string
+      - description: Model ID
+        in: query
+        name: model_id
+        type: string
+      - description: Minimum price
+        in: query
+        name: min_price
+        type: integer
+      - description: Maximum price
+        in: query
+        name: max_price
+        type: integer
+      - description: Minimum year
+        in: query
+        name: min_year
+        type: integer
+      - description: Maximum year
+        in: query
+        name: max_year
+        type: integer
+      - description: Minimum kilometers
+        in: query
+        name: min_kilometers
+        type: integer
+      - description: Maximum kilometers
+        in: query
+        name: max_kilometers
+        type: integer
+      - description: Minimum engine power
+        in: query
+        name: min_engine_power
+        type: integer
+      - description: Maximum engine power
+        in: query
+        name: max_engine_power
+        type: integer
+      - description: Minimum engine volume
+        in: query
+        name: min_engine_volume
+        type: integer
+      - description: Maximum engine volume
+        in: query
+        name: max_engine_volume
+        type: integer
+      - description: Color
+        in: query
+        name: color
+        type: string
+      - description: Heavy damage
+        in: query
+        name: heavy_damage
+        type: boolean
+      - description: Created by
+        in: query
+        name: created_by
+        type: string
+      - default: created_at
+        description: Sort by
+        in: query
+        name: sort
+        type: string
+      - default: asc
+        description: Order
+        in: query
+        name: order
+        type: string
+      - description: Status
+        in: query
+        name: status
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Listings
+          schema:
+            $ref: '#/definitions/carwise.ListListingResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      summary: List listings
+      tags:
+      - listings
+    post:
+      consumes:
+      - application/json
+      description: Create a new listing with the given details
+      parameters:
+      - description: Listing details
+        in: body
+        name: listing
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.CreateListingRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Listing created successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new listing
+      tags:
+      - listings
+  /listing/{id}:
+    delete:
+      description: Delete a listing by its unique identifier
+      parameters:
+      - description: Listing ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Listing deleted successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Delete a listing
+      tags:
+      - listings
+    get:
+      description: Get a listing by its unique identifier
+      parameters:
+      - description: Listing ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Listing details
+          schema:
+            $ref: '#/definitions/carwise.GetListingResponse'
+        "404":
+          description: Listing not found
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      summary: Get a listing by ID
+      tags:
+      - listings
+    put:
+      consumes:
+      - application/json
+      description: Update the details of a listing
+      parameters:
+      - description: Listing ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Listing details
+        in: body
+        name: listing
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.UpdateListingRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Listing updated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update a listing
+      tags:
+      - listings
+  /listing/{id}/status:
+    patch:
+      description: Update the status of a listing
+      parameters:
+      - description: Listing ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Listing status
+        in: body
+        name: status
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.UpdateListingStatusRequest'
+      responses:
+        "200":
+          description: Listing status updated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Update a listing status
+      tags:
+      - listings
   /profile:
     get:
       description: Get the profile information of the authenticated user

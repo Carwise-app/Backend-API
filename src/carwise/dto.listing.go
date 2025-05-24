@@ -1,5 +1,7 @@
 package carwise
 
+// @model CreateListingRequest
+// @Description Request body for creating a new listing
 type CreateListingRequest struct {
 	BrandId      string            `json:"brand_id"`
 	SeriesId     string            `json:"series_id"`
@@ -17,6 +19,8 @@ type CreateListingRequest struct {
 	Role         int               `json:"-"`
 }
 
+// @model ListingDetailInfo
+// @Description Detailed information about the listing
 type ListingDetailInfo struct {
 	FuelType          string `json:"fuel_type"`
 	TransmissionType  string `json:"transmission_type"`
@@ -40,6 +44,8 @@ type ListingDetailInfo struct {
 	RearBumper        string `json:"rear_bumper"`
 }
 
+// @model GetListingResponse
+// @Description Response body for getting a listing
 type GetListingResponse struct {
 	Id           string            `json:"id"`
 	Slug         string            `json:"slug"`
@@ -61,10 +67,14 @@ type GetListingResponse struct {
 	UpdatedAt    int64             `json:"updated_at"`
 }
 
+// @model ListListingRequest
+// @Description Request body for listing listings
 type ListListingRequest struct {
 	Filter ListingFilter
 }
 
+// @model ListingFilter
+// @Description Filter criteria for listing search
 type ListingFilter struct {
 	BrandId          string `json:"brand_id"`
 	SeriesId         string `json:"series_id"`
@@ -97,6 +107,8 @@ type ListingFilter struct {
 	Limit            int    `json:"limit"`
 }
 
+// @model UpdateListingRequest
+// @Description Request body for updating a listing
 type UpdateListingRequest struct {
 	Id           string            `json:"id"`
 	BrandId      string            `json:"brand_id"`
@@ -115,12 +127,16 @@ type UpdateListingRequest struct {
 	Role         int               `json:"-"`
 }
 
+// @model DeleteListingRequest
+// @Description Request body for deleting a listing
 type DeleteListingRequest struct {
 	Id     string `json:"-"`
 	UserId string `json:"-"`
 	Role   int    `json:"-"`
 }
 
+// @model UpdateListingStatusRequest
+// @Description Request body for updating the status of a listing
 type UpdateListingStatusRequest struct {
 	Id     string `json:"-"`
 	Status int    `json:"status" validate:"required,min=1,max=3"`
@@ -128,11 +144,15 @@ type UpdateListingStatusRequest struct {
 	Role   int    `json:"-"`
 }
 
+// @model ListListingResponse
+// @Description Response body for listing listings
 type ListListingResponse struct {
 	Listings []ListListingInfo `json:"listings"`
 	Total    int               `json:"total"`
 }
 
+// @model ListListingInfo
+// @Description Information about a listing
 type ListListingInfo struct {
 	Id           string `json:"id"`
 	Slug         string `json:"slug"`

@@ -10,6 +10,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Create a new listing
+// @Description Create a new listing with the given details
+// @Tags listings
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param listing body carwise.CreateListingRequest true "Listing details"
+// @Success 201 {object} map[string]interface{} "Listing created successfully"
+// @Failure 400 {object} ErrorResponse "Invalid request"
+// @Failure 401 {object} ErrorResponse "Unauthorized"
+// @Router /listing [post]
 func CreateListing(ctx *gin.Context) {
 	userContext, exists := ctx.Get("user")
 	if !exists {
@@ -35,6 +46,15 @@ func CreateListing(ctx *gin.Context) {
 	ctx.JSON(http.StatusCreated, gin.H{"message": "Listing created successfully", "id": id})
 }
 
+// @Summary Get a listing by ID
+// @Description Get a listing by its unique identifier
+// @Tags listings
+// @Produce json
+// @Param id path string true "Listing ID"
+// @Success 200 {object} carwise.GetListingResponse "Listing details"
+// @Failure 404 {object} ErrorResponse "Listing not found"
+// @Failure 500 {object} ErrorResponse "Internal server error"
+// @Router /listing/{id} [get]
 func GetListing(ctx *gin.Context) {
 	id := ctx.Param("id")
 
@@ -47,6 +67,43 @@ func GetListing(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, listing)
 }
 
+// @Summary List listings
+// @Description List all listings with optional filtering
+// @Tags listings
+// @Produce json
+// @Param page query int false "Page number" default(1)
+// @Param limit query int false "Number of listings per page" default(10)
+// @Param query query string false "Search query"
+// @Param body_type query string false "Body type"
+// @Param drive_type query string false "Drive type"
+// @Param transmission_type query string false "Transmission type"
+// @Param fuel_type query string false "Fuel type"
+// @Param city query string false "City"
+// @Param district query string false "District"
+// @Param neighborhood query string false "Neighborhood"
+// @Param brand_id query string false "Brand ID"
+// @Param series_id query string false "Series ID"
+// @Param model_id query string false "Model ID"
+// @Param min_price query int false "Minimum price"
+// @Param max_price query int false "Maximum price"
+// @Param min_year query int false "Minimum year"
+// @Param max_year query int false "Maximum year"
+// @Param min_kilometers query int false "Minimum kilometers"
+// @Param max_kilometers query int false "Maximum kilometers"
+// @Param min_engine_power query int false "Minimum engine power"
+// @Param max_engine_power query int false "Maximum engine power"
+// @Param min_engine_volume query int false "Minimum engine volume"
+// @Param max_engine_volume query int false "Maximum engine volume"
+// @Param color query string false "Color"
+// @Param heavy_damage query bool false "Heavy damage"
+// @Param created_by query string false "Created by"
+// @Param sort query string false "Sort by" default(created_at)
+// @Param order query string false "Order" default(asc)
+// @Param status query int false "Status"
+// @Success 200 {object} carwise.ListListingResponse "Listings"
+// @Failure 400 {object} ErrorResponse "Invalid request"
+// @Failure 500 {object} ErrorResponse "Internal server error"
+// @Router /listing [get]
 func ListListing(ctx *gin.Context) {
 	var request carwise.ListListingRequest
 
@@ -267,6 +324,19 @@ func ListListing(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+// @Summary Update a listing
+// @Description Update the details of a listing
+// @Tags listings
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param id path string true "Listing ID"
+// @Param listing body carwise.UpdateListingRequest true "Listing details"
+// @Success 200 {object} map[string]interface{} "Listing updated successfully"
+// @Failure 400 {object} ErrorResponse "Invalid request"
+// @Failure 401 {object} ErrorResponse "Unauthorized"
+// @Failure 500 {object} ErrorResponse "Internal server error"
+// @Router /listing/{id} [put]
 func UpdateListing(ctx *gin.Context) {
 	userContext, exists := ctx.Get("user")
 	if !exists {
@@ -300,6 +370,16 @@ func UpdateListing(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Listing updated successfully"})
 }
 
+// @Summary Delete a listing
+// @Description Delete a listing by its unique identifier
+// @Tags listings
+// @Security BearerAuth
+// @Param id path string true "Listing ID"
+// @Success 200 {object} map[string]interface{} "Listing deleted successfully"
+// @Failure 400 {object} ErrorResponse "Invalid request"
+// @Failure 401 {object} ErrorResponse "Unauthorized"
+// @Failure 500 {object} ErrorResponse "Internal server error"
+// @Router /listing/{id} [delete]
 func DeleteListing(ctx *gin.Context) {
 	userContext, exists := ctx.Get("user")
 	if !exists {
@@ -328,6 +408,17 @@ func DeleteListing(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Listing deleted successfully"})
 }
 
+// @Summary Update a listing status
+// @Description Update the status of a listing
+// @Tags listings
+// @Security BearerAuth
+// @Param id path string true "Listing ID"
+// @Param status body carwise.UpdateListingStatusRequest true "Listing status"
+// @Success 200 {object} map[string]interface{} "Listing status updated successfully"
+// @Failure 400 {object} ErrorResponse "Invalid request"
+// @Failure 401 {object} ErrorResponse "Unauthorized"
+// @Failure 500 {object} ErrorResponse "Internal server error"
+// @Router /listing/{id}/status [patch]
 func UpdateListingStatus(ctx *gin.Context) {
 	userContext, exists := ctx.Get("user")
 	if !exists {

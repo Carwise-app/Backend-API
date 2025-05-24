@@ -138,7 +138,7 @@ func DeleteBrand(ctx *gin.Context) {
 
 // @Summary Create a new series
 // @Description Create a new series for a specific brand
-// @Tags series
+// @Tags brands
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -178,7 +178,7 @@ func CreateSeries(ctx *gin.Context) {
 
 // @Summary Update an existing series
 // @Description Update a series with the provided details
-// @Tags series
+// @Tags brands
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -222,7 +222,7 @@ func UpdateSeries(ctx *gin.Context) {
 
 // @Summary Delete a series
 // @Description Delete a series by its ID
-// @Tags series
+// @Tags brands
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -260,7 +260,7 @@ func DeleteSeries(ctx *gin.Context) {
 
 // @Summary Create a new model
 // @Description Create a new model for a specific series
-// @Tags models
+// @Tags brands
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -304,7 +304,7 @@ func CreateModel(ctx *gin.Context) {
 
 // @Summary Update an existing model
 // @Description Update a model with the provided details
-// @Tags models
+// @Tags brands
 // @Accept json
 // @Produce json
 // @Security BearerAuth
@@ -349,7 +349,7 @@ func UpdateModel(ctx *gin.Context) {
 
 // @Summary Delete a model
 // @Description Delete a model by its ID
-// @Tags models
+// @Tags brands
 // @Accept json
 // @Produce json
 // @Security BearerAuth
