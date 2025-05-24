@@ -62,8 +62,6 @@ jobs:
   deploy:
     needs: docker_deploy
     runs-on: ubuntu-latest
-    env:
-      IMAGE: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
     steps:
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
@@ -72,8 +70,8 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            echo "🚀 Pulling image: $IMAGE"
-            docker pull $IMAGE
+            echo "🚀 Pulling image: ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}"
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
 
             echo "🧹 Stopping and removing old container if exists..."
             docker stop carwisegw || true
@@ -105,4 +103,4 @@ jobs:
               -e GOOGLE_REDIRECT_URL=${{ env.GOOGLE_REDIRECT_URL }} \
               -e GOOGLE_SCOPES=${{ env.GOOGLE_SCOPES }} \
               -e OAUTH2_STATE=${{ env.OAUTH2_STATE }} \
-              $IMAGE
+              ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
