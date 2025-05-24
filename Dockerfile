@@ -22,7 +22,6 @@ RUN update-ca-certificates
 ENV TZ=UTC
 
 COPY --from=builder /app/carwise-backend .
-COPY templates ./templates
 
 ENV GIN_MODE=release
 
