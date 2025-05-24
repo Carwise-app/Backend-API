@@ -42,8 +42,10 @@ jobs:
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
-            # Pull the latest image
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/carwise-backend:latest
+            IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/carwise-backend:latest
+
+            echo "🚀 Pulling image: $IMAGE"
+            docker pull $IMAGE
             
             # Stop and remove the existing container if it exists
             docker stop carwise-backend || true
@@ -78,4 +80,4 @@ jobs:
               -e GOOGLE_REDIRECT_URL=${{ secrets.GOOGLE_REDIRECT_URL }} \
               -e GOOGLE_SCOPES=${{ secrets.GOOGLE_SCOPES }} \
               -e OAUTH2_STATE=${{ secrets.OAUTH2_STATE }} \
-              ${{ secrets.DOCKERHUB_USERNAME }}/carwise-backend:latest
+              $IMAGE
