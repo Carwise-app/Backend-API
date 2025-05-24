@@ -1096,6 +1096,196 @@ const docTemplate = `{
                 }
             }
         },
+        "/chat": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get all chats for a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "messages"
+                ],
+                "summary": "Get chats",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Chats retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/carwise.GetChatsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/chat/{receiver_id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get messages between two users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "messages"
+                ],
+                "summary": "Get messages",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Receiver ID",
+                        "name": "receiver_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Messages retrieved successfully",
+                        "schema": {
+                            "$ref": "#/definitions/carwise.GetMessagesResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Send a message to a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "messages"
+                ],
+                "summary": "Send a message",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Receiver ID",
+                        "name": "receiver_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Message details",
+                        "name": "message",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/carwise.SendMessageRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Message sent successfully",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/listing": {
             "get": {
                 "description": "List all listings with optional filtering",
@@ -1917,6 +2107,18 @@ const docTemplate = `{
                 }
             }
         },
+        "carwise.ChatInfo": {
+            "description": "Chat information",
+            "type": "object",
+            "properties": {
+                "last_message_time": {
+                    "type": "integer"
+                },
+                "user": {
+                    "$ref": "#/definitions/carwise.UserInfo"
+                }
+            }
+        },
         "carwise.CreateListingRequest": {
             "description": "Request body for creating a new listing",
             "type": "object",
@@ -1959,6 +2161,21 @@ const docTemplate = `{
                 },
                 "title": {
                     "type": "string"
+                }
+            }
+        },
+        "carwise.GetChatsResponse": {
+            "description": "Response body for getting chats",
+            "type": "object",
+            "properties": {
+                "chats": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/carwise.ChatInfo"
+                    }
+                },
+                "total": {
+                    "type": "integer"
                 }
             }
         },
@@ -2021,6 +2238,21 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "integer"
+                }
+            }
+        },
+        "carwise.GetMessagesResponse": {
+            "description": "Response body for getting messages",
+            "type": "object",
+            "properties": {
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/carwise.MessageInfo"
+                    }
+                },
+                "total": {
                     "type": "integer"
                 }
             }
@@ -2180,6 +2412,30 @@ const docTemplate = `{
                 }
             }
         },
+        "carwise.MessageInfo": {
+            "description": "Message information",
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "read": {
+                    "type": "boolean"
+                },
+                "receiver": {
+                    "$ref": "#/definitions/carwise.UserInfo"
+                },
+                "sender": {
+                    "$ref": "#/definitions/carwise.UserInfo"
+                }
+            }
+        },
         "carwise.Model": {
             "type": "object",
             "properties": {
@@ -2308,6 +2564,15 @@ const docTemplate = `{
                 "email": {
                     "type": "string",
                     "example": "john.doe@example.com"
+                }
+            }
+        },
+        "carwise.SendMessageRequest": {
+            "description": "Request body for sending a message",
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
                 }
             }
         },

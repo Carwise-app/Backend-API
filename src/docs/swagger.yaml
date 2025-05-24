@@ -59,6 +59,14 @@ definitions:
     - password
     - re_password
     type: object
+  carwise.ChatInfo:
+    description: Chat information
+    properties:
+      last_message_time:
+        type: integer
+      user:
+        $ref: '#/definitions/carwise.UserInfo'
+    type: object
   carwise.CreateListingRequest:
     description: Request body for creating a new listing
     properties:
@@ -88,6 +96,16 @@ definitions:
         type: string
       title:
         type: string
+    type: object
+  carwise.GetChatsResponse:
+    description: Response body for getting chats
+    properties:
+      chats:
+        items:
+          $ref: '#/definitions/carwise.ChatInfo'
+        type: array
+      total:
+        type: integer
     type: object
   carwise.GetListingResponse:
     description: Response body for getting a listing
@@ -129,6 +147,16 @@ definitions:
       title:
         type: string
       updated_at:
+        type: integer
+    type: object
+  carwise.GetMessagesResponse:
+    description: Response body for getting messages
+    properties:
+      messages:
+        items:
+          $ref: '#/definitions/carwise.MessageInfo'
+        type: array
+      total:
         type: integer
     type: object
   carwise.Image:
@@ -237,6 +265,22 @@ definitions:
       year:
         type: integer
     type: object
+  carwise.MessageInfo:
+    description: Message information
+    properties:
+      created_at:
+        type: integer
+      id:
+        type: string
+      message:
+        type: string
+      read:
+        type: boolean
+      receiver:
+        $ref: '#/definitions/carwise.UserInfo'
+      sender:
+        $ref: '#/definitions/carwise.UserInfo'
+    type: object
   carwise.Model:
     properties:
       brand_id:
@@ -328,6 +372,12 @@ definitions:
         type: string
     required:
     - email
+    type: object
+  carwise.SendMessageRequest:
+    description: Request body for sending a message
+    properties:
+      message:
+        type: string
     type: object
   carwise.Series:
     properties:
@@ -1188,6 +1238,128 @@ paths:
       summary: Update an existing model
       tags:
       - brands
+  /chat:
+    get:
+      consumes:
+      - application/json
+      description: Get all chats for a user
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Chats retrieved successfully
+          schema:
+            $ref: '#/definitions/carwise.GetChatsResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get chats
+      tags:
+      - messages
+  /chat/{receiver_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get messages between two users
+      parameters:
+      - description: Receiver ID
+        in: path
+        name: receiver_id
+        required: true
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Messages retrieved successfully
+          schema:
+            $ref: '#/definitions/carwise.GetMessagesResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get messages
+      tags:
+      - messages
+    post:
+      consumes:
+      - application/json
+      description: Send a message to a user
+      parameters:
+      - description: Receiver ID
+        in: path
+        name: receiver_id
+        required: true
+        type: string
+      - description: Message details
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.SendMessageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Message sent successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Send a message
+      tags:
+      - messages
   /listing:
     get:
       description: List all listings with optional filtering

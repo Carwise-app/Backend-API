@@ -27,6 +27,8 @@ type Hub struct {
 	mu         sync.RWMutex
 }
 
+// @model WSMessage
+// @Description WebSocket message structure
 type WSMessage struct {
 	Type      string          `json:"type"`
 	UserId    string          `json:"user_id"`

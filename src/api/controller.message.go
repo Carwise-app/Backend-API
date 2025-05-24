@@ -9,6 +9,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary Send a message
+// @Description Send a message to a user
+// @Tags messages
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param receiver_id path string true "Receiver ID"
+// @Param message body carwise.SendMessageRequest true "Message details"
+// @Success 200 {object} map[string]interface{} "Message sent successfully"
+// @Failure 400 {object} ErrorResponse "Invalid request"
+// @Failure 401 {object} ErrorResponse "Unauthorized"
+// @Failure 500 {object} ErrorResponse "Internal server error"
+// @Router /chat/{receiver_id} [post]
 func SendMessage(ctx *gin.Context) {
 	userContext, exists := ctx.Get("user")
 	if !exists {
@@ -36,6 +49,20 @@ func SendMessage(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{"message": "Message sent successfully"})
 }
 
+// @Summary Get messages
+// @Description Get messages between two users
+// @Tags messages
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param receiver_id path string true "Receiver ID"
+// @Param limit query int false "Limit"
+// @Param page query int false "Page"
+// @Success 200 {object} carwise.GetMessagesResponse "Messages retrieved successfully"
+// @Failure 400 {object} ErrorResponse "Invalid request"
+// @Failure 401 {object} ErrorResponse "Unauthorized"
+// @Failure 500 {object} ErrorResponse "Internal server error"
+// @Router /chat/{receiver_id} [get]
 func GetMessages(ctx *gin.Context) {
 	userContext, exists := ctx.Get("user")
 	if !exists {
@@ -62,6 +89,19 @@ func GetMessages(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+// @Summary Get chats
+// @Description Get all chats for a user
+// @Tags messages
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param limit query int false "Limit"
+// @Param page query int false "Page"
+// @Success 200 {object} carwise.GetChatsResponse "Chats retrieved successfully"
+// @Failure 400 {object} ErrorResponse "Invalid request"
+// @Failure 401 {object} ErrorResponse "Unauthorized"
+// @Failure 500 {object} ErrorResponse "Internal server error"
+// @Router /chat [get]
 func GetChats(ctx *gin.Context) {
 	userContext, exists := ctx.Get("user")
 	if !exists {

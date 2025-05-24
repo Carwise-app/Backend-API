@@ -1,5 +1,7 @@
 package carwise
 
+// @model SendMessageRequest
+// @Description Request body for sending a message
 type SendMessageRequest struct {
 	ReceiverId string `json:"-"`
 	Message    string `json:"message"`
@@ -7,6 +9,8 @@ type SendMessageRequest struct {
 	Role       int    `json:"-"`
 }
 
+// @model GetMessagesRequest
+// @Description Request body for getting messages
 type GetMessagesRequest struct {
 	ReceiverId string `json:"-"`
 	Limit      int    `json:"-"`
@@ -15,11 +19,15 @@ type GetMessagesRequest struct {
 	Role       int    `json:"-"`
 }
 
+// @model GetMessagesResponse
+// @Description Response body for getting messages
 type GetMessagesResponse struct {
 	Messages []MessageInfo `json:"messages"`
 	Total    int           `json:"total"`
 }
 
+// @model MessageInfo
+// @Description Message information
 type MessageInfo struct {
 	Id        string   `json:"id"`
 	Sender    UserInfo `json:"sender"`
@@ -29,6 +37,8 @@ type MessageInfo struct {
 	CreatedAt int64    `json:"created_at"`
 }
 
+// @model GetChatsRequest
+// @Description Request body for getting chats
 type GetChatsRequest struct {
 	Limit  int    `json:"-"`
 	Page   int    `json:"-"`
@@ -36,12 +46,16 @@ type GetChatsRequest struct {
 	Role   int    `json:"-"`
 }
 
+// @model GetChatsResponse
+// @Description Response body for getting chats
 type GetChatsResponse struct {
 	Chats []ChatInfo `json:"chats"`
 	Total int        `json:"total"`
 }
 
+// @model ChatInfo
+// @Description Chat information
 type ChatInfo struct {
-	User      UserInfo `json:"user"`
+	User            UserInfo `json:"user"`
 	LastMessageTime int64    `json:"last_message_time"`
 }
