@@ -169,3 +169,11 @@ type ListListingInfo struct {
 	Image        Image  `json:"image"`
 	CreatedAt    int64  `json:"created_at"`
 }
+
+// @model IdResponse
+// @Description Response body for id
+type IdResponse struct {
+	Id string `json:"id"`
+}
+
+

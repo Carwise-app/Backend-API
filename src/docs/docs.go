@@ -427,22 +427,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Brand created successfully",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "allOf": [
-                                    {
-                                        "type": "string"
-                                    },
-                                    {
-                                        "type": "object",
-                                        "properties": {
-                                            "message": {
-                                                "type": "string"
-                                            }
-                                        }
-                                    }
-                                ]
-                            }
+                            "$ref": "#/definitions/carwise.IdResponse"
                         }
                     },
                     "400": {
@@ -653,22 +638,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Series created successfully",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "allOf": [
-                                    {
-                                        "type": "string"
-                                    },
-                                    {
-                                        "type": "object",
-                                        "properties": {
-                                            "message": {
-                                                "type": "string"
-                                            }
-                                        }
-                                    }
-                                ]
-                            }
+                            "$ref": "#/definitions/carwise.IdResponse"
                         }
                     },
                     "400": {
@@ -891,22 +861,7 @@ const docTemplate = `{
                     "200": {
                         "description": "Model created successfully",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "allOf": [
-                                    {
-                                        "type": "string"
-                                    },
-                                    {
-                                        "type": "object",
-                                        "properties": {
-                                            "message": {
-                                                "type": "string"
-                                            }
-                                        }
-                                    }
-                                ]
-                            }
+                            "$ref": "#/definitions/carwise.IdResponse"
                         }
                     },
                     "400": {
@@ -1681,8 +1636,7 @@ const docTemplate = `{
                     "201": {
                         "description": "Listing created successfully",
                         "schema": {
-                            "type": "object",
-                            "additionalProperties": true
+                            "$ref": "#/definitions/carwise.IdResponse"
                         }
                     },
                     "400": {
@@ -2406,6 +2360,15 @@ const docTemplate = `{
                 },
                 "total": {
                     "type": "integer"
+                }
+            }
+        },
+        "carwise.IdResponse": {
+            "description": "Response body for id",
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
                 }
             }
         },

@@ -32,7 +32,7 @@ func GetAllBrands(ctx *gin.Context) {
 // @Produce json
 // @Security BearerAuth
 // @Param brand body carwise.BrandCreateRequest true "Brand creation request"
-// @Success 200 {object} map[string]string{message=string} "Brand created successfully"
+// @Success 200 {object} carwise.IdResponse "Brand created successfully"
 // @Failure 400 {object} map[string]string
 // @Failure 401 {object} map[string]string
 // @Router /brands [post]
@@ -52,13 +52,13 @@ func CreateBrand(ctx *gin.Context) {
 	request.UserId = claim.UserId
 	request.Role = claim.Role
 
-	err := interactor.CreateBrand(&request)
+	brand, err := interactor.CreateBrand(&request)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "Brand created successfully"})
+	ctx.JSON(http.StatusOK, gin.H{"id": brand.Id})
 }
 
 // @Summary Update an existing brand
@@ -144,7 +144,7 @@ func DeleteBrand(ctx *gin.Context) {
 // @Security BearerAuth
 // @Param id path string true "Brand ID"
 // @Param series body carwise.SeriesCreateRequest true "Series creation request"
-// @Success 200 {object} map[string]string{message=string} "Series created successfully"
+// @Success 200 {object} carwise.IdResponse "Series created successfully"
 // @Failure 400 {object} map[string]string
 // @Failure 401 {object} map[string]string
 // @Router /brands/{id}/series [post]
@@ -167,13 +167,13 @@ func CreateSeries(ctx *gin.Context) {
 	brandId := ctx.Param("id")
 	request.BrandId = brandId
 
-	err := interactor.CreateSeries(&request)
+	series, err := interactor.CreateSeries(&request)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "Series created successfully"})
+	ctx.JSON(http.StatusOK, gin.H{"id": series.Id})
 }
 
 // @Summary Update an existing series
@@ -267,7 +267,7 @@ func DeleteSeries(ctx *gin.Context) {
 // @Param id path string true "Brand ID"
 // @Param sid path string true "Series ID"
 // @Param model body carwise.ModelCreateRequest true "Model creation request"
-// @Success 200 {object} map[string]string{message=string} "Model created successfully"
+// @Success 200 {object} carwise.IdResponse "Model created successfully"
 // @Failure 400 {object} map[string]string
 // @Failure 401 {object} map[string]string
 // @Router /brands/{id}/series/{sid}/models [post]
@@ -293,13 +293,13 @@ func CreateModel(ctx *gin.Context) {
 	seriesId := ctx.Param("sid")
 	request.SeriesId = seriesId
 
-	err := interactor.CreateModel(&request)
+	model, err := interactor.CreateModel(&request)
 	if err != nil {
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"message": "Model created successfully"})
+	ctx.JSON(http.StatusOK, gin.H{"id": model.Id})
 }
 
 // @Summary Update an existing model

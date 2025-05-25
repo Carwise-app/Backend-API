@@ -159,6 +159,12 @@ definitions:
       total:
         type: integer
     type: object
+  carwise.IdResponse:
+    description: Response body for id
+    properties:
+      id:
+        type: string
+    type: object
   carwise.Image:
     description: Image information
     properties:
@@ -827,14 +833,7 @@ paths:
         "200":
           description: Brand created successfully
           schema:
-            additionalProperties:
-              allOf:
-              - type: string
-              - properties:
-                  message:
-                    type: string
-                type: object
-            type: object
+            $ref: '#/definitions/carwise.IdResponse'
         "400":
           description: Bad Request
           schema:
@@ -964,14 +963,7 @@ paths:
         "200":
           description: Series created successfully
           schema:
-            additionalProperties:
-              allOf:
-              - type: string
-              - properties:
-                  message:
-                    type: string
-                type: object
-            type: object
+            $ref: '#/definitions/carwise.IdResponse'
         "400":
           description: Bad Request
           schema:
@@ -1110,14 +1102,7 @@ paths:
         "200":
           description: Model created successfully
           schema:
-            additionalProperties:
-              allOf:
-              - type: string
-              - properties:
-                  message:
-                    type: string
-                type: object
-            type: object
+            $ref: '#/definitions/carwise.IdResponse'
         "400":
           description: Bad Request
           schema:
@@ -1616,8 +1601,7 @@ paths:
         "201":
           description: Listing created successfully
           schema:
-            additionalProperties: true
-            type: object
+            $ref: '#/definitions/carwise.IdResponse'
         "400":
           description: Invalid request
           schema:

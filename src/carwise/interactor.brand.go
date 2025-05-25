@@ -10,9 +10,9 @@ func (i *Interactor) GetAllBrands() ([]Brand, error) {
 	return i.services.BrandRepo.GetAll()
 }
 
-func (i *Interactor) CreateBrand(request *BrandCreateRequest) error {
+func (i *Interactor) CreateBrand(request *BrandCreateRequest) (*Brand, error) {
 	if request.Role != 2 {
-		return errors.New("unauthorized")
+		return nil, errors.New("unauthorized")
 	}
 
 	brand := &Brand{
@@ -21,7 +21,12 @@ func (i *Interactor) CreateBrand(request *BrandCreateRequest) error {
 		Name:    request.Name,
 	}
 
-	return i.services.BrandRepo.Create(brand)
+	err := i.services.BrandRepo.Create(brand)
+	if err != nil {
+		return nil, err
+	}
+
+	return brand, nil
 }
 
 func (i *Interactor) UpdateBrand(request *BrandUpdateRequest) error {
@@ -51,14 +56,14 @@ func (i *Interactor) GetAllSeriesByBrandId(brandId string) ([]Series, error) {
 	return i.services.BrandRepo.GetAllSeriesByBrandId(brandId)
 }
 
-func (i *Interactor) CreateSeries(request *SeriesCreateRequest) error {
+func (i *Interactor) CreateSeries(request *SeriesCreateRequest) (*Series, error) {
 	if request.Role != 2 {
-		return errors.New("unauthorized")
+		return nil, errors.New("unauthorized")
 	}
 
 	_, err := i.services.BrandRepo.GetById(request.BrandId)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	series := &Series{
@@ -67,7 +72,12 @@ func (i *Interactor) CreateSeries(request *SeriesCreateRequest) error {
 		Name:    request.Name,
 	}
 
-	return i.services.BrandRepo.CreateSeries(series)
+	err = i.services.BrandRepo.CreateSeries(series)
+	if err != nil {
+		return nil, err
+	}
+
+	return series, nil
 }
 
 func (i *Interactor) UpdateSeries(request *SeriesUpdateRequest) error {
@@ -96,19 +106,19 @@ func (i *Interactor) GetAllModelsBySeriesId(seriesId string) ([]Model, error) {
 	return i.services.BrandRepo.GetAllModelsBySeriesId(seriesId)
 }
 
-func (i *Interactor) CreateModel(request *ModelCreateRequest) error {
+func (i *Interactor) CreateModel(request *ModelCreateRequest) (*Model, error) {
 	if request.Role != 2 {
-		return errors.New("unauthorized")
+		return nil, errors.New("unauthorized")
 	}
 
 	_, err := i.services.BrandRepo.GetById(request.BrandId)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	_, err = i.services.BrandRepo.GetSeriesById(request.SeriesId)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	model := &Model{
@@ -118,7 +128,12 @@ func (i *Interactor) CreateModel(request *ModelCreateRequest) error {
 		Name:     request.Name,
 	}
 
-	return i.services.BrandRepo.CreateModel(model)
+	err = i.services.BrandRepo.CreateModel(model)
+	if err != nil {
+		return nil, err
+	}
+
+	return model, nil
 }
 
 func (i *Interactor) UpdateModel(request *ModelUpdateRequest) error {

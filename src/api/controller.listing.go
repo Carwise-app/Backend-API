@@ -17,7 +17,7 @@ import (
 // @Produce json
 // @Security BearerAuth
 // @Param listing body carwise.CreateListingRequest true "Listing details"
-// @Success 201 {object} map[string]interface{} "Listing created successfully"
+// @Success 201 {object} carwise.IdResponse "Listing created successfully"
 // @Failure 400 {object} ErrorResponse "Invalid request"
 // @Failure 401 {object} ErrorResponse "Unauthorized"
 // @Router /listing [post]
@@ -43,7 +43,7 @@ func CreateListing(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, gin.H{"message": "Listing created successfully", "id": id})
+	ctx.JSON(http.StatusCreated, gin.H{"id": id})
 }
 
 // @Summary Get a listing by ID
