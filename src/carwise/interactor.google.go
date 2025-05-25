@@ -54,8 +54,13 @@ func (i *Interactor) GoogleIdToken(idToken string) (*User, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to verify google id token: %v", err)
 	}
-	account, _ := i.services.UserRepo.GetByEmail(googleAccount.Email)
-	if account.Id == "" {
+
+	account, err := i.services.UserRepo.GetByEmail(googleAccount.Email)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user account: %v", err)
+	}
+
+	if account == nil || account.Id == "" {
 		now := time.Now().Unix()
 		newAccount := User{
 			Id:          uuid.New().String(),
@@ -70,6 +75,7 @@ func (i *Interactor) GoogleIdToken(idToken string) (*User, error) {
 			CreatedAt:   now,
 			UpdatedAt:   now,
 			LastLogin:   now,
+			GoogleId:    googleAccount.Id,
 		}
 		err := i.services.UserRepo.Create(&newAccount)
 		if err != nil {
