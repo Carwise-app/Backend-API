@@ -47,7 +47,7 @@ func main() {
 
 	app := gin.Default()
 	app.Static("/uploads", "./uploads")
-	app.Static("/.well-known", "./.well-known")
+	app.Static("/.well-known", "./well-known")
 
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
