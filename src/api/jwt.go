@@ -19,20 +19,28 @@ const (
 var JWT_SECRET = []byte(os.Getenv("JWT_SECRET"))
 
 type UserClaims struct {
-	UserId string `json:"user_id"`
-	Email  string `json:"email"`
-	Role   int    `json:"role"`
-	Status int    `json:"status"`
+	UserId      string `json:"user_id"`
+	Email       string `json:"email"`
+	Role        int    `json:"role"`
+	Status      int    `json:"status"`
+	FirstName   string `json:"first_name"`
+	LastName    string `json:"last_name"`
+	CountryCode string `json:"country_code"`
+	PhoneNumber string `json:"phone_number"`
 	jwt.StandardClaims
 }
 
 func JWTAuthorization(user *carwise.User) (string, error) {
 	expirationTime := time.Now().Add(24 * 365 * time.Hour).Unix()
 	claims := UserClaims{
-		UserId: user.Id,
-		Email:  user.Email,
-		Role:   user.Role,
-		Status: user.Status,
+		UserId:      user.Id,
+		Email:       user.Email,
+		Role:        user.Role,
+		Status:      user.Status,
+		FirstName:   user.FirstName,
+		LastName:    user.LastName,
+		CountryCode: user.CountryCode,
+		PhoneNumber: user.PhoneNumber,
 		StandardClaims: jwt.StandardClaims{
 			Id:        uuid.New().String(),
 			ExpiresAt: expirationTime,
