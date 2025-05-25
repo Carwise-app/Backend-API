@@ -90,6 +90,11 @@ func main() {
 		auth.GET("/google", GoogleLogin)
 		auth.GET("/google/callback", GoogleCallback)
 		auth.GET("/google/id-token", GoogleIdToken)
+		auth.GET("/reset-password", func(c *gin.Context) {
+			token := c.Query("token")
+			email := c.Query("email")
+			c.Redirect(http.StatusMovedPermanently, "carwise://reset-password?token="+token+"&email="+email)
+		})
 	}
 
 	profile := app.Group("/profile")
