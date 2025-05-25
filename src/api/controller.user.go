@@ -2,6 +2,7 @@ package main
 
 import (
 	"carwise"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -20,12 +21,14 @@ import (
 func Register(ctx *gin.Context) {
 	var request carwise.UserCreateRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {
+		log.Println("Error binding JSON:", err.Error())
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	errors := ValidateStruct(request)
 	if errors != nil {
+		log.Println("Validation errors:", errors)
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": errors,
 		})
@@ -34,6 +37,7 @@ func Register(ctx *gin.Context) {
 
 	user, errors := interactor.CreateUser(request)
 	if errors != nil {
+		log.Println("Error creating user:", errors)
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": errors,
 		})
@@ -42,6 +46,7 @@ func Register(ctx *gin.Context) {
 
 	token, err := JWTAuthorization(user)
 	if err != nil {
+		log.Println("Error generating token:", err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": []string{"Could not generate token"}})
 		return
 	}
