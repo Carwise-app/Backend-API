@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.carwise.android",
+    "sha256_cert_fingerprints":
+    ["44:EE:85:9B:47:79:E5:74:12:55:17:A7:E2:A1:27:5A:69:5F:BE:E9:8E:83:F7:0A:AD:EE:87:29:9B:7B:64:21"]
+  }
+}] 
