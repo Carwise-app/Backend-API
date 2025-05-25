@@ -9,7 +9,7 @@ type UserCreateRequest struct {
 	CountryCode string `json:"country_code" validate:"required,max=10" example:"+90"`
 	PhoneNumber string `json:"phone_number" validate:"required" example:"5551234567"`
 	Email       string `json:"email" validate:"required,email" example:"john.doe@example.com"`
-	Password    string `json:"password" validate:"required,strong_password" example:"StrongP@ss123"`
+	Password    string `json:"password" validate:"required,min=6,max=50" example:"StrongP@ss123"`
 }
 
 // @model UserLoginRequest
@@ -28,8 +28,8 @@ type ResetPasswordRequest struct {
 // @model ChangePasswordRequest
 // @Description Change password request
 type ChangePasswordRequest struct {
-	Password   string `json:"password" validate:"required,strong_password" example:"NewStrongP@ss123"`
-	RePassword string `json:"re_password" validate:"required,strong_password,password_match" example:"NewStrongP@ss123"`
+	Password   string `json:"password" validate:"required,min=6,max=50" example:"NewStrongP@ss123"`
+	RePassword string `json:"re_password" validate:"required,min=6,max=50" example:"NewStrongP@ss123"`
 }
 
 // @model UserInfo
