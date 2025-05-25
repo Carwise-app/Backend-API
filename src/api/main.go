@@ -14,6 +14,7 @@ import (
 	_ "docs" // Import the generated docs package with blank identifier
 	"infra"
 	"log"
+	"net/http"
 	"os"
 	"os/exec"
 	"runtime"
@@ -73,6 +74,10 @@ func main() {
 	)
 
 	go hub.Run()
+
+	app.GET("/", func(c *gin.Context) {
+		c.Redirect(http.StatusMovedPermanently, "/swagger/index.html")
+	})
 
 	auth := app.Group("/auth")
 	{
