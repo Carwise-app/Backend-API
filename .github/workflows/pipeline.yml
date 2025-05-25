@@ -117,4 +117,5 @@ jobs:
             echo "🚀 Running new container..."
             docker run -d --name carwisegw --restart always -p 4040:4040 \
               --env-file ~/.carwisegw/carwisegw.env \
+              -v carwisegw_uploads:/app/uploads \
               ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
