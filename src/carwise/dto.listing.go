@@ -60,6 +60,7 @@ type GetListingResponse struct {
 	City         string            `json:"city"`
 	District     string            `json:"district"`
 	Neighborhood string            `json:"neighborhood"`
+	IsFavorite   bool              `json:"is_favorite"`
 	Images       []Image           `json:"images"`
 	DetailInfo   ListingDetailInfo `json:"detail"`
 	CreatedBy    UserInfo          `json:"created_by"`
@@ -105,6 +106,7 @@ type ListingFilter struct {
 	Status           int    `json:"status"`
 	Page             int    `json:"page"`
 	Limit            int    `json:"limit"`
+	UserId           string `json:"-"`
 }
 
 // @model UpdateListingRequest
@@ -166,6 +168,7 @@ type ListListingInfo struct {
 	City         string `json:"city"`
 	District     string `json:"district"`
 	Neighborhood string `json:"neighborhood"`
+	IsFavorite   bool   `json:"is_favorite"`
 	Image        Image  `json:"image"`
 	CreatedAt    int64  `json:"created_at"`
 }
@@ -176,4 +179,9 @@ type IdResponse struct {
 	Id string `json:"id"`
 }
 
-
+// @model GetListingRequest
+// @Description Request body for getting a listing
+type GetListingRequest struct {
+	Id     string `json:"id"`
+	UserId string `json:"-"`
+}

@@ -1395,12 +1395,15 @@ const docTemplate = `{
         },
         "/listing": {
             "get": {
-                "description": "List all listings with optional filtering",
+                "description": "Get a list of listings with optional filters",
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Listing Car"
+                    "Listing"
                 ],
                 "summary": "List listings",
                 "parameters": [
@@ -1414,7 +1417,7 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "default": 10,
-                        "description": "Number of listings per page",
+                        "description": "Items per page",
                         "name": "limit",
                         "in": "query"
                     },
@@ -1422,6 +1425,24 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Search query",
                         "name": "query",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Brand ID",
+                        "name": "brand_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Series ID",
+                        "name": "series_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Model ID",
+                        "name": "model_id",
                         "in": "query"
                     },
                     {
@@ -1464,24 +1485,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Neighborhood",
                         "name": "neighborhood",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Brand ID",
-                        "name": "brand_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Series ID",
-                        "name": "series_id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "Model ID",
-                        "name": "model_id",
                         "in": "query"
                     },
                     {
@@ -1558,46 +1561,46 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "Created by",
-                        "name": "created_by",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
                         "default": "created_at",
-                        "description": "Sort by",
+                        "description": "Sort field (created_at, price, kilometers, year)",
                         "name": "sort",
                         "in": "query"
                     },
                     {
                         "type": "string",
                         "default": "asc",
-                        "description": "Order",
+                        "description": "Sort order (asc, desc)",
                         "name": "order",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "Status",
+                        "description": "Listing status",
                         "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Created by user ID",
+                        "name": "created_by",
                         "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Listings",
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/carwise.ListListingResponse"
                         }
                     },
                     "400": {
-                        "description": "Invalid request",
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/main.ErrorResponse"
                         }
                     },
                     "500": {
-                        "description": "Internal server error",
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/main.ErrorResponse"
                         }
@@ -2205,10 +2208,14 @@ const docTemplate = `{
             "properties": {
                 "password": {
                     "type": "string",
+                    "maxLength": 50,
+                    "minLength": 6,
                     "example": "NewStrongP@ss123"
                 },
                 "re_password": {
                     "type": "string",
+                    "maxLength": 50,
+                    "minLength": 6,
                     "example": "NewStrongP@ss123"
                 }
             }
@@ -2322,6 +2329,9 @@ const docTemplate = `{
                         "$ref": "#/definitions/carwise.Image"
                     }
                 },
+                "is_favorite": {
+                    "type": "boolean"
+                },
                 "model": {
                     "$ref": "#/definitions/carwise.Model"
                 },
@@ -2422,6 +2432,9 @@ const docTemplate = `{
                 },
                 "image": {
                     "$ref": "#/definitions/carwise.Image"
+                },
+                "is_favorite": {
+                    "type": "boolean"
                 },
                 "model": {
                     "$ref": "#/definitions/carwise.Model"
@@ -2855,6 +2868,8 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string",
+                    "maxLength": 50,
+                    "minLength": 6,
                     "example": "StrongP@ss123"
                 },
                 "phone_number": {

@@ -122,11 +122,11 @@ func main() {
 	listing := app.Group("/listing")
 	{
 		listing.POST("/", AuthMiddleware(), CreateListing)
-		listing.GET("/:id", GetListing)
+		listing.GET("/:id", OptionalAuthMiddleware(), GetListing)
 		listing.PUT("/:id", AuthMiddleware(), UpdateListing)
 		listing.DELETE("/:id", AuthMiddleware(), DeleteListing)
 		listing.PATCH("/:id/status", AuthMiddleware(), UpdateListingStatus)
-		listing.GET("/", ListListing)
+		listing.GET("/", OptionalAuthMiddleware(), ListListing)
 	}
 
 	upload := app.Group("/upload")

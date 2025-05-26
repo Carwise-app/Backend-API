@@ -56,9 +56,16 @@ func CreateListing(ctx *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Internal server error"
 // @Router /listing/{id} [get]
 func GetListing(ctx *gin.Context) {
+	var request carwise.GetListingRequest
+	userContext, exists := ctx.Get("user")
+	if exists {
+		claim := userContext.(*UserClaims)
+		request.UserId = claim.UserId
+	}
 	id := ctx.Param("id")
+	request.Id = id
 
-	listing, err := interactor.GetListingById(id)
+	listing, err := interactor.GetListingById(&request)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -68,12 +75,16 @@ func GetListing(ctx *gin.Context) {
 }
 
 // @Summary List listings
-// @Description List all listings with optional filtering
-// @Tags Listing Car
+// @Description Get a list of listings with optional filters
+// @Tags Listing
+// @Accept json
 // @Produce json
 // @Param page query int false "Page number" default(1)
-// @Param limit query int false "Number of listings per page" default(10)
+// @Param limit query int false "Items per page" default(10)
 // @Param query query string false "Search query"
+// @Param brand_id query string false "Brand ID"
+// @Param series_id query string false "Series ID"
+// @Param model_id query string false "Model ID"
 // @Param body_type query string false "Body type"
 // @Param drive_type query string false "Drive type"
 // @Param transmission_type query string false "Transmission type"
@@ -81,9 +92,6 @@ func GetListing(ctx *gin.Context) {
 // @Param city query string false "City"
 // @Param district query string false "District"
 // @Param neighborhood query string false "Neighborhood"
-// @Param brand_id query string false "Brand ID"
-// @Param series_id query string false "Series ID"
-// @Param model_id query string false "Model ID"
 // @Param min_price query int false "Minimum price"
 // @Param max_price query int false "Maximum price"
 // @Param min_year query int false "Minimum year"
@@ -96,16 +104,23 @@ func GetListing(ctx *gin.Context) {
 // @Param max_engine_volume query int false "Maximum engine volume"
 // @Param color query string false "Color"
 // @Param heavy_damage query bool false "Heavy damage"
-// @Param created_by query string false "Created by"
-// @Param sort query string false "Sort by" default(created_at)
-// @Param order query string false "Order" default(asc)
-// @Param status query int false "Status"
-// @Success 200 {object} carwise.ListListingResponse "Listings"
-// @Failure 400 {object} ErrorResponse "Invalid request"
-// @Failure 500 {object} ErrorResponse "Internal server error"
+// @Param sort query string false "Sort field (created_at, price, kilometers, year)" default(created_at)
+// @Param order query string false "Sort order (asc, desc)" default(asc)
+// @Param status query int false "Listing status"
+// @Param created_by query string false "Created by user ID"
+// @Success 200 {object} carwise.ListListingResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 500 {object} ErrorResponse
 // @Router /listing [get]
 func ListListing(ctx *gin.Context) {
 	var request carwise.ListListingRequest
+
+	// Get user context if available
+	userContext, exists := ctx.Get("user")
+	if exists {
+		claim := userContext.(*UserClaims)
+		request.Filter.UserId = claim.UserId
+	}
 
 	page := ctx.DefaultQuery("page", "1")
 	limit := ctx.DefaultQuery("limit", "10")

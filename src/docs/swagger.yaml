@@ -51,9 +51,13 @@ definitions:
     properties:
       password:
         example: NewStrongP@ss123
+        maxLength: 50
+        minLength: 6
         type: string
       re_password:
         example: NewStrongP@ss123
+        maxLength: 50
+        minLength: 6
         type: string
     required:
     - password
@@ -132,6 +136,8 @@ definitions:
         items:
           $ref: '#/definitions/carwise.Image'
         type: array
+      is_favorite:
+        type: boolean
       model:
         $ref: '#/definitions/carwise.Model'
       neighborhood:
@@ -202,6 +208,8 @@ definitions:
         type: string
       image:
         $ref: '#/definitions/carwise.Image'
+      is_favorite:
+        type: boolean
       model:
         $ref: '#/definitions/carwise.Model'
       neighborhood:
@@ -494,6 +502,8 @@ definitions:
         type: string
       password:
         example: StrongP@ss123
+        maxLength: 50
+        minLength: 6
         type: string
       phone_number:
         example: "5551234567"
@@ -1444,7 +1454,9 @@ paths:
       - Favorite
   /listing:
     get:
-      description: List all listings with optional filtering
+      consumes:
+      - application/json
+      description: Get a list of listings with optional filters
       parameters:
       - default: 1
         description: Page number
@@ -1452,13 +1464,25 @@ paths:
         name: page
         type: integer
       - default: 10
-        description: Number of listings per page
+        description: Items per page
         in: query
         name: limit
         type: integer
       - description: Search query
         in: query
         name: query
+        type: string
+      - description: Brand ID
+        in: query
+        name: brand_id
+        type: string
+      - description: Series ID
+        in: query
+        name: series_id
+        type: string
+      - description: Model ID
+        in: query
+        name: model_id
         type: string
       - description: Body type
         in: query
@@ -1487,18 +1511,6 @@ paths:
       - description: Neighborhood
         in: query
         name: neighborhood
-        type: string
-      - description: Brand ID
-        in: query
-        name: brand_id
-        type: string
-      - description: Series ID
-        in: query
-        name: series_id
-        type: string
-      - description: Model ID
-        in: query
-        name: model_id
         type: string
       - description: Minimum price
         in: query
@@ -1548,42 +1560,42 @@ paths:
         in: query
         name: heavy_damage
         type: boolean
-      - description: Created by
-        in: query
-        name: created_by
-        type: string
       - default: created_at
-        description: Sort by
+        description: Sort field (created_at, price, kilometers, year)
         in: query
         name: sort
         type: string
       - default: asc
-        description: Order
+        description: Sort order (asc, desc)
         in: query
         name: order
         type: string
-      - description: Status
+      - description: Listing status
         in: query
         name: status
         type: integer
+      - description: Created by user ID
+        in: query
+        name: created_by
+        type: string
       produces:
       - application/json
       responses:
         "200":
-          description: Listings
+          description: OK
           schema:
             $ref: '#/definitions/carwise.ListListingResponse'
         "400":
-          description: Invalid request
+          description: Bad Request
           schema:
             $ref: '#/definitions/main.ErrorResponse'
         "500":
-          description: Internal server error
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/main.ErrorResponse'
       summary: List listings
       tags:
-      - Listing Car
+      - Listing
     post:
       consumes:
       - application/json

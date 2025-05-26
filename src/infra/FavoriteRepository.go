@@ -80,3 +80,19 @@ func (r *FavoriteRepository) DeleteFavorite(favorite *carwise.Favorite) error {
 	_, err := r.db.Exec(query, favorite.UserId, favorite.ListingId)
 	return err
 }
+
+func (r *FavoriteRepository) IsFavorite(userId, listingId string) bool {
+	query := `
+	SELECT EXISTS (
+		SELECT 1
+		FROM favorites
+		WHERE user_id = $1 AND listing_id = $2
+	)
+	`
+	var exists bool
+	err := r.db.QueryRow(query, userId, listingId).Scan(&exists)
+	if err != nil {
+		return false
+	}
+	return exists
+}

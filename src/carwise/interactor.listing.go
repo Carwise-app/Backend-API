@@ -84,14 +84,14 @@ func (i *Interactor) CreateListing(request *CreateListingRequest) (string, error
 	return listing.Id, nil
 }
 
-func (i *Interactor) GetListingById(idOrSlug string) (*GetListingResponse, error) {
+func (i *Interactor) GetListingById(request *GetListingRequest) (*GetListingResponse, error) {
 	var listing *Listing
 	var err error
 
-	if isUUID(idOrSlug) {
-		listing, err = i.services.ListingRepo.GetListingById(idOrSlug)
+	if isUUID(request.Id) {
+		listing, err = i.services.ListingRepo.GetListingById(request.Id)
 	} else {
-		listing, err = i.services.ListingRepo.GetListingBySlug(idOrSlug)
+		listing, err = i.services.ListingRepo.GetListingBySlug(request.Id)
 	}
 
 	if err != nil {
@@ -128,6 +128,8 @@ func (i *Interactor) GetListingById(idOrSlug string) (*GetListingResponse, error
 		images = append(images, *image)
 
 	}
+
+	isFavorite := i.services.FavoriteRepo.IsFavorite(request.UserId, listing.Id)
 
 	response := &GetListingResponse{
 		Id:           listing.Id,
@@ -166,6 +168,7 @@ func (i *Interactor) GetListingById(idOrSlug string) (*GetListingResponse, error
 			RearLeftMudguard:  listing.RearLeftMudguard,
 			RearBumper:        listing.RearBumper,
 		},
+		IsFavorite: isFavorite,
 		CreatedBy: UserInfo{
 			Id:          createdBy.Id,
 			FirstName:   createdBy.FirstName,
@@ -313,17 +316,16 @@ func (i *Interactor) ListListing(request *ListListingRequest) (*ListListingRespo
 		if err != nil {
 			return nil, err
 		}
-
-		// Create a default empty image
 		image := Image{}
 
-		// Only try to get the first image if the listing has images
 		if len(listing.Images) > 0 {
 			firstImage, err := i.services.ImageRepo.GetImageById(listing.Images[0])
 			if err == nil {
 				image = *firstImage
 			}
 		}
+
+		isFavorite := i.services.FavoriteRepo.IsFavorite(request.Filter.UserId, listing.Id)
 
 		listingsInfo = append(listingsInfo, ListListingInfo{
 			Id:           listing.Id,
@@ -340,6 +342,7 @@ func (i *Interactor) ListListing(request *ListListingRequest) (*ListListingRespo
 			Neighborhood: listing.Neighborhood,
 			Image:        image,
 			CreatedAt:    listing.CreatedAt,
+			IsFavorite:   isFavorite,
 		})
 	}
 

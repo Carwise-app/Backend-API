@@ -180,3 +180,29 @@ func WebSocketAuthMiddleware() gin.HandlerFunc {
 		ctx.Next()
 	}
 }
+
+func OptionalAuthMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		authHeader := c.GetHeader("Authorization")
+		if authHeader == "" {
+			c.Next()
+			return
+		}
+
+		tokenString := strings.Replace(authHeader, "Bearer ", "", 1)
+		token, err := jwt.ParseWithClaims(tokenString, &UserClaims{}, func(token *jwt.Token) (interface{}, error) {
+			return JWT_SECRET, nil
+		})
+
+		if err != nil {
+			c.Next()
+			return
+		}
+
+		if claims, ok := token.Claims.(*UserClaims); ok && token.Valid {
+			c.Set("user", claims)
+		}
+
+		c.Next()
+	}
+}

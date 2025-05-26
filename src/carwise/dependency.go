@@ -91,6 +91,7 @@ type FavoriteRepository interface {
 	GetFavoritesByUserId(userId string, limit, offset int) ([]Favorite, error)
 	CountFavoritesByUserId(userId string) (int, error)
 	DeleteFavorite(favorite *Favorite) error
+	IsFavorite(userId, listingId string) bool
 }
 
 type Services struct {
