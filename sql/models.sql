@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS listings (
     rear_left_door VARCHAR(50) NOT NULL DEFAULT '',
     rear_left_mudguard VARCHAR(50) NOT NULL DEFAULT '',
     rear_bumper VARCHAR(50) NOT NULL DEFAULT '' ,
-    created_by UUID NOT NULL REFERENCES users(id),
+    created_by UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     created_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP),
     updated_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP)
 );
@@ -86,20 +86,20 @@ CREATE TABLE IF NOT EXISTS listings (
 CREATE TABLE IF NOT EXISTS images (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     path TEXT NOT NULL DEFAULT '',
-    created_by UUID NOT NULL REFERENCES users(id),
+    created_by UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     created_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP)
 );
 
 CREATE TABLE IF NOT EXISTS image_predictions (
-    image_id UUID PRIMARY KEY REFERENCES images(id),
+    image_id UUID PRIMARY KEY REFERENCES images(id) ON DELETE CASCADE,
     prediction BOOLEAN NOT NULL DEFAULT false,
     confidence FLOAT NOT NULL DEFAULT 0.0,
     created_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP)
 );
 
 CREATE TABLE IF NOT EXISTS favorites (
-    user_id UUID NOT NULL REFERENCES users(id),
-    listing_id UUID NOT NULL REFERENCES listings(id),
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    listing_id UUID NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
     created_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP),
     PRIMARY KEY (user_id, listing_id)
 );
