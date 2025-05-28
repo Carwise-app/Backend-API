@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS brands (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    image_id TEXT DEFAULT '',
+    image_path TEXT DEFAULT '',
     name VARCHAR(255) NOT NULL DEFAULT ''
 );
 

@@ -3,20 +3,20 @@ package carwise
 // @model BrandCreateRequest
 // @Description Request body for creating a new brand
 type BrandCreateRequest struct {
-	ImageId string `json:"image_id" example:"img_123456"`
-	Name    string `json:"name" validate:"required" example:"BMW"`
-	UserId  string `json:"-"`
-	Role    int    `json:"-"`
+	ImagePath string `json:"image_path" example:"img_123456"`
+	Name      string `json:"name" validate:"required" example:"BMW"`
+	UserId    string `json:"-"`
+	Role      int    `json:"-"`
 }
 
 // @model BrandUpdateRequest
 // @Description Request body for updating an existing brand
 type BrandUpdateRequest struct {
-	ImageId string `json:"image_id" example:"img_123456"`
-	Name    string `json:"name" validate:"required" example:"BMW"`
-	BrandId string `json:"-"`
-	UserId  string `json:"-"`
-	Role    int    `json:"-"`
+	ImagePath string `json:"image_path" example:"img_123456"`
+	Name      string `json:"name" validate:"required" example:"BMW"`
+	BrandId   string `json:"-"`
+	UserId    string `json:"-"`
+	Role      int    `json:"-"`
 }
 
 // @model BrandDeleteRequest

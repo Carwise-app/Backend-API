@@ -1,9 +1,9 @@
 package carwise
 
 type Brand struct {
-	Id      string `json:"id,omitempty"`
-	ImageId string `json:"image_id,omitempty"`
-	Name    string `json:"name,omitempty"`
+	Id        string `json:"id,omitempty"`
+	ImagePath string `json:"image_path,omitempty"`
+	Name      string `json:"name,omitempty"`
 }
 
 type Series struct {
@@ -20,10 +20,10 @@ type Model struct {
 }
 
 type BrandWithDetails struct {
-	Id      string         `json:"id,omitempty"`
-	ImageId string         `json:"image_id,omitempty"`
-	Name    string         `json:"name,omitempty"`
-	Series  []SeriesDetail `json:"series,omitempty"`
+	Id        string         `json:"id,omitempty"`
+	ImagePath string         `json:"image_path,omitempty"`
+	Name      string         `json:"name,omitempty"`
+	Series    []SeriesDetail `json:"series,omitempty"`
 }
 
 type SeriesDetail struct {

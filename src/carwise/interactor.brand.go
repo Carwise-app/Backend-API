@@ -14,9 +14,9 @@ func (i *Interactor) CreateBrand(request *BrandCreateRequest) (*Brand, error) {
 	}
 
 	brand := &Brand{
-		Id:      uuid.New().String(),
-		ImageId: request.ImageId,
-		Name:    request.Name,
+		Id:        uuid.New().String(),
+		ImagePath: request.ImagePath,
+		Name:      request.Name,
 	}
 
 	err := i.services.BrandRepo.Create(brand)
@@ -36,7 +36,7 @@ func (i *Interactor) UpdateBrand(request *BrandUpdateRequest) error {
 	if err != nil {
 		return err
 	}
-	brand.ImageId = request.ImageId
+	brand.ImagePath = request.ImagePath
 	brand.Name = request.Name
 
 	return i.services.BrandRepo.Update(brand)

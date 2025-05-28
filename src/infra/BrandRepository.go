@@ -16,7 +16,7 @@ func NewBrandRepository() *BrandRepository {
 
 func (r *BrandRepository) GetAll() ([]carwise.Brand, error) {
 	query := `
-	SELECT id, image_id, name FROM brands
+	SELECT id, image_path, name FROM brands
 	`
 
 	rows, err := r.db.Query(query)
@@ -28,7 +28,7 @@ func (r *BrandRepository) GetAll() ([]carwise.Brand, error) {
 	var brands []carwise.Brand
 	for rows.Next() {
 		var brand carwise.Brand
-		err := rows.Scan(&brand.Id, &brand.ImageId, &brand.Name)
+		err := rows.Scan(&brand.Id, &brand.ImagePath, &brand.Name)
 		if err != nil {
 			return nil, err
 		}
@@ -40,12 +40,12 @@ func (r *BrandRepository) GetAll() ([]carwise.Brand, error) {
 
 func (r *BrandRepository) Create(brand *carwise.Brand) error {
 	query := `
-	INSERT INTO brands (id, image_id, name)
+	INSERT INTO brands (id, image_path, name)
 	VALUES ($1, $2, $3)
 	RETURNING id
 	`
 
-	err := r.db.QueryRow(query, brand.Id, brand.ImageId, brand.Name).Scan(&brand.Id)
+	err := r.db.QueryRow(query, brand.Id, brand.ImagePath, brand.Name).Scan(&brand.Id)
 	if err != nil {
 		return err
 	}
@@ -55,12 +55,12 @@ func (r *BrandRepository) Create(brand *carwise.Brand) error {
 func (r *BrandRepository) Update(brand *carwise.Brand) error {
 	query := `
 	UPDATE brands
-	SET image_id = $1, name = $2
+	SET image_path = $1, name = $2
 	WHERE id = $3
 	RETURNING id
 	`
 
-	err := r.db.QueryRow(query, brand.ImageId, brand.Name, brand.Id).Scan(&brand.Id)
+	err := r.db.QueryRow(query, brand.ImagePath, brand.Name, brand.Id).Scan(&brand.Id)
 	if err != nil {
 		return err
 	}
@@ -81,11 +81,11 @@ func (r *BrandRepository) Delete(id string) error {
 
 func (r *BrandRepository) GetById(id string) (*carwise.Brand, error) {
 	query := `
-	SELECT id, image_id, name FROM brands WHERE id = $1
+	SELECT id, image_path, name FROM brands WHERE id = $1
 	`
 
 	var brand carwise.Brand
-	err := r.db.QueryRow(query, id).Scan(&brand.Id, &brand.ImageId, &brand.Name)
+	err := r.db.QueryRow(query, id).Scan(&brand.Id, &brand.ImagePath, &brand.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -280,10 +280,10 @@ func (r *BrandRepository) GetAllWithDetails() ([]carwise.BrandWithDetails, error
 		}
 
 		brandWithDetails := carwise.BrandWithDetails{
-			Id:      brand.Id,
-			ImageId: brand.ImageId,
-			Name:    brand.Name,
-			Series:  seriesDetails,
+			Id:        brand.Id,
+			ImagePath: brand.ImagePath,
+			Name:      brand.Name,
+			Series:    seriesDetails,
 		}
 		brandsWithDetails = append(brandsWithDetails, brandWithDetails)
 	}
