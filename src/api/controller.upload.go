@@ -2,6 +2,7 @@ package main
 
 import (
 	"carwise"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,6 +22,7 @@ import (
 func UploadImage(ctx *gin.Context) {
 	userContext, exists := ctx.Get("user")
 	if !exists {
+		log.Println("No User found in request context")
 		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
 		return
 	}
@@ -29,6 +31,7 @@ func UploadImage(ctx *gin.Context) {
 	var request carwise.UploadImageRequest
 	file, err := ctx.FormFile("file")
 	if err != nil {
+		log.Println("Error getting form file", err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -39,6 +42,7 @@ func UploadImage(ctx *gin.Context) {
 
 	image, err := interactor.UploadImage(&request)
 	if err != nil {
+		log.Println("Error uploading image", err)
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
