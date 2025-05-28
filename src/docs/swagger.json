@@ -2130,7 +2130,7 @@
                 "id": {
                     "type": "string"
                 },
-                "image_id": {
+                "image_path": {
                     "type": "string"
                 },
                 "name": {
@@ -2145,7 +2145,7 @@
                 "name"
             ],
             "properties": {
-                "image_id": {
+                "image_path": {
                     "type": "string",
                     "example": "img_123456"
                 },
@@ -2162,7 +2162,7 @@
                 "name"
             ],
             "properties": {
-                "image_id": {
+                "image_path": {
                     "type": "string",
                     "example": "img_123456"
                 },
@@ -2178,7 +2178,7 @@
                 "id": {
                     "type": "string"
                 },
-                "image_id": {
+                "image_path": {
                     "type": "string"
                 },
                 "name": {

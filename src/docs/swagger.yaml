@@ -4,7 +4,7 @@ definitions:
     properties:
       id:
         type: string
-      image_id:
+      image_path:
         type: string
       name:
         type: string
@@ -12,7 +12,7 @@ definitions:
   carwise.BrandCreateRequest:
     description: Request body for creating a new brand
     properties:
-      image_id:
+      image_path:
         example: img_123456
         type: string
       name:
@@ -24,7 +24,7 @@ definitions:
   carwise.BrandUpdateRequest:
     description: Request body for updating an existing brand
     properties:
-      image_id:
+      image_path:
         example: img_123456
         type: string
       name:
@@ -37,7 +37,7 @@ definitions:
     properties:
       id:
         type: string
-      image_id:
+      image_path:
         type: string
       name:
         type: string

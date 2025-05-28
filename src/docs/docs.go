@@ -2136,7 +2136,7 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
-                "image_id": {
+                "image_path": {
                     "type": "string"
                 },
                 "name": {
@@ -2151,7 +2151,7 @@ const docTemplate = `{
                 "name"
             ],
             "properties": {
-                "image_id": {
+                "image_path": {
                     "type": "string",
                     "example": "img_123456"
                 },
@@ -2168,7 +2168,7 @@ const docTemplate = `{
                 "name"
             ],
             "properties": {
-                "image_id": {
+                "image_path": {
                     "type": "string",
                     "example": "img_123456"
                 },
@@ -2184,7 +2184,7 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
-                "image_id": {
+                "image_path": {
                     "type": "string"
                 },
                 "name": {
