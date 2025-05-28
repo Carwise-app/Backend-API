@@ -70,7 +70,7 @@ func (i *Interactor) LoginUser(request UserLoginRequest) (*User, []string) {
 }
 
 func (i *Interactor) IsTokenBlackListed(token string) (bool, []string) {
-	isBlacklisted, err := i.services.TokenRepo.IsTokenBlackListed(token)
+	isBlacklisted, err := i.services.RedisRepo.IsTokenBlackListed(token)
 	if err != nil {
 		return false, []string{"Failed to check token blacklist: " + err.Error()}
 	}
@@ -79,7 +79,7 @@ func (i *Interactor) IsTokenBlackListed(token string) (bool, []string) {
 }
 
 func (i *Interactor) AddTokenBlackList(token string) []string {
-	err := i.services.TokenRepo.AddTokenBlackList(token)
+	err := i.services.RedisRepo.AddTokenBlackList(token)
 	if err != nil {
 		return []string{"Failed to add token to blacklist: " + err.Error()}
 	}

@@ -2,13 +2,11 @@ package carwise
 
 import (
 	"errors"
+	"fmt"
+	"log"
 
 	"github.com/google/uuid"
 )
-
-func (i *Interactor) GetAllBrands() ([]Brand, error) {
-	return i.services.BrandRepo.GetAll()
-}
 
 func (i *Interactor) CreateBrand(request *BrandCreateRequest) (*Brand, error) {
 	if request.Role != 2 {
@@ -50,10 +48,6 @@ func (i *Interactor) DeleteBrand(request *BrandDeleteRequest) error {
 	}
 
 	return i.services.BrandRepo.Delete(request.BrandId)
-}
-
-func (i *Interactor) GetAllSeriesByBrandId(brandId string) ([]Series, error) {
-	return i.services.BrandRepo.GetAllSeriesByBrandId(brandId)
 }
 
 func (i *Interactor) CreateSeries(request *SeriesCreateRequest) (*Series, error) {
@@ -100,10 +94,6 @@ func (i *Interactor) DeleteSeries(request *SeriesDeleteRequest) error {
 	}
 
 	return i.services.BrandRepo.DeleteSeries(request.SeriesId)
-}
-
-func (i *Interactor) GetAllModelsBySeriesId(seriesId string) ([]Model, error) {
-	return i.services.BrandRepo.GetAllModelsBySeriesId(seriesId)
 }
 
 func (i *Interactor) CreateModel(request *ModelCreateRequest) (*Model, error) {
@@ -159,5 +149,27 @@ func (i *Interactor) DeleteModel(request *ModelDeleteRequest) error {
 }
 
 func (i *Interactor) GetAllBrandsWithDetails() ([]BrandWithDetails, error) {
-	return i.services.BrandRepo.GetAllWithDetails()
+	brands, err := i.services.RedisRepo.GetBrandsWithDetails()
+	if err != nil {
+		if err.Error() == "Redis is not available" {
+			log.Printf("Warning: Redis is not available, falling back to database: %v", err)
+		} else {
+			return nil, fmt.Errorf("failed to get brands from cache: %v", err)
+		}
+	}
+
+	if brands != nil {
+		return brands, nil
+	}
+
+	brands, err = i.services.BrandRepo.GetAllWithDetails()
+	if err != nil {
+		return nil, fmt.Errorf("failed to get brands from database: %v", err)
+	}
+
+	if err := i.services.RedisRepo.SetBrandsWithDetails(brands); err != nil {
+		log.Printf("Warning: failed to cache brands: %v", err)
+	}
+
+	return brands, nil
 }

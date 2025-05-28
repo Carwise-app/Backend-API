@@ -61,7 +61,7 @@ func main() {
 	interactor = carwise.NewInteractor(
 		carwise.Services{
 			UserRepo:          infra.NewUserRepository(),
-			TokenRepo:         infra.NewTokenRepository(),
+			RedisRepo:         infra.NewRedisRepository(),
 			MailGW:            infra.NewMailGateway(),
 			PasswordResetRepo: infra.NewPasswordResetRepository(),
 			BrandRepo:         infra.NewBrandRepository(),

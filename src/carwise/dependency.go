@@ -13,9 +13,11 @@ type UserRepository interface {
 	Update(user *User) error
 }
 
-type TokenRepository interface {
+type RedisRepository interface {
 	IsTokenBlackListed(token string) (bool, error)
 	AddTokenBlackList(token string) error
+	SetBrandsWithDetails(brands []BrandWithDetails) error
+	GetBrandsWithDetails() ([]BrandWithDetails, error)
 }
 
 type MailGateway interface {
@@ -96,7 +98,7 @@ type FavoriteRepository interface {
 
 type Services struct {
 	UserRepo          UserRepository
-	TokenRepo         TokenRepository
+	RedisRepo         RedisRepository
 	MailGW            MailGateway
 	PasswordResetRepo PasswordResetRepository
 	BrandRepo         BrandRepository

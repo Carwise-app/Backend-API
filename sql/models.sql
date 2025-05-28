@@ -46,9 +46,9 @@ CREATE TABLE IF NOT EXISTS messages (
 CREATE TABLE IF NOT EXISTS listings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     slug VARCHAR(255) NOT NULL DEFAULT '',
-    brand_id UUID NOT NULL REFERENCES brands(id),
-    series_id UUID NOT NULL REFERENCES series(id),
-    model_id UUID NOT NULL REFERENCES models(id),
+    brand_id UUID NOT NULL REFERENCES brands(id) ON DELETE CASCADE,
+    series_id UUID NOT NULL REFERENCES series(id) ON DELETE CASCADE,
+    model_id UUID NOT NULL REFERENCES models(id) ON DELETE CASCADE,
     title VARCHAR(255) NOT NULL DEFAULT '',
     description TEXT NOT NULL DEFAULT '',
     status INT NOT NULL DEFAULT 1,
