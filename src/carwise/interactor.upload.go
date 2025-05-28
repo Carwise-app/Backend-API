@@ -24,8 +24,8 @@ func (i *Interactor) UploadImage(request *UploadImageRequest) (*Image, error) {
 	}
 
 	contentType := request.File.Header.Get("Content-Type")
-	if contentType != "image/jpeg" && contentType != "image/png" && contentType != "image/gif" {
-		return nil, errors.New("only jpeg, png and gif images are allowed")
+	if contentType != "image/jpeg" && contentType != "image/jpg" && contentType != "image/png" && contentType != "image/gif" {
+		return nil, errors.New("only jpeg, jpg, png and gif images are allowed")
 	}
 
 	image, err := i.services.ImageRepo.SaveImage(request.File, request.UserId)
