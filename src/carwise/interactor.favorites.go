@@ -1,6 +1,7 @@
 package carwise
 
 import (
+	"log"
 	"time"
 )
 
@@ -28,10 +29,12 @@ func (i *Interactor) GetFavorites(request *GetFavoritesRequest) (*ListListingRes
 	offset := (request.Page - 1) * request.Limit
 	favorites, err := i.services.FavoriteRepo.GetFavoritesByUserId(request.UserId, request.Limit, offset)
 	if err != nil {
+		log.Println("GetFavorites error: ", err)
 		return nil, err
 	}
 	total, err := i.services.FavoriteRepo.CountFavoritesByUserId(request.UserId)
 	if err != nil {
+		log.Println("GetFavorites error: ", err)
 		return nil, err
 	}
 
@@ -39,7 +42,7 @@ func (i *Interactor) GetFavorites(request *GetFavoritesRequest) (*ListListingRes
 	for _, favorite := range favorites {
 		listing, err := i.services.ListingRepo.GetListingById(favorite.ListingId)
 		if err != nil {
-			return nil, err
+			continue
 		}
 
 		brand, err := i.services.BrandRepo.GetById(listing.BrandId)
