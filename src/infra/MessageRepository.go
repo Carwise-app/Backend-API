@@ -22,15 +22,24 @@ func (r *MessageRepository) SaveMessage(message *carwise.Message) error {
 	return err
 }
 
-func (r *MessageRepository) GetMessagesByUserId(userId string, limit, page int) ([]carwise.Message, error) {
+func (r *MessageRepository) GetMessagesByUserId(userId, listingId string, limit, page int) ([]carwise.Message, error) {
 	query := `
+		WITH chat_messages AS (
+			SELECT m.*,
+				CASE 
+					WHEN sender_id = $1 THEN receiver_id 
+					ELSE sender_id 
+				END AS other_user_id
+			FROM messages m
+			WHERE (m.sender_id = $1 OR m.receiver_id = $1)
+			AND m.listing_id = $2
+		)
 		SELECT id, sender_id, receiver_id, message, read, created_at, listing_id
-		FROM messages
-		WHERE sender_id = $1 OR receiver_id = $1
+		FROM chat_messages
 		ORDER BY created_at DESC
-		LIMIT $2 OFFSET $3
+		LIMIT $3 OFFSET $4
 	`
-	rows, err := r.db.Query(query, userId, limit, limit*(page-1))
+	rows, err := r.db.Query(query, userId, listingId, limit, limit*(page-1))
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +60,10 @@ func (r *MessageRepository) GetMessagesByUserId(userId string, limit, page int) 
 
 func (r *MessageRepository) CountMessagesByUserId(userId, listingId string) (int, error) {
 	query := `
-		SELECT COUNT(*) FROM messages WHERE sender_id = $1 OR receiver_id = $1 AND listing_id = $2
+		SELECT COUNT(*) 
+		FROM messages 
+		WHERE (sender_id = $1 OR receiver_id = $1) 
+		AND listing_id = $2
 	`
 	var count int
 	err := r.db.QueryRow(query, userId, listingId).Scan(&count)
@@ -63,31 +75,30 @@ func (r *MessageRepository) CountMessagesByUserId(userId, listingId string) (int
 
 func (r *MessageRepository) GetChats(userId string, limit, page int) ([]carwise.Chat, error) {
 	query := `
-		WITH distinct_chats AS (
-			SELECT DISTINCT ON (
-				CASE 
-					WHEN sender_id = $1 THEN receiver_id 
-					ELSE sender_id 
-				END
-			)
+		WITH chat_messages AS (
+			SELECT 
 				CASE 
 					WHEN sender_id = $1 THEN receiver_id 
 					ELSE sender_id 
 				END AS other_user_id,
-				created_at AS last_message_time,
-				listing_id
+				created_at,
+				listing_id,
+				ROW_NUMBER() OVER (
+					PARTITION BY 
+						CASE 
+							WHEN sender_id = $1 THEN receiver_id 
+							ELSE sender_id 
+						END,
+						listing_id
+					ORDER BY created_at DESC
+				) as rn
 			FROM messages 
-			WHERE sender_id = $1 OR receiver_id = $1 
-			ORDER BY 
-				CASE 
-					WHEN sender_id = $1 THEN receiver_id 
-					ELSE sender_id 
-				END,
-				created_at DESC
+			WHERE sender_id = $1 OR receiver_id = $1
 		)
-		SELECT other_user_id, last_message_time, listing_id
-		FROM distinct_chats
-		ORDER BY last_message_time DESC
+		SELECT other_user_id, created_at as last_message_time, listing_id
+		FROM chat_messages
+		WHERE rn = 1
+		ORDER BY created_at DESC
 		LIMIT $2 OFFSET $3
 	`
 
@@ -114,6 +125,28 @@ func (r *MessageRepository) GetChats(userId string, limit, page int) ([]carwise.
 	return chats, nil
 }
 
+func (r *MessageRepository) CountChats(userId string) (int, error) {
+	query := `
+		SELECT COUNT(DISTINCT (other_user_id, listing_id))
+		FROM (
+			SELECT 
+				CASE 
+					WHEN sender_id = $1 THEN receiver_id 
+					ELSE sender_id 
+				END AS other_user_id,
+				listing_id
+			FROM messages 
+			WHERE sender_id = $1 OR receiver_id = $1
+		) AS chat_pairs
+	`
+	var count int
+	err := r.db.QueryRow(query, userId).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}
+
 func (r *MessageRepository) ReadMessage(messageId string) error {
 	query := `
 		UPDATE messages
@@ -122,16 +155,4 @@ func (r *MessageRepository) ReadMessage(messageId string) error {
 	`
 	_, err := r.db.Exec(query, messageId)
 	return err
-}
-
-func (r *MessageRepository) CountChats(userId string) (int, error) {
-	query := `
-		SELECT COUNT(DISTINCT CASE WHEN sender_id = $1 THEN receiver_id ELSE sender_id END) FROM messages WHERE sender_id = $1 OR receiver_id = $1
-	`
-	var count int
-	err := r.db.QueryRow(query, userId).Scan(&count)
-	if err != nil {
-		return 0, err
-	}
-	return count, nil
 }
