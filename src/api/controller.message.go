@@ -16,6 +16,7 @@ import (
 // @Produce json
 // @Security BearerAuth
 // @Param receiver_id path string true "Receiver ID"
+// @Param listing_id path string true "Listing ID"
 // @Param message body carwise.SendMessageRequest true "Message details"
 // @Success 200 {object} map[string]interface{} "Message sent successfully"
 // @Failure 400 {object} ErrorResponse "Invalid request"
@@ -39,6 +40,7 @@ func SendMessage(ctx *gin.Context) {
 	request.Role = claim.Role
 
 	request.ReceiverId = ctx.Param("receiver_id")
+	request.ListingId = ctx.Param("listing_id")
 
 	err := interactor.SendMessage(&request)
 	if err != nil {
@@ -56,6 +58,7 @@ func SendMessage(ctx *gin.Context) {
 // @Produce json
 // @Security BearerAuth
 // @Param receiver_id path string true "Receiver ID"
+// @Param listing_id path string true "Listing ID"
 // @Param limit query int false "Limit"
 // @Param page query int false "Page"
 // @Success 200 {object} carwise.GetMessagesResponse "Messages retrieved successfully"
@@ -74,6 +77,7 @@ func GetMessages(ctx *gin.Context) {
 	var request carwise.GetMessagesRequest
 
 	request.ReceiverId = ctx.Param("receiver_id")
+	request.ListingId = ctx.Param("listing_id")
 	request.Limit, _ = strconv.Atoi(ctx.DefaultQuery("limit", "10"))
 	request.Page, _ = strconv.Atoi(ctx.DefaultQuery("page", "1"))
 

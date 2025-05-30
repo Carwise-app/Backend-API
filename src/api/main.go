@@ -139,8 +139,8 @@ func main() {
 	chat := app.Group("/chat")
 	{
 		chat.GET("/", AuthMiddleware(), GetChats)
-		chat.POST("/:receiver_id", AuthMiddleware(), SendMessage)
-		chat.GET("/:receiver_id", AuthMiddleware(), GetMessages)
+		chat.POST("/:listing_id/:receiver_id", AuthMiddleware(), SendMessage)
+		chat.GET("/:listing_id/:receiver_id", AuthMiddleware(), GetMessages)
 		chat.GET("/ws", WebSocketAuthMiddleware(), WebSocketHandler)
 	}
 

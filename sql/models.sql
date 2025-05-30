@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS models (
 
 CREATE TABLE IF NOT EXISTS messages (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    listing_id UUID NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
     sender_id UUID NOT NULL REFERENCES users(id),
     receiver_id UUID NOT NULL REFERENCES users(id),
     message TEXT NOT NULL DEFAULT '',

@@ -3,6 +3,7 @@ package carwise
 // @model SendMessageRequest
 // @Description Request body for sending a message
 type SendMessageRequest struct {
+	ListingId  string `json:"-"`
 	ReceiverId string `json:"-"`
 	Message    string `json:"message"`
 	UserId     string `json:"-"`
@@ -12,6 +13,7 @@ type SendMessageRequest struct {
 // @model GetMessagesRequest
 // @Description Request body for getting messages
 type GetMessagesRequest struct {
+	ListingId  string `json:"-"`
 	ReceiverId string `json:"-"`
 	Limit      int    `json:"-"`
 	Page       int    `json:"-"`
@@ -56,6 +58,7 @@ type GetChatsResponse struct {
 // @model ChatInfo
 // @Description Chat information
 type ChatInfo struct {
-	User            UserInfo `json:"user"`
-	LastMessageTime int64    `json:"last_message_time"`
+	User            UserInfo        `json:"user"`
+	Listing         ListListingInfo `json:"listing"`
+	LastMessageTime int64           `json:"last_message_time"`
 }

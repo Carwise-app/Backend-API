@@ -2,6 +2,7 @@ package carwise
 
 type Message struct {
 	Id         string
+	ListingId  string
 	SenderId   string
 	ReceiverId string
 	Message    string
@@ -10,6 +11,7 @@ type Message struct {
 }
 
 type Chat struct {
+	ListingId       string
 	OtherUserId     string
 	LastMessageTime int64
 }

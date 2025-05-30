@@ -1138,6 +1138,13 @@ const docTemplate = `{
                         "required": true
                     },
                     {
+                        "type": "string",
+                        "description": "Listing ID",
+                        "name": "listing_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
                         "type": "integer",
                         "description": "Limit",
                         "name": "limit",
@@ -1199,6 +1206,13 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Receiver ID",
                         "name": "receiver_id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Listing ID",
+                        "name": "listing_id",
                         "in": "path",
                         "required": true
                     },
@@ -2226,6 +2240,9 @@ const docTemplate = `{
             "properties": {
                 "last_message_time": {
                     "type": "integer"
+                },
+                "listing": {
+                    "$ref": "#/definitions/carwise.ListListingInfo"
                 },
                 "user": {
                     "$ref": "#/definitions/carwise.UserInfo"

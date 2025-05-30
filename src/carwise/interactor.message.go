@@ -15,6 +15,7 @@ func (i *Interactor) SendMessage(request *SendMessageRequest) error {
 		Message:    request.Message,
 		Read:       false,
 		CreatedAt:  time.Now().Unix(),
+		ListingId:  request.ListingId,
 	}
 
 	return i.services.MessageRepo.SaveMessage(message)
@@ -26,7 +27,7 @@ func (i *Interactor) GetMessages(request *GetMessagesRequest) (*GetMessagesRespo
 		return nil, err
 	}
 
-	total, err := i.services.MessageRepo.CountMessagesByUserId(request.UserId)
+	total, err := i.services.MessageRepo.CountMessagesByUserId(request.UserId, request.ListingId)
 	if err != nil {
 		return nil, err
 	}
@@ -100,6 +101,36 @@ func (i *Interactor) GetChats(request *GetChatsRequest) (*GetChatsResponse, erro
 			return nil, err
 		}
 
+		listing, err := i.services.ListingRepo.GetListingById(chat.ListingId)
+		if err != nil {
+			return nil, err
+		}
+
+		brand, err := i.services.BrandRepo.GetById(listing.BrandId)
+		if err != nil {
+			return nil, err
+		}
+
+		series, err := i.services.BrandRepo.GetSeriesById(listing.SeriesId)
+		if err != nil {
+			return nil, err
+		}
+
+		model, err := i.services.BrandRepo.GetModelById(listing.ModelId)
+		if err != nil {
+			return nil, err
+		}
+		image := Image{}
+
+		if len(listing.Images) > 0 {
+			firstImage, err := i.services.ImageRepo.GetImageById(listing.Images[0])
+			if err == nil {
+				image = *firstImage
+			}
+		}
+
+		isFavorite := i.services.FavoriteRepo.IsFavorite(request.UserId, listing.Id)
+
 		chatInfos = append(chatInfos, ChatInfo{
 			User: UserInfo{
 				Id:          user.Id,
@@ -108,6 +139,23 @@ func (i *Interactor) GetChats(request *GetChatsRequest) (*GetChatsResponse, erro
 				Email:       user.Email,
 				CountryCode: user.CountryCode,
 				PhoneNumber: user.PhoneNumber,
+			},
+			Listing: ListListingInfo{
+				Id:           listing.Id,
+				Slug:         listing.Slug,
+				Status:       listing.Status,
+				Brand:        *brand,
+				Series:       *series,
+				Model:        *model,
+				Title:        listing.Title,
+				Currency:     listing.Currency,
+				Price:        listing.Price,
+				City:         listing.City,
+				District:     listing.District,
+				Neighborhood: listing.Neighborhood,
+				Image:        image,
+				CreatedAt:    listing.CreatedAt,
+				IsFavorite:   isFavorite,
 			},
 			LastMessageTime: chat.LastMessageTime,
 		})
