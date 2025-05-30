@@ -227,14 +227,6 @@ func ResetPassword(ctx *gin.Context) {
 func GetUserById(ctx *gin.Context) {
 	var request carwise.GetUserByIdRequest
 
-	err := ctx.ShouldBindJSON(&request)
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": []string{err.Error()},
-		})
-		return
-	}
-
 	request.Id = ctx.Param("id")
 	user, errors := interactor.GetUserById(request)
 	if errors != nil {
