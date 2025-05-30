@@ -80,6 +80,8 @@ func main() {
 		c.Redirect(http.StatusMovedPermanently, "/swagger/index.html")
 	})
 
+	app.GET("/user/:id", GetUserById)
+
 	auth := app.Group("/auth")
 	{
 		auth.POST("/register", Register)

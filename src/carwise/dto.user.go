@@ -48,3 +48,10 @@ type UserInfo struct {
 type TokenResponse struct {
 	AccessToken string `json:"access_token" example:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."`
 }
+
+// @model GetUserByIdRequest
+// @Description Get user by ID request
+type GetUserByIdRequest struct {
+	Id     string `json:"-"`
+	UserId string `json:"-"`
+}

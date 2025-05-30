@@ -212,3 +212,37 @@ func ResetPassword(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 
 }
+
+// @Summary Get user by ID
+// @Description Get user by ID
+// @Tags User
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {object} carwise.UserInfo "User information"
+// @Failure 400 {object} map[string]interface{} "Validation error"
+// @Failure 401 {object} map[string]interface{} "Unauthorized"
+// @Failure 404 {object} map[string]interface{} "User not found"
+// @Failure 500 {object} map[string]interface{} "Server error"
+// @Router /user/{id} [get]
+func GetUserById(ctx *gin.Context) {
+	var request carwise.GetUserByIdRequest
+
+	err := ctx.ShouldBindJSON(&request)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": []string{err.Error()},
+		})
+		return
+	}
+
+	request.Id = ctx.Param("id")
+	user, errors := interactor.GetUserById(request)
+	if errors != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": errors,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, user)
+}

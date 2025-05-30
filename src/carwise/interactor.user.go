@@ -159,6 +159,21 @@ func (i *Interactor) ChangePassword(request ChangePasswordRequest, token, email 
 	return nil
 }
 
+func (i *Interactor) GetUserById(request GetUserByIdRequest) (*UserInfo, []string) {
+	user, err := i.services.UserRepo.GetByID(request.Id)
+	if err != nil {
+		return nil, []string{"An unexpected error occurred. Please try again later."}
+	}
+	return &UserInfo{
+		Id:          user.Id,
+		FirstName:   user.FirstName,
+		LastName:    user.LastName,
+		Email:       user.Email,
+		CountryCode: user.CountryCode,
+		PhoneNumber: user.PhoneNumber,
+	}, nil
+}
+
 func hashPassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
