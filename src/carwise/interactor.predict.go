@@ -9,10 +9,12 @@ import (
 	"time"
 )
 
+// @model PredictionResponse
+// @Description Response containing prediction results from the ML API
 type PredictionResponse struct {
-	TahminiFiyat float64 `json:"tahmini_fiyat"`
-	R2Skoru      float64 `json:"r2_skoru"`
-	MAE          float64 `json:"mae"`
+	TahminiFiyat float64 `json:"tahmini_fiyat" example:"250000.00"` // Predicted price in TL
+	R2Skoru      float64 `json:"r2_skoru" example:"0.85"`           // R2 score of the prediction model
+	MAE          float64 `json:"mae" example:"15000.00"`            // Mean Absolute Error in TL
 }
 
 func (i *Interactor) CreatePredict(request *PredictRequest) (*PredictionResponse, error) {

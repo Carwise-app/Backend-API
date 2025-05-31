@@ -167,6 +167,18 @@ definitions:
       total:
         type: integer
     type: object
+  carwise.GetPredictsResponse:
+    description: Response containing user's predictions
+    properties:
+      predicts:
+        description: List of predictions
+        items:
+          $ref: '#/definitions/carwise.Predict'
+        type: array
+      total:
+        description: Total number of predictions
+        type: integer
+    type: object
   carwise.IdResponse:
     description: Response body for id
     properties:
@@ -326,6 +338,94 @@ definitions:
     required:
     - name
     type: object
+  carwise.Predict:
+    description: Car price prediction model
+    properties:
+      accident_history:
+        description: Number of accidents
+        example: 0
+        type: number
+      body_type:
+        description: Body type (Sedan/Hatchback/SUV)
+        example: Sedan
+        type: string
+      brand:
+        description: Car brand
+        example: Toyota
+        type: string
+      color:
+        description: Car color
+        example: Beyaz
+        type: string
+      created_at:
+        description: Creation timestamp
+        example: 1717238400
+        type: integer
+      created_by:
+        description: User who made the prediction
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+      engine_power:
+        description: Engine power in horsepower
+        example: 132
+        type: number
+      engine_volume:
+        description: Engine volume in liters
+        example: 1.6
+        type: number
+      fuel_type:
+        description: Fuel type (Benzin/Dizel/LPG)
+        example: Benzin
+        type: string
+      id:
+        description: Unique identifier
+        example: 550e8400-e29b-41d4-a716-446655440000
+        type: string
+      mae:
+        description: Mean Absolute Error in TL
+        example: 15000
+        type: number
+      mileage:
+        description: Mileage in kilometers
+        example: 75000
+        type: number
+      model:
+        description: Car model
+        example: 1.6 Vision
+        type: string
+      original_parts:
+        description: Number of original parts
+        example: 10
+        type: integer
+      painted_parts:
+        description: Number of painted parts
+        example: 2
+        type: integer
+      price:
+        description: Predicted price in TL
+        example: 250000
+        type: number
+      r2:
+        description: R2 score of the prediction model
+        example: 0.85
+        type: number
+      replaced_parts:
+        description: Number of replaced parts
+        example: 0
+        type: integer
+      series:
+        description: Car series
+        example: Corolla
+        type: string
+      transmission_type:
+        description: Transmission type (Manuel/Otomatik)
+        example: Manuel
+        type: string
+      year:
+        description: Manufacturing year
+        example: 2019
+        type: integer
+    type: object
   carwise.PredictImageResponse:
     description: Response containing the prediction results for an image
     properties:
@@ -345,6 +445,86 @@ definitions:
         description: Whether the image shows car damage
         example: true
         type: boolean
+    type: object
+  carwise.PredictRequest:
+    description: Request body for creating a car price prediction
+    properties:
+      Boyalı_sayısı:
+        description: Number of painted parts
+        example: 2
+        type: integer
+      Değişen_sayısı:
+        description: Number of replaced parts
+        example: 0
+        type: integer
+      Kasa_Tipi:
+        description: Body type (Sedan/Hatchback/SUV)
+        example: Sedan
+        type: string
+      Kilometre:
+        description: Mileage in kilometers
+        example: 75000
+        type: number
+      Marka:
+        description: Car brand
+        example: Toyota
+        type: string
+      Model:
+        description: Car model
+        example: 1.6 Vision
+        type: string
+      Motor_Gücü:
+        description: Engine power in horsepower
+        example: 132
+        type: number
+      Motor_Hacmi:
+        description: Engine volume in liters
+        example: 1.6
+        type: number
+      Orjinal_sayısı:
+        description: Number of original parts
+        example: 10
+        type: integer
+      Renk:
+        description: Car color
+        example: Beyaz
+        type: string
+      Seri:
+        description: Car series
+        example: Corolla
+        type: string
+      Tramer:
+        description: Number of accidents
+        example: 0
+        type: number
+      Vites_Tipi:
+        description: Transmission type (Manuel/Otomatik)
+        example: Manuel
+        type: string
+      Yakıt_Tipi:
+        description: Fuel type (Benzin/Dizel/LPG)
+        example: Benzin
+        type: string
+      Yıl:
+        description: Manufacturing year
+        example: 2019
+        type: integer
+    type: object
+  carwise.PredictionResponse:
+    description: Response containing prediction results from the ML API
+    properties:
+      mae:
+        description: Mean Absolute Error in TL
+        example: 15000
+        type: number
+      r2_skoru:
+        description: R2 score of the prediction model
+        example: 0.85
+        type: number
+      tahmini_fiyat:
+        description: Predicted price in TL
+        example: 250000
+        type: number
     type: object
   carwise.ProfileResponse:
     description: User profile response
@@ -1776,6 +1956,73 @@ paths:
       summary: Update a listing status
       tags:
       - Listing Car
+  /predict:
+    get:
+      description: Get a paginated list of predictions made by the user
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Items per page (default: 10)'
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of predictions
+          schema:
+            $ref: '#/definitions/carwise.GetPredictsResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Get user's predictions
+      tags:
+      - Predict
+    post:
+      consumes:
+      - application/json
+      description: Create a new car price prediction using the ML model
+      parameters:
+      - description: Car details for prediction
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.PredictRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Prediction results
+          schema:
+            $ref: '#/definitions/carwise.PredictionResponse'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+        "500":
+          description: Server error
+          schema:
+            $ref: '#/definitions/main.ErrorResponse'
+      security:
+      - BearerAuth: []
+      summary: Create a new car price prediction
+      tags:
+      - Predict
   /profile:
     get:
       description: Get the profile information of the authenticated user

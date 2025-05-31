@@ -1876,6 +1876,112 @@
                 }
             }
         },
+        "/predict": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get a paginated list of predictions made by the user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Predict"
+                ],
+                "summary": "Get user's predictions",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number (default: 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Items per page (default: 10)",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "List of predictions",
+                        "schema": {
+                            "$ref": "#/definitions/carwise.GetPredictsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Create a new car price prediction using the ML model",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Predict"
+                ],
+                "summary": "Create a new car price prediction",
+                "parameters": [
+                    {
+                        "description": "Car details for prediction",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/carwise.PredictRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Prediction results",
+                        "schema": {
+                            "$ref": "#/definitions/carwise.PredictionResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "$ref": "#/definitions/main.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/profile": {
             "get": {
                 "security": [
@@ -2441,6 +2547,23 @@
                 }
             }
         },
+        "carwise.GetPredictsResponse": {
+            "description": "Response containing user's predictions",
+            "type": "object",
+            "properties": {
+                "predicts": {
+                    "description": "List of predictions",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/carwise.Predict"
+                    }
+                },
+                "total": {
+                    "description": "Total number of predictions",
+                    "type": "integer"
+                }
+            }
+        },
         "carwise.IdResponse": {
             "description": "Response body for id",
             "type": "object",
@@ -2675,6 +2798,117 @@
                 }
             }
         },
+        "carwise.Predict": {
+            "description": "Car price prediction model",
+            "type": "object",
+            "properties": {
+                "accident_history": {
+                    "description": "Number of accidents",
+                    "type": "number",
+                    "example": 0
+                },
+                "body_type": {
+                    "description": "Body type (Sedan/Hatchback/SUV)",
+                    "type": "string",
+                    "example": "Sedan"
+                },
+                "brand": {
+                    "description": "Car brand",
+                    "type": "string",
+                    "example": "Toyota"
+                },
+                "color": {
+                    "description": "Car color",
+                    "type": "string",
+                    "example": "Beyaz"
+                },
+                "created_at": {
+                    "description": "Creation timestamp",
+                    "type": "integer",
+                    "example": 1717238400
+                },
+                "created_by": {
+                    "description": "User who made the prediction",
+                    "type": "string",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "engine_power": {
+                    "description": "Engine power in horsepower",
+                    "type": "number",
+                    "example": 132
+                },
+                "engine_volume": {
+                    "description": "Engine volume in liters",
+                    "type": "number",
+                    "example": 1.6
+                },
+                "fuel_type": {
+                    "description": "Fuel type (Benzin/Dizel/LPG)",
+                    "type": "string",
+                    "example": "Benzin"
+                },
+                "id": {
+                    "description": "Unique identifier",
+                    "type": "string",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "mae": {
+                    "description": "Mean Absolute Error in TL",
+                    "type": "number",
+                    "example": 15000
+                },
+                "mileage": {
+                    "description": "Mileage in kilometers",
+                    "type": "number",
+                    "example": 75000
+                },
+                "model": {
+                    "description": "Car model",
+                    "type": "string",
+                    "example": "1.6 Vision"
+                },
+                "original_parts": {
+                    "description": "Number of original parts",
+                    "type": "integer",
+                    "example": 10
+                },
+                "painted_parts": {
+                    "description": "Number of painted parts",
+                    "type": "integer",
+                    "example": 2
+                },
+                "price": {
+                    "description": "Predicted price in TL",
+                    "type": "number",
+                    "example": 250000
+                },
+                "r2": {
+                    "description": "R2 score of the prediction model",
+                    "type": "number",
+                    "example": 0.85
+                },
+                "replaced_parts": {
+                    "description": "Number of replaced parts",
+                    "type": "integer",
+                    "example": 0
+                },
+                "series": {
+                    "description": "Car series",
+                    "type": "string",
+                    "example": "Corolla"
+                },
+                "transmission_type": {
+                    "description": "Transmission type (Manuel/Otomatik)",
+                    "type": "string",
+                    "example": "Manuel"
+                },
+                "year": {
+                    "description": "Manufacturing year",
+                    "type": "integer",
+                    "example": 2019
+                }
+            }
+        },
         "carwise.PredictImageResponse": {
             "description": "Response containing the prediction results for an image",
             "type": "object",
@@ -2701,6 +2935,108 @@
                     "description": "Whether the image shows car damage",
                     "type": "boolean",
                     "example": true
+                }
+            }
+        },
+        "carwise.PredictRequest": {
+            "description": "Request body for creating a car price prediction",
+            "type": "object",
+            "properties": {
+                "Boyalı_sayısı": {
+                    "description": "Number of painted parts",
+                    "type": "integer",
+                    "example": 2
+                },
+                "Değişen_sayısı": {
+                    "description": "Number of replaced parts",
+                    "type": "integer",
+                    "example": 0
+                },
+                "Kasa_Tipi": {
+                    "description": "Body type (Sedan/Hatchback/SUV)",
+                    "type": "string",
+                    "example": "Sedan"
+                },
+                "Kilometre": {
+                    "description": "Mileage in kilometers",
+                    "type": "number",
+                    "example": 75000
+                },
+                "Marka": {
+                    "description": "Car brand",
+                    "type": "string",
+                    "example": "Toyota"
+                },
+                "Model": {
+                    "description": "Car model",
+                    "type": "string",
+                    "example": "1.6 Vision"
+                },
+                "Motor_Gücü": {
+                    "description": "Engine power in horsepower",
+                    "type": "number",
+                    "example": 132
+                },
+                "Motor_Hacmi": {
+                    "description": "Engine volume in liters",
+                    "type": "number",
+                    "example": 1.6
+                },
+                "Orjinal_sayısı": {
+                    "description": "Number of original parts",
+                    "type": "integer",
+                    "example": 10
+                },
+                "Renk": {
+                    "description": "Car color",
+                    "type": "string",
+                    "example": "Beyaz"
+                },
+                "Seri": {
+                    "description": "Car series",
+                    "type": "string",
+                    "example": "Corolla"
+                },
+                "Tramer": {
+                    "description": "Number of accidents",
+                    "type": "number",
+                    "example": 0
+                },
+                "Vites_Tipi": {
+                    "description": "Transmission type (Manuel/Otomatik)",
+                    "type": "string",
+                    "example": "Manuel"
+                },
+                "Yakıt_Tipi": {
+                    "description": "Fuel type (Benzin/Dizel/LPG)",
+                    "type": "string",
+                    "example": "Benzin"
+                },
+                "Yıl": {
+                    "description": "Manufacturing year",
+                    "type": "integer",
+                    "example": 2019
+                }
+            }
+        },
+        "carwise.PredictionResponse": {
+            "description": "Response containing prediction results from the ML API",
+            "type": "object",
+            "properties": {
+                "mae": {
+                    "description": "Mean Absolute Error in TL",
+                    "type": "number",
+                    "example": 15000
+                },
+                "r2_skoru": {
+                    "description": "R2 score of the prediction model",
+                    "type": "number",
+                    "example": 0.85
+                },
+                "tahmini_fiyat": {
+                    "description": "Predicted price in TL",
+                    "type": "number",
+                    "example": 250000
                 }
             }
         },
