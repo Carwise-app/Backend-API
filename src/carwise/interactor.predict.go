@@ -85,6 +85,14 @@ func (i *Interactor) GetPredicts(request *GetPredictsRequest) (*GetPredictsRespo
 	if err != nil {
 		return nil, err
 	}
+
+	if len(predicts) == 0 {
+		return &GetPredictsResponse{
+			Predicts: []Predict{},
+			Total:    total,
+		}, nil
+	}
+
 	return &GetPredictsResponse{
 		Predicts: predicts,
 		Total:    total,
