@@ -218,6 +218,16 @@ func (r *ListingRepository) DeleteListing(id string) error {
 		return err
 	}
 
+	query = `
+	DELETE FROM favorites
+	WHERE listing_id = $1
+	`
+
+	_, err = r.db.Exec(query, id)
+	if err != nil {
+		return err
+	}
+	
 	return nil
 }
 
