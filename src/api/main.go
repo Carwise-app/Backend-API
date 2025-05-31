@@ -71,6 +71,7 @@ func main() {
 			PredictionRepo:    infra.NewPredictionRepository(),
 			GoogleAuth:        infra.NewGoogleAuth(),
 			FavoriteRepo:      infra.NewFavoriteRepository(),
+			PredictRepo:       infra.NewPredictRepository(),
 		},
 	)
 
@@ -151,6 +152,12 @@ func main() {
 		favorite.POST("/:listing_id", AuthMiddleware(), CreateFavorite)
 		favorite.DELETE("/:listing_id", AuthMiddleware(), DeleteFavorite)
 		favorite.GET("/", AuthMiddleware(), GetFavorites)
+	}
+
+	predict := app.Group("/predict")
+	{
+		predict.POST("/", OptionalAuthMiddleware(), CreatePredict)
+		predict.GET("/", AuthMiddleware(), GetPredicts)
 	}
 
 	app.GET("/swagger/*any", ginSwagger.WrapHandler(ginSwaggerFiles.Handler))

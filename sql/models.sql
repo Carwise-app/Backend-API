@@ -105,3 +105,26 @@ CREATE TABLE IF NOT EXISTS favorites (
     PRIMARY KEY (user_id, listing_id)
 );
 
+CREATE TABLE IF NOT EXISTS predicts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    created_by UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP),
+    brand VARCHAR(255) NOT NULL DEFAULT '',
+    series VARCHAR(255) NOT NULL DEFAULT '',
+    model VARCHAR(255) NOT NULL DEFAULT '',
+    year INT NOT NULL DEFAULT 0,
+    mileage FLOAT NOT NULL DEFAULT 0.0,
+    engine_volume FLOAT NOT NULL DEFAULT 0.0,
+    engine_power FLOAT NOT NULL DEFAULT 0.0,
+    accident_history FLOAT NOT NULL DEFAULT 0.0,
+    transmission_type VARCHAR(255) NOT NULL DEFAULT '',
+    fuel_type VARCHAR(255) NOT NULL DEFAULT '',
+    body_type VARCHAR(255) NOT NULL DEFAULT '',
+    color VARCHAR(255) NOT NULL DEFAULT '',
+    original_parts INT NOT NULL DEFAULT 0,
+    replaced_parts INT NOT NULL DEFAULT 0,
+    painted_parts INT NOT NULL DEFAULT 0,
+    price FLOAT NOT NULL DEFAULT 0.0,
+    r2 FLOAT NOT NULL DEFAULT 0.0,
+    mae FLOAT NOT NULL DEFAULT 0.0
+);

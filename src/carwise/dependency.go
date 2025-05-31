@@ -96,6 +96,12 @@ type FavoriteRepository interface {
 	IsFavorite(userId, listingId string) bool
 }
 
+type PredictRepository interface {
+	SavePredict(predict *Predict) error
+	GetPredictByUserId(userId string, page, limit int) ([]Predict, error)
+	CountPredictByUserId(userId string) (int, error)
+}
+
 type Services struct {
 	UserRepo          UserRepository
 	RedisRepo         RedisRepository
@@ -108,4 +114,5 @@ type Services struct {
 	PredictionRepo    PredictionRepository
 	GoogleAuth        GoogleAuth
 	FavoriteRepo      FavoriteRepository
+	PredictRepo       PredictRepository
 }
