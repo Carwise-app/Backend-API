@@ -80,7 +80,7 @@ func main() {
 		c.Redirect(http.StatusMovedPermanently, "/swagger/index.html")
 	})
 
-	app.GET("/user/:id", GetUserById)
+	app.GET("/user/:id", AuthMiddleware(), GetUserById)
 
 	auth := app.Group("/auth")
 	{

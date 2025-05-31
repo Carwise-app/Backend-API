@@ -22,12 +22,12 @@ func (i *Interactor) SendMessage(request *SendMessageRequest) error {
 }
 
 func (i *Interactor) GetMessages(request *GetMessagesRequest) (*GetMessagesResponse, error) {
-	messages, err := i.services.MessageRepo.GetMessagesByUserId(request.UserId, request.ListingId, request.Limit, request.Page)
+	messages, err := i.services.MessageRepo.GetMessagesByUserId(request.UserId, request.ReceiverId, request.ListingId, request.Limit, request.Page)
 	if err != nil {
 		return nil, err
 	}
 
-	total, err := i.services.MessageRepo.CountMessagesByUserId(request.UserId, request.ListingId)
+	total, err := i.services.MessageRepo.CountMessagesByUserId(request.UserId, request.ReceiverId, request.ListingId)
 	if err != nil {
 		return nil, err
 	}

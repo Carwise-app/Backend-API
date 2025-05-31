@@ -69,8 +69,8 @@ type ImageRepository interface {
 
 type MessageRepository interface {
 	SaveMessage(message *Message) error
-	GetMessagesByUserId(userId, listingId string, limit, offset int) ([]Message, error)
-	CountMessagesByUserId(userId, listingId string) (int, error)
+	GetMessagesByUserId(userId, otherUserId, listingId string, limit, offset int) ([]Message, error)
+	CountMessagesByUserId(userId, otherUserId, listingId string) (int, error)
 	GetChats(userId string, limit, offset int) ([]Chat, error)
 	CountChats(userId string) (int, error)
 	ReadMessage(messageId string) error
