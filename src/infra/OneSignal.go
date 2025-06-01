@@ -21,7 +21,7 @@ type OneSignalNotification struct {
 	Contents             map[string]string `json:"contents"`
 	Headings             map[string]string `json:"headings,omitempty"`
 	Data                 map[string]string `json:"data,omitempty"`
-	BigPicture           string            `json:"big_picture,omitempty"`
+	LargeIcon            string            `json:"large_icon,omitempty"`
 }
 
 type OneSignalResponse struct {
@@ -69,7 +69,7 @@ func (r *OneSignalRepository) PushNotification(
 	}
 
 	if bigImage != "" {
-		notification.BigPicture = bigImage
+		notification.LargeIcon = bigImage
 	}
 
 	jsonData, err := json.Marshal(notification)
