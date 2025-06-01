@@ -241,19 +241,6 @@ func (i *Interactor) UpdateListing(request *UpdateListingRequest) error {
 
 	if request.Price < listing.Price {
 		go func() {
-			image := Image{}
-			if len(listing.Images) > 0 {
-				firstImage, err := i.services.ImageRepo.GetImageById(listing.Images[0])
-				if err == nil {
-					image = *firstImage
-				}
-			}
-
-			imageUrl := ""
-			if image.Path != "" {
-				imageUrl = "https://carwisegw.yusuftalhaklc.com" + strings.Replace(image.Path, ".", "", -1)
-			}
-
 			err = i.CreatePushNotification(
 				PriceDropped,
 				"",
@@ -262,7 +249,6 @@ func (i *Interactor) UpdateListing(request *UpdateListingRequest) error {
 					"listing_id": listing.Id,
 				},
 				"",
-				imageUrl,
 			)
 			if err != nil {
 				log.Println("CreatePushNotification error: ", err)

@@ -1,6 +1,9 @@
 package carwise
 
-import "errors"
+import (
+	"errors"
+	"strings"
+)
 
 var (
 	SystemMessage = 1
@@ -15,7 +18,6 @@ func (i *Interactor) CreatePushNotification(
 	m string,
 	customData map[string]string,
 	userId string,
-	bigImage string,
 ) error {
 	var title string
 	var message string
@@ -36,20 +38,39 @@ func (i *Interactor) CreatePushNotification(
 	default:
 		return errors.New("geçersiz bildirim türü")
 	}
+	imageUrl := ""
+	if customData["listing_id"] != "" {
+		listing, err := i.services.ListingRepo.GetListingById(customData["listing_id"])
+		if err != nil {
+			return err
+		}
+
+		image := Image{}
+		if len(listing.Images) > 0 {
+			firstImage, err := i.services.ImageRepo.GetImageById(listing.Images[0])
+			if err == nil {
+				image = *firstImage
+			}
+		}
+
+		if image.Path != "" {
+			imageUrl = "https://carwisegw.yusuftalhaklc.com" + strings.TrimPrefix(image.Path, ".")
+		}
+	}
 
 	if status == PriceDropped {
 		deviceTokens, err := i.services.FavoriteRepo.GetUserDeviceTokens(customData["listing_id"])
 		if err != nil {
 			return err
 		}
-		return i.PushNotification(deviceTokens, title, message, customData, bigImage)
+		return i.PushNotification(deviceTokens, title, message, customData, imageUrl)
 	} else {
 		user, err := i.services.UserRepo.GetByID(userId)
 		if err != nil {
 			return err
 		}
 		if user.PushNotify {
-			return i.PushNotification([]string{user.DeviceToken}, title, message, customData, bigImage)
+			return i.PushNotification([]string{user.DeviceToken}, title, message, customData, imageUrl)
 		}
 	}
 	return nil
