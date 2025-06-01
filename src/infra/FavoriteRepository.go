@@ -121,3 +121,28 @@ func (r *FavoriteRepository) GetUserDeviceTokens(listingId string) ([]string, er
 	}
 	return deviceTokens, nil
 }
+
+func (r *FavoriteRepository) GetUserEmails(listingId string) ([]string, error) {
+	query := `
+	SELECT u.email 
+	FROM favorites f
+	INNER JOIN users u ON f.user_id = u.id
+	WHERE f.listing_id = $1 AND u.email_notify = true
+	`
+	rows, err := r.db.Query(query, listingId)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	emails := []string{}
+	for rows.Next() {
+		var email string
+		err := rows.Scan(&email)
+		if err != nil {
+			return nil, err
+		}
+		emails = append(emails, email)
+	}
+	return emails, nil
+}

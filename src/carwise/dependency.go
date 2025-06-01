@@ -12,6 +12,7 @@ type UserRepository interface {
 	UpdatePassword(email, hashedPassword string) error
 	Update(user *User) error
 	GetAllDeviceTokens() ([]string, error)
+	GetAllEmails() ([]string, error)
 }
 
 type RedisRepository interface {
@@ -22,7 +23,7 @@ type RedisRepository interface {
 }
 
 type MailGateway interface {
-	Send(To string, Body []byte) error
+	SendEmail(to, subject, templateName string, data map[string]interface{}) error
 }
 
 type PasswordResetRepository interface {
@@ -97,6 +98,7 @@ type FavoriteRepository interface {
 	IsFavorite(userId, listingId string) bool
 
 	GetUserDeviceTokens(listingId string) ([]string, error)
+	GetUserEmails(listingId string) ([]string, error)
 }
 
 type PredictRepository interface {

@@ -5,7 +5,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"log"
-	"math/big"
 	"time"
 
 	"github.com/google/uuid"
@@ -107,24 +106,12 @@ func (i *Interactor) ResetPasswordRequest(request ResetPasswordRequest) []string
 		fmt.Printf("Failed to save reset code: %v\n", err)
 	}
 
-	resetLink := fmt.Sprintf("http://localhost:3000/reset-password?token=%s&email=%s", token, request.Email)
-	emailBody := fmt.Sprintf(`From: Carwise <app.carwise@gmail.com>
-Subject: Password Reset Request
-Dear User,
-We received a request to reset the password associated with your account. If you made this request, please click the link below to reset your password:
-
-%s
-
-This link will expire in 5 days. If you did not request a password reset, you can safely ignore this email.
-
-Best regards,
-Carwise Team`, resetLink)
-
-	err = i.services.MailGW.Send(request.Email, []byte(emailBody))
-	if err != nil {
-		log.Printf("Error send password reset email: %v\n", err)
-		return []string{"An unexpected error occurred. Please try again later."}
-	}
+	resetLink := fmt.Sprintf("https://carwisegw.yusuftalhaklc.com/auth/reset-password?token=%s&email=%s", token, request.Email)
+	err = i.services.MailGW.SendEmail(request.Email, "Password Reset Request", "reset_password.html", map[string]interface{}{
+		"title":   "Şifre Sıfırlama İsteği",
+		"message": "Hesabınızla ilişkili şifreyi sıfırlama talebi aldık. Eğer bu talebi siz yaptıysanız, şifrenizi sıfırlamak için aşağıdaki bağlantıya tıklayın:",
+		"link":    resetLink,
+	})
 
 	return nil
 }
@@ -199,19 +186,4 @@ func generateToken(size int) (string, error) {
 
 	return hex.EncodeToString(buf), nil
 
-}
-
-func generateSecureListingNumber(length int) (string, error) {
-	letters := []rune("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-	randPart := make([]rune, length)
-
-	for i := range randPart {
-		idx, err := rand.Int(rand.Reader, big.NewInt(int64(len(letters))))
-		if err != nil {
-			return "", err
-		}
-		randPart[i] = letters[idx.Int64()]
-	}
-
-	return string(randPart), nil
 }

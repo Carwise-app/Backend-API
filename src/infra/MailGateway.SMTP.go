@@ -1,9 +1,12 @@
 package infra
 
 import (
+	"bytes"
 	"crypto/tls"
+	"fmt"
 	"net/smtp"
 	"os"
+	"text/template"
 )
 
 type MailGateway struct {
@@ -22,46 +25,71 @@ func NewMailGateway() *MailGateway {
 	}
 }
 
-func (GW *MailGateway) Send(To string, Body []byte) error {
-	auth := smtp.PlainAuth("", GW.User, GW.Password, GW.Host)
+func (gw *MailGateway) SendEmail(to, subject, templateName string, data map[string]interface{}) error {
+	// Şablonu oku ve işle
+	tmpl, err := template.ParseFiles("templates/" + templateName)
+	if err != nil {
+		return fmt.Errorf("template parse error: %v", err)
+	}
 
+	var bodyBuffer bytes.Buffer
+	if err := tmpl.Execute(&bodyBuffer, data); err != nil {
+		return fmt.Errorf("template execute error: %v", err)
+	}
+
+	// Mail mesajı oluştur
+	msg := bytes.Buffer{}
+	msg.WriteString(fmt.Sprintf("From: Carwise <%s>\r\n", gw.User))
+	msg.WriteString(fmt.Sprintf("To: %s\r\n", to))
+	msg.WriteString(fmt.Sprintf("Subject: %s\r\n", subject))
+	msg.WriteString("MIME-Version: 1.0\r\n")
+	msg.WriteString("Content-Type: text/html; charset=\"UTF-8\"\r\n")
+	msg.WriteString("\r\n")
+	msg.Write(bodyBuffer.Bytes())
+
+	// SMTP kimlik doğrulaması
+	auth := smtp.PlainAuth("", gw.User, gw.Password, gw.Host)
+
+	// TLS yapılandırması
 	tlsconfig := &tls.Config{
 		InsecureSkipVerify: true,
-		ServerName:         GW.Host,
+		ServerName:         gw.Host,
 	}
 
-	c, err := smtp.Dial(GW.Host + ":" + GW.Port)
+	// SMTP sunucusuna bağlan
+	c, err := smtp.Dial(gw.Host + ":" + gw.Port)
 	if err != nil {
-		return err
+		return fmt.Errorf("SMTP dial error: %v", err)
 	}
+	defer c.Close()
 
-	c.StartTLS(tlsconfig)
+	if err = c.StartTLS(tlsconfig); err != nil {
+		return fmt.Errorf("StartTLS error: %v", err)
+	}
 
 	if err = c.Auth(auth); err != nil {
-		return err
+		return fmt.Errorf("SMTP auth error: %v", err)
 	}
 
-	if err = c.Mail(GW.User); err != nil {
-		return err
+	if err = c.Mail(gw.User); err != nil {
+		return fmt.Errorf("MAIL FROM error: %v", err)
 	}
 
-	if err = c.Rcpt(To); err != nil {
-		return err
+	if err = c.Rcpt(to); err != nil {
+		return fmt.Errorf("RCPT TO error: %v", err)
 	}
 
 	w, err := c.Data()
 	if err != nil {
-		return err
+		return fmt.Errorf("DATA command error: %v", err)
 	}
 
-	_, err = w.Write(Body)
-	if err != nil {
-		return err
+	if _, err = w.Write(msg.Bytes()); err != nil {
+		return fmt.Errorf("message write error: %v", err)
 	}
 
-	err = w.Close()
-	if err != nil {
-		return err
+	if err = w.Close(); err != nil {
+		return fmt.Errorf("close write error: %v", err)
 	}
 
 	return nil

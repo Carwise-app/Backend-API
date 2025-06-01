@@ -239,3 +239,27 @@ func (r *UserRepository) GetAllDeviceTokens() ([]string, error) {
 	}
 	return deviceTokens, nil
 }
+
+func (r *UserRepository) GetAllEmails() ([]string, error) {
+	query := `
+		SELECT email 
+		FROM users 
+		WHERE email_notify = true
+	`
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get all emails: %w", err)
+	}
+	defer rows.Close()
+
+	emails := []string{}
+	for rows.Next() {
+		var email string
+		err := rows.Scan(&email)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan email: %w", err)
+		}
+		emails = append(emails, email)
+	}
+	return emails, nil
+}

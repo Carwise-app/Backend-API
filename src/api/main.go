@@ -48,7 +48,7 @@ func main() {
 	app := gin.Default()
 	app.Static("/uploads", "./uploads")
 	app.Static("/.well-known", "./well-known")
-
+	app.LoadHTMLGlob("templates/*")
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},

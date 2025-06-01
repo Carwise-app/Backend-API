@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.title}}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: white;
+            padding: 20px;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 1px solid #f1f1f1;
+        }
+        
+        .header {
+            background: #D32E2E;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .logo-section {
+            margin-bottom: 15px;
+        }
+        
+        .app-logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            opacity: 0.95;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .notification-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .text-section {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .image-section {
+            flex-shrink: 0;
+            width: 150px;
+            height: auto;
+            margin-left: auto;
+        }
+        
+        .content-image {
+            width: 100%;
+            height: auto;
+            max-height: 120px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #f1f1f1;
+            box-shadow: 0 4px 12px rgba(211, 46, 46, 0.1);
+            object-fit: cover;
+            display: block;
+        }
+        
+        .image-fallback {
+            width: 100%;
+            height: 120px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            color: #D32E2E;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+        }
+        
+        .title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        
+        .message {
+            font-size: 15px;
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+        
+        .action-section {
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .action-button {
+            display: inline-block;
+            background: #D32E2E;
+            color: white;
+            text-decoration: none;
+            padding: 14px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(211, 46, 46, 0.3);
+        }
+        
+        .action-button:hover {
+            background: #B52828;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(211, 46, 46, 0.4);
+        }
+        
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #e9ecef, transparent);
+            margin: 30px 0;
+        }
+        
+        .info-box {
+            background: #f8f9fa;
+            border-left: 4px solid #D32E2E;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+            text-align: left;
+        }
+        
+        .info-box-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .info-box-text {
+            color: #6c757d;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 25px 30px;
+            text-align: center;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .footer-brand {
+            color: #D32E2E;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .footer-text {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .footer-copyright {
+            color: #adb5bd;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .header, .content, .footer {
+                padding: 25px 20px;
+            }
+            
+            .notification-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .image-section {
+                order: -1;
+                width: 100%;
+                max-width: 200px;
+                align-self: flex-start;
+            }
+            
+            .content-image {
+                max-height: 100px;
+            }
+            
+            .image-fallback {
+                height: 100px;
+                font-size: 28px;
+            }
+            
+            .title {
+                font-size: 18px;
+            }
+            
+            .message {
+                font-size: 14px;
+            }
+            
+            .action-button {
+                padding: 12px 25px;
+                font-size: 15px;
+            }
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <div class="logo-section">
+                <div class="app-logo">CARWISE</div>
+            </div>
+            <div class="header-title">Bildirim</div>
+        </div>
+        
+        <div class="content">
+            <div class="notification-content">
+                <div class="text-section">
+                    <div class="title">{{.title}}</div>
+                    <div class="message">{{.message}}</div>
+                </div>
+                <div class="image-section" id="imageSection">
+                    <img src="{{.image}}" alt="Content Image" class="content-image" id="contentImage" onerror="showFallback()">
+                </div>
+            </div>
+            
+            <div class="action-section">
+                <a href="{{.link}}" class="action-button">Detayları Görüntüle</a>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="info-box">
+                <div class="info-box-title">📱 Carwise Uygulaması</div>
+                <div class="info-box-text">
+                    Bu bildirim Carwise uygulamanızdan gönderilmiştir. 
+                    Daha fazla detay için uygulamayı ziyaret edebilirsiniz.
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="footer-brand">CARWISE</div>
+            <div class="footer-text">
+                Bu e-posta otomatik olarak gönderilmiştir.
+            </div>
+            <div class="footer-copyright">
+                © 2025 Carwise - Tüm hakları saklıdır.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showFallback() {
+            const imageSection = document.getElementById('imageSection');
+            if (imageSection) {
+                imageSection.innerHTML = '<div class="image-fallback">🖼️</div>';
+            }
+        }
+        
+        function hideImageSection() {
+            const imageSection = document.getElementById('imageSection');
+            if (imageSection) {
+                imageSection.style.display = 'none';
+            }
+        }
+        
+        // Check if image URL is empty or null
+        window.onload = function() {
+            const img = document.getElementById('contentImage');
+            const imageUrl = '{{.image}}';
+            
+            if (!imageUrl || imageUrl.trim() === '' || imageUrl === '{{.image}}') {
+                hideImageSection();
+                return;
+            }
+            
+            if (img && (img.naturalWidth === 0 || img.complete === false)) {
+                showFallback();
+            }
+        }
+    </script>
+</body>
+</html>
