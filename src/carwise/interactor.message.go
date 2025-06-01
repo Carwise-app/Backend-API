@@ -13,20 +13,18 @@ func (i *Interactor) SendMessage(request *SendMessageRequest) error {
 		return err
 	}
 
-	if listing.CreatedBy != request.UserId {
-		err = i.CreatePushNotification(
-			ChatMessage,
-			"",
-			"",
-			map[string]string{
-				"listing_id": listing.Id,
-				"user_id":    request.UserId,
-			},
-			listing.CreatedBy,
-		)
-		if err != nil {
-			log.Println("CreatePushNotification error: ", err)
-		}
+	err = i.CreatePushNotification(
+		ChatMessage,
+		"",
+		"",
+		map[string]string{
+			"listing_id": listing.Id,
+			"user_id":    request.UserId,
+		},
+		request.ReceiverId,
+	)
+	if err != nil {
+		log.Println("CreatePushNotification error: ", err)
 	}
 
 	message := &Message{
