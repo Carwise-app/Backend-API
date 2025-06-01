@@ -23,6 +23,7 @@ ENV TZ=UTC
 
 COPY --from=builder /app/carwise-backend .
 COPY --from=builder /app/.well-known ./well-known
+COPY --from=builder /app/templates ./templates
 
 ENV GIN_MODE=release
 
