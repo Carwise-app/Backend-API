@@ -7,6 +7,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/websocket"
 )
 
 // @Summary Send a message
@@ -129,6 +130,12 @@ func GetChats(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, response)
 }
 
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
+
 func WebSocketHandler(ctx *gin.Context) {
 	userContext, exists := ctx.Get("user")
 	if !exists {
@@ -143,15 +150,19 @@ func WebSocketHandler(ctx *gin.Context) {
 		return
 	}
 
+	listingId := ctx.Param("listing_id")
+	receiverId := ctx.Param("receiver_id")
+
 	client := &Client{
-		Hub:    hub,
-		Conn:   conn,
-		Send:   make(chan []byte, 256),
-		UserId: claim.UserId,
-		Role:   claim.Role,
+		Id:         generateClientID(claim.UserId, listingId, receiverId),
+		Conn:       conn,
+		Send:       make(chan []byte, 256),
+		UserId:     claim.UserId,
+		ListingId:  listingId,
+		ReceiverId: receiverId,
 	}
 
-	client.Hub.register <- client
+	hub.Register <- client
 
 	go client.WritePump()
 	go client.ReadPump()

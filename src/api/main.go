@@ -147,7 +147,7 @@ func main() {
 		chat.GET("/", AuthMiddleware(), GetChats)
 		chat.POST("/:listing_id/:receiver_id", AuthMiddleware(), SendMessage)
 		chat.GET("/:listing_id/:receiver_id", AuthMiddleware(), GetMessages)
-		chat.GET("/ws", WebSocketAuthMiddleware(), WebSocketHandler)
+		chat.GET("/ws/:listing_id/:receiver_id", WebSocketAuthMiddleware(), WebSocketHandler)
 	}
 
 	favorite := app.Group("/favorite")

@@ -3,76 +3,72 @@ package main
 import (
 	"carwise"
 	"encoding/json"
+	"fmt"
 	"log"
-	"net/http"
 	"sync"
+	"time"
 
 	"github.com/gorilla/websocket"
 )
 
 type Client struct {
-	Hub    *Hub
-	Conn   *websocket.Conn
-	Send   chan []byte
-	UserId string
-	Role   int
-	mu     sync.Mutex
+	Id         string
+	UserId     string
+	ListingId  string
+	ReceiverId string
+	Conn       *websocket.Conn
+	Send       chan []byte
 }
 
 type Hub struct {
-	clients    map[string]*Client
-	broadcast  chan []byte
-	register   chan *Client
-	unregister chan *Client
+	Clients    map[*Client]bool
+	Broadcast  chan []byte
+	Register   chan *Client
+	Unregister chan *Client
 	mu         sync.RWMutex
 }
 
-// @model WSMessage
-// @Description WebSocket message structure
-type WSMessage struct {
-	Type      string          `json:"type"`
-	UserId    string          `json:"user_id"`
-	Message   string          `json:"message"`
-	Timestamp int64           `json:"timestamp"`
-	Data      json.RawMessage `json:"data,omitempty"`
+type Message struct {
+	Message    string `json:"message"`
+	SenderId   string `json:"sender_id"`
+	ReceiverId string `json:"receiver_id"`
+	ListingId  string `json:"listing_id"`
+	Timestamp  int64  `json:"timestamp"`
 }
 
 var hub = &Hub{
-	clients:    make(map[string]*Client),
-	broadcast:  make(chan []byte),
-	register:   make(chan *Client),
-	unregister: make(chan *Client),
+	Clients:    make(map[*Client]bool),
+	Broadcast:  make(chan []byte),
+	Register:   make(chan *Client),
+	Unregister: make(chan *Client),
 }
 
 func (h *Hub) Run() {
 	for {
 		select {
-		case client := <-h.register:
+		case client := <-h.Register:
 			h.mu.Lock()
-			h.clients[client.UserId] = client
+			h.Clients[client] = true
 			h.mu.Unlock()
-		case client := <-h.unregister:
+			log.Printf("Client registered: %s", client.Id)
+
+		case client := <-h.Unregister:
 			h.mu.Lock()
-			if _, ok := h.clients[client.UserId]; ok {
-				delete(h.clients, client.UserId)
+			if _, ok := h.Clients[client]; ok {
+				delete(h.Clients, client)
 				close(client.Send)
 			}
 			h.mu.Unlock()
-		case message := <-h.broadcast:
-			var wsMsg WSMessage
-			if err := json.Unmarshal(message, &wsMsg); err != nil {
-				log.Printf("Error unmarshaling message: %v", err)
-				continue
-			}
+			log.Printf("Client unregistered: %s", client.Id)
 
+		case message := <-h.Broadcast:
 			h.mu.RLock()
-			// Mesajı alıcıya gönder
-			if client, ok := h.clients[wsMsg.UserId]; ok {
+			for client := range h.Clients {
 				select {
 				case client.Send <- message:
 				default:
+					delete(h.Clients, client)
 					close(client.Send)
-					delete(h.clients, client.UserId)
 				}
 			}
 			h.mu.RUnlock()
@@ -82,12 +78,13 @@ func (h *Hub) Run() {
 
 func (c *Client) ReadPump() {
 	defer func() {
-		c.Hub.unregister <- c
+		hub.Unregister <- c
 		c.Conn.Close()
 	}()
 
 	for {
-		_, message, err := c.Conn.ReadMessage()
+		var msg Message
+		err := c.Conn.ReadJSON(&msg)
 		if err != nil {
 			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 				log.Printf("error: %v", err)
@@ -95,55 +92,60 @@ func (c *Client) ReadPump() {
 			break
 		}
 
-		var wsMsg WSMessage
-		if err := json.Unmarshal(message, &wsMsg); err != nil {
-			log.Printf("Error unmarshaling message: %v", err)
-			continue
+		isReceiverActive := false
+		hub.mu.RLock()
+		for client := range hub.Clients {
+			if client.UserId == msg.ReceiverId && client.ListingId == msg.ListingId {
+				isReceiverActive = true
+				break
+			}
 		}
+		hub.mu.RUnlock()
 
-		if err := interactor.SendMessage(&carwise.SendMessageRequest{
-			ReceiverId: wsMsg.UserId,
-			Message:    wsMsg.Message,
-			UserId:     c.UserId,
-			Role:       c.Role,
-		}); err != nil {
-			log.Printf("Error saving message: %v", err)
-			continue
-		}
+		interactor.SendMessage(&carwise.SendMessageRequest{
+			Message:          msg.Message,
+			UserId:           msg.SenderId,
+			ReceiverId:       msg.ReceiverId,
+			ListingId:        msg.ListingId,
+			IsReceiverActive: isReceiverActive,
+		})
 
-		// Mesajı hub'a gönder
-		c.Hub.broadcast <- message
+		c.broadcastToRoom(&msg)
 	}
 }
 
 func (c *Client) WritePump() {
-	defer func() {
-		c.Conn.Close()
-	}()
+	defer c.Conn.Close()
 
-	for {
-		select {
-		case message, ok := <-c.Send:
-			if !ok {
-				c.Conn.WriteMessage(websocket.CloseMessage, []byte{})
-				return
-			}
+	for message := range c.Send {
+		err := c.Conn.WriteMessage(websocket.TextMessage, message)
+		if err != nil {
+			break
+		}
+	}
 
-			c.mu.Lock()
-			err := c.Conn.WriteMessage(websocket.TextMessage, message)
-			c.mu.Unlock()
-			if err != nil {
-				log.Printf("Error writing message: %v", err)
-				return
+	c.Conn.WriteMessage(websocket.CloseMessage, []byte{})
+}
+
+func (c *Client) broadcastToRoom(msg *Message) {
+	hub.mu.RLock()
+	defer hub.mu.RUnlock()
+
+	for client := range hub.Clients {
+		if client.ListingId == c.ListingId &&
+			client.UserId == msg.ReceiverId {
+			msg.Timestamp = time.Now().Unix()
+			msgBytes, _ := json.Marshal(msg)
+			select {
+			case client.Send <- msgBytes:
+			default:
+				delete(hub.Clients, client)
+				close(client.Send)
 			}
 		}
 	}
 }
 
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-	CheckOrigin: func(r *http.Request) bool {
-		return true // Geliştirme için CORS kontrolünü devre dışı bırakıyoruz
-	},
+func generateClientID(userID, listingID, receiverID string) string {
+	return fmt.Sprintf("%s_%s_%s", userID, listingID, receiverID)
 }

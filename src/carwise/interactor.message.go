@@ -13,21 +13,23 @@ func (i *Interactor) SendMessage(request *SendMessageRequest) error {
 		return err
 	}
 
-	go func() {
-		err = i.CreatePushNotification(
-			ChatMessage,
-			"",
-			"",
-			map[string]string{
-				"listing_id": listing.Id,
-				"user_id":    request.UserId,
-			},
-			request.ReceiverId,
-		)
-		if err != nil {
-			log.Println("CreatePushNotification error: ", err)
-		}
-	}()
+	if !request.IsReceiverActive {
+		go func() {
+			err = i.CreatePushNotification(
+				ChatMessage,
+				"",
+				"",
+				map[string]string{
+					"listing_id": listing.Id,
+					"user_id":    request.UserId,
+				},
+				request.ReceiverId,
+			)
+			if err != nil {
+				log.Println("CreatePushNotification error: ", err)
+			}
+		}()
+	}
 
 	message := &Message{
 		Id:         uuid.New().String(),

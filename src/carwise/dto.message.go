@@ -3,11 +3,12 @@ package carwise
 // @model SendMessageRequest
 // @Description Request body for sending a message
 type SendMessageRequest struct {
-	ListingId  string `json:"-"`
-	ReceiverId string `json:"-"`
-	Message    string `json:"message"`
-	UserId     string `json:"-"`
-	Role       int    `json:"-"`
+	ListingId        string `json:"-"`
+	ReceiverId       string `json:"-"`
+	Message          string `json:"message"`
+	UserId           string `json:"-"`
+	Role             int    `json:"-"`
+	IsReceiverActive bool   `json:"-"`
 }
 
 // @model GetMessagesRequest
