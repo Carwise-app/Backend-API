@@ -59,10 +59,10 @@ type GetUserByIdRequest struct {
 // @model PushNotificationRequest
 // @Description Push notification request
 type PushNotificationRequest struct {
-	Title     string            `json:"title" example:"Title"`
-	Message   string            `json:"message" example:"Message"`
-	Data      map[string]string `json:"data" example:"Data"`
-	UserId    string            `json:"-"`
-	Role      int               `json:"-"`
-	LargeIcon string            `json:"large_icon" example:"https://example.com/large_icon.png"`
+	Title    string            `json:"title" example:"Title"`
+	Message  string            `json:"message" example:"Message"`
+	Data     map[string]string `json:"data" example:"Data"`
+	UserId   string            `json:"-"`
+	Role     int               `json:"-"`
+	BigImage string            `json:"big_image" example:"https://example.com/big_image.png"`
 }

@@ -15,7 +15,7 @@ func (i *Interactor) CreatePushNotification(
 	m string,
 	customData map[string]string,
 	userId string,
-	largeIcon string,
+	bigImage string,
 ) error {
 	var title string
 	var message string
@@ -42,21 +42,21 @@ func (i *Interactor) CreatePushNotification(
 		if err != nil {
 			return err
 		}
-		return i.PushNotification(deviceTokens, title, message, customData, largeIcon)
+		return i.PushNotification(deviceTokens, title, message, customData, bigImage)
 	} else {
 		user, err := i.services.UserRepo.GetByID(userId)
 		if err != nil {
 			return err
 		}
 		if user.PushNotify {
-			return i.PushNotification([]string{user.DeviceToken}, title, message, customData, largeIcon)
+			return i.PushNotification([]string{user.DeviceToken}, title, message, customData, bigImage)
 		}
 	}
 	return nil
 }
 
-func (i *Interactor) PushNotification(deviceTokens []string, title, message string, customData map[string]string, largeIcon string) error {
-	return i.services.OneSignalRepo.PushNotification(deviceTokens, title, message, customData, largeIcon)
+func (i *Interactor) PushNotification(deviceTokens []string, title, message string, customData map[string]string, bigImage string) error {
+	return i.services.OneSignalRepo.PushNotification(deviceTokens, title, message, customData, bigImage)
 }
 
 func (i *Interactor) PushNotificationToAll(request *PushNotificationRequest) error {
@@ -67,5 +67,5 @@ func (i *Interactor) PushNotificationToAll(request *PushNotificationRequest) err
 	if err != nil {
 		return err
 	}
-	return i.PushNotification(deviceTokens, request.Title, request.Message, request.Data, request.LargeIcon)
+	return i.PushNotification(deviceTokens, request.Title, request.Message, request.Data, request.BigImage)
 }

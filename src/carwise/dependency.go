@@ -106,7 +106,7 @@ type PredictRepository interface {
 }
 
 type OneSignalRepository interface {
-	PushNotification(deviceTokens []string, title, message string, customData map[string]string, largeIcon string) error
+	PushNotification(deviceTokens []string, title, message string, customData map[string]string, bigImage string) error
 }
 
 type Services struct {
