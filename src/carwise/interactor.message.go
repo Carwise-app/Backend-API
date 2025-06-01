@@ -2,6 +2,7 @@ package carwise
 
 import (
 	"log"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -13,19 +14,35 @@ func (i *Interactor) SendMessage(request *SendMessageRequest) error {
 		return err
 	}
 
-	err = i.CreatePushNotification(
-		ChatMessage,
-		"",
-		"",
-		map[string]string{
-			"listing_id": listing.Id,
-			"user_id":    request.UserId,
-		},
-		request.ReceiverId,
-	)
-	if err != nil {
-		log.Println("CreatePushNotification error: ", err)
-	}
+	go func() {
+		image := Image{}
+		if len(listing.Images) > 0 {
+			firstImage, err := i.services.ImageRepo.GetImageById(listing.Images[0])
+			if err == nil {
+				image = *firstImage
+			}
+		}
+
+		imageUrl := ""
+		if image.Path != "" {
+			imageUrl = "https://carwisegw.yusuftalhaklc.com" + strings.Replace(image.Path, ".", "", -1)
+		}
+
+		err = i.CreatePushNotification(
+			ChatMessage,
+			"",
+			"",
+			map[string]string{
+				"listing_id": listing.Id,
+				"user_id":    request.UserId,
+			},
+			request.ReceiverId,
+			imageUrl,
+		)
+		if err != nil {
+			log.Println("CreatePushNotification error: ", err)
+		}
+	}()
 
 	message := &Message{
 		Id:         uuid.New().String(),

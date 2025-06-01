@@ -2,6 +2,7 @@ package carwise
 
 import (
 	"log"
+	"strings"
 	"time"
 )
 
@@ -18,19 +19,34 @@ func (i *Interactor) CreateFavorite(request *FavoriteRequest) error {
 	}
 
 	if listing.CreatedBy != request.UserId {
-		err = i.CreatePushNotification(
-			FavoriteAdded,
-			"",
-			"",
-			map[string]string{
-				"listing_id": listing.Id,
-				"user_id":    request.UserId,
-			},
-			listing.CreatedBy,
-		)
-		if err != nil {
-			log.Println("CreatePushNotification error: ", err)
-		}
+		go func() {
+			image := Image{}
+			if len(listing.Images) > 0 {
+				firstImage, err := i.services.ImageRepo.GetImageById(listing.Images[0])
+				if err == nil {
+					image = *firstImage
+				}
+			}
+
+			imageUrl := ""
+			if image.Path != "" {
+				imageUrl = "https://carwisegw.yusuftalhaklc.com" + strings.Replace(image.Path, ".", "", -1)
+			}
+			err = i.CreatePushNotification(
+				FavoriteAdded,
+				"",
+				"",
+				map[string]string{
+					"listing_id": listing.Id,
+					"user_id":    request.UserId,
+				},
+				listing.CreatedBy,
+				imageUrl,
+			)
+			if err != nil {
+				log.Println("CreatePushNotification error: ", err)
+			}
+		}()
 	}
 
 	return i.services.FavoriteRepo.CreateFavorite(Favorite)

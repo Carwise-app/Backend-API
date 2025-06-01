@@ -21,6 +21,7 @@ type OneSignalNotification struct {
 	Contents             map[string]string `json:"contents"`
 	Headings             map[string]string `json:"headings,omitempty"`
 	Data                 map[string]string `json:"data,omitempty"`
+	LargeIcon            string            `json:"large_icon,omitempty"`
 }
 
 type OneSignalResponse struct {
@@ -38,7 +39,13 @@ func NewOneSignalRepository() *OneSignalRepository {
 	}
 }
 
-func (r *OneSignalRepository) PushNotification(deviceTokens []string, title, message string, customData map[string]string) error {
+func (r *OneSignalRepository) PushNotification(
+	deviceTokens []string,
+	title,
+	message string,
+	customData map[string]string,
+	largeIcon string,
+) error {
 	url := r.BaseURL
 
 	notification := OneSignalNotification{
@@ -59,6 +66,10 @@ func (r *OneSignalRepository) PushNotification(deviceTokens []string, title, mes
 
 	if customData != nil {
 		notification.Data = customData
+	}
+
+	if largeIcon != "" {
+		notification.LargeIcon = largeIcon
 	}
 
 	jsonData, err := json.Marshal(notification)

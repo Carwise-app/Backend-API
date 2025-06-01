@@ -9,7 +9,14 @@ var (
 	PriceDropped  = 4
 )
 
-func (i *Interactor) CreatePushNotification(status int, t, m string, customData map[string]string, userId string) error {
+func (i *Interactor) CreatePushNotification(
+	status int,
+	t,
+	m string,
+	customData map[string]string,
+	userId string,
+	largeIcon string,
+) error {
 	var title string
 	var message string
 
@@ -35,21 +42,21 @@ func (i *Interactor) CreatePushNotification(status int, t, m string, customData 
 		if err != nil {
 			return err
 		}
-		return i.PushNotification(deviceTokens, title, message, customData)
+		return i.PushNotification(deviceTokens, title, message, customData, largeIcon)
 	} else {
 		user, err := i.services.UserRepo.GetByID(userId)
 		if err != nil {
 			return err
 		}
 		if user.PushNotify {
-			return i.PushNotification([]string{user.DeviceToken}, title, message, customData)
+			return i.PushNotification([]string{user.DeviceToken}, title, message, customData, largeIcon)
 		}
 	}
 	return nil
 }
 
-func (i *Interactor) PushNotification(deviceTokens []string, title, message string, customData map[string]string) error {
-	return i.services.OneSignalRepo.PushNotification(deviceTokens, title, message, customData)
+func (i *Interactor) PushNotification(deviceTokens []string, title, message string, customData map[string]string, largeIcon string) error {
+	return i.services.OneSignalRepo.PushNotification(deviceTokens, title, message, customData, largeIcon)
 }
 
 func (i *Interactor) PushNotificationToAll(request *PushNotificationRequest) error {
@@ -60,5 +67,5 @@ func (i *Interactor) PushNotificationToAll(request *PushNotificationRequest) err
 	if err != nil {
 		return err
 	}
-	return i.PushNotification(deviceTokens, request.Title, request.Message, request.Data)
+	return i.PushNotification(deviceTokens, request.Title, request.Message, request.Data, request.LargeIcon)
 }
