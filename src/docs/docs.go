@@ -1882,6 +1882,67 @@ const docTemplate = `{
                 }
             }
         },
+        "/notification/push": {
+            "post": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Push Notification",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Notification"
+                ],
+                "summary": "Push Notification",
+                "parameters": [
+                    {
+                        "description": "Push Notification Request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/carwise.PushNotificationRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Push Notification Response\" example:{\"message\":\"Push notification sent successfully\"}",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request\" example:{\"error\":\"Invalid request\"}",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized\" example:{\"error\":\"No User found in request context\"}",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error\" example:{\"error\":\"Internal server error\"}",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/predict": {
             "get": {
                 "security": [
@@ -3219,6 +3280,9 @@ const docTemplate = `{
                 }
             }
         },
+        "carwise.PushNotificationRequest": {
+            "type": "object"
+        },
         "carwise.ResetPasswordRequest": {
             "description": "Password reset request",
             "type": "object",
@@ -3496,7 +3560,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "carwisegw.yusuftalhaklc.com",
+	Host:             "localhost:8080",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Carwise API",

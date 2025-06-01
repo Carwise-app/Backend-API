@@ -208,10 +208,34 @@ func (r *UserRepository) Update(user *carwise.User) error {
         WHERE id = $10`
 
 	_, err := r.db.Exec(query, user.FirstName, user.LastName, user.ImageUrl,
-		 user.CountryCode, user.PhoneNumber, user.DeviceToken, user.EmailNotify,
-		  user.PushNotify, user.UpdatedAt, user.Id)
+		user.CountryCode, user.PhoneNumber, user.DeviceToken, user.EmailNotify,
+		user.PushNotify, user.UpdatedAt, user.Id)
 	if err != nil {
 		return fmt.Errorf("failed to update user: %w", err)
 	}
 	return nil
+}
+
+func (r *UserRepository) GetAllDeviceTokens() ([]string, error) {
+	query := `
+		SELECT device_token 
+		FROM users 
+		WHERE push_notify = true AND device_token IS NOT NULL
+	`
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get all device tokens: %w", err)
+	}
+	defer rows.Close()
+
+	deviceTokens := []string{}
+	for rows.Next() {
+		var deviceToken string
+		err := rows.Scan(&deviceToken)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan device token: %w", err)
+		}
+		deviceTokens = append(deviceTokens, deviceToken)
+	}
+	return deviceTokens, nil
 }

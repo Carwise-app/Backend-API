@@ -55,3 +55,13 @@ type GetUserByIdRequest struct {
 	Id     string `json:"-"`
 	UserId string `json:"-"`
 }
+
+// @model PushNotificationRequest
+// @Description Push notification request
+type PushNotificationRequest struct {
+	Title   string            `json:"title" example:"Title"`
+	Message string            `json:"message" example:"Message"`
+	Data    map[string]string `json:"data" example:"Data"`
+	UserId  string            `json:"-"`
+	Role    int               `json:"-"`
+}

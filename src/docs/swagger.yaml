@@ -586,6 +586,8 @@ definitions:
         example: 1
         type: integer
     type: object
+  carwise.PushNotificationRequest:
+    type: object
   carwise.ResetPasswordRequest:
     description: Password reset request
     properties:
@@ -773,7 +775,7 @@ definitions:
         example: Operation completed successfully
         type: string
     type: object
-host: carwisegw.yusuftalhaklc.com
+host: localhost:8080
 info:
   contact:
     email: support@carwise.com
@@ -1982,6 +1984,47 @@ paths:
       summary: Update a listing status
       tags:
       - Listing Car
+  /notification/push:
+    post:
+      consumes:
+      - application/json
+      description: Push Notification
+      parameters:
+      - description: Push Notification Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.PushNotificationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Push Notification Response" example:{"message":"Push notification
+            sent successfully"}
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request" example:{"error":"Invalid request"}
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized" example:{"error":"No User found in request context"}
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error" example:{"error":"Internal server error"}
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Push Notification
+      tags:
+      - Notification
   /predict:
     get:
       description: Get a paginated list of predictions made by the user

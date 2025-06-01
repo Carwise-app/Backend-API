@@ -11,6 +11,7 @@ type UserRepository interface {
 	GetByEmail(email string) (*User, error)
 	UpdatePassword(email, hashedPassword string) error
 	Update(user *User) error
+	GetAllDeviceTokens() ([]string, error)
 }
 
 type RedisRepository interface {
@@ -94,12 +95,18 @@ type FavoriteRepository interface {
 	CountFavoritesByUserId(userId string) (int, error)
 	DeleteFavorite(favorite *Favorite) error
 	IsFavorite(userId, listingId string) bool
+
+	GetUserDeviceTokens(listingId string) ([]string, error)
 }
 
 type PredictRepository interface {
 	SavePredict(predict *Predict) error
 	GetPredictByUserId(userId string, page, limit int) ([]Predict, error)
 	CountPredictByUserId(userId string) (int, error)
+}
+
+type OneSignalRepository interface {
+	PushNotification(deviceTokens []string, title, message string, customData map[string]string) error
 }
 
 type Services struct {
@@ -115,4 +122,5 @@ type Services struct {
 	GoogleAuth        GoogleAuth
 	FavoriteRepo      FavoriteRepository
 	PredictRepo       PredictRepository
+	OneSignalRepo     OneSignalRepository
 }

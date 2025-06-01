@@ -6,11 +6,31 @@ import (
 )
 
 func (i *Interactor) CreateFavorite(request *FavoriteRequest) error {
+	listing, err := i.services.ListingRepo.GetListingById(request.ListingId)
+	if err != nil {
+		return err
+	}
 
 	Favorite := &Favorite{
 		UserId:    request.UserId,
-		ListingId: request.ListingId,
+		ListingId: listing.Id,
 		CreatedAt: time.Now().Unix(),
+	}
+
+	if listing.CreatedBy != request.UserId {
+		err = i.CreatePushNotification(
+			FavoriteAdded,
+			"",
+			"",
+			map[string]string{
+				"listing_id": listing.Id,
+				"user_id":    request.UserId,
+			},
+			listing.CreatedBy,
+		)
+		if err != nil {
+			log.Println("CreatePushNotification error: ", err)
+		}
 	}
 
 	return i.services.FavoriteRepo.CreateFavorite(Favorite)

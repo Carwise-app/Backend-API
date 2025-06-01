@@ -96,3 +96,28 @@ func (r *FavoriteRepository) IsFavorite(userId, listingId string) bool {
 	}
 	return exists
 }
+
+func (r *FavoriteRepository) GetUserDeviceTokens(listingId string) ([]string, error) {
+	query := `
+	SELECT u.device_token 
+	FROM favorites f
+	INNER JOIN users u ON f.user_id = u.id
+	WHERE f.listing_id = $1 AND u.push_notify = true AND u.device_token IS NOT NULL
+	`
+	rows, err := r.db.Query(query, listingId)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	deviceTokens := []string{}
+	for rows.Next() {
+		var deviceToken string
+		err := rows.Scan(&deviceToken)
+		if err != nil {
+			return nil, err
+		}
+		deviceTokens = append(deviceTokens, deviceToken)
+	}
+	return deviceTokens, nil
+}

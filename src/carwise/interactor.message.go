@@ -8,6 +8,27 @@ import (
 )
 
 func (i *Interactor) SendMessage(request *SendMessageRequest) error {
+	listing, err := i.services.ListingRepo.GetListingById(request.ListingId)
+	if err != nil {
+		return err
+	}
+
+	if listing.CreatedBy != request.UserId {
+		err = i.CreatePushNotification(
+			ChatMessage,
+			"",
+			"",
+			map[string]string{
+				"listing_id": listing.Id,
+				"user_id":    request.UserId,
+			},
+			listing.CreatedBy,
+		)
+		if err != nil {
+			log.Println("CreatePushNotification error: ", err)
+		}
+	}
+
 	message := &Message{
 		Id:         uuid.New().String(),
 		SenderId:   request.UserId,
@@ -15,7 +36,7 @@ func (i *Interactor) SendMessage(request *SendMessageRequest) error {
 		Message:    request.Message,
 		Read:       false,
 		CreatedAt:  time.Now().Unix(),
-		ListingId:  request.ListingId,
+		ListingId:  listing.Id,
 	}
 
 	return i.services.MessageRepo.SaveMessage(message)

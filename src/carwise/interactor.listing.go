@@ -239,6 +239,21 @@ func (i *Interactor) UpdateListing(request *UpdateListingRequest) error {
 		return err
 	}
 
+	if request.Price < listing.Price {
+		err = i.CreatePushNotification(
+			PriceDropped,
+			"",
+			"",
+			map[string]string{
+				"listing_id": listing.Id,
+			},
+			"",
+		)
+		if err != nil {
+			log.Println("CreatePushNotification error: ", err)
+		}
+	}
+
 	return nil
 }
 

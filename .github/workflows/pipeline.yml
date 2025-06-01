@@ -30,6 +30,8 @@ env:
   GOOGLE_REDIRECT_URL: ${{ secrets.GOOGLE_REDIRECT_URL }}
   GOOGLE_SCOPES: ${{ secrets.GOOGLE_SCOPES }}
   OAUTH2_STATE: ${{ secrets.OAUTH2_STATE }}
+  ONESIGNAL_APP_ID: ${{ secrets.ONESIGNAL_APP_ID }}
+  ONESIGNAL_API_KEY: ${{ secrets.ONESIGNAL_API_KEY }}
 
 jobs:
   build:
@@ -112,6 +114,8 @@ jobs:
             GOOGLE_REDIRECT_URL=${{ env.GOOGLE_REDIRECT_URL }}
             GOOGLE_SCOPES=${{ env.GOOGLE_SCOPES }}
             OAUTH2_STATE=${{ env.OAUTH2_STATE }}
+            ONESIGNAL_APP_ID=${{ env.ONESIGNAL_APP_ID }}
+            ONESIGNAL_API_KEY=${{ env.ONESIGNAL_API_KEY }}
             EOF
             chmod 600 ~/.carwisegw/carwisegw.env
             echo "✅ .env file created securely."

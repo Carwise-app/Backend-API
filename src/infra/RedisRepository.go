@@ -26,7 +26,7 @@ func NewRedisRepository() *RedisRepository {
 
 func (r *RedisRepository) IsTokenBlackListed(token string) (bool, error) {
 	if !IsRedisAvailable(r.client) {
-		return false, fmt.Errorf("Redis is not available")
+		return false, fmt.Errorf("redis is not available")
 	}
 
 	val, err := r.client.Get(context.Background(), token).Result()
@@ -46,7 +46,7 @@ func (r *RedisRepository) IsTokenBlackListed(token string) (bool, error) {
 
 func (r *RedisRepository) AddTokenBlackList(token string) error {
 	if !IsRedisAvailable(r.client) {
-		return fmt.Errorf("Redis is not available")
+		return fmt.Errorf("redis is not available")
 	}
 
 	err := r.client.Set(context.Background(), token, "blacklisted", 0).Err()
@@ -59,7 +59,7 @@ func (r *RedisRepository) AddTokenBlackList(token string) error {
 
 func (r *RedisRepository) SetBrandsWithDetails(brands []carwise.BrandWithDetails) error {
 	if !IsRedisAvailable(r.client) {
-		return fmt.Errorf("Redis is not available")
+		return fmt.Errorf("redis is not available")
 	}
 
 	data, err := json.Marshal(brands)
@@ -77,7 +77,7 @@ func (r *RedisRepository) SetBrandsWithDetails(brands []carwise.BrandWithDetails
 
 func (r *RedisRepository) GetBrandsWithDetails() ([]carwise.BrandWithDetails, error) {
 	if !IsRedisAvailable(r.client) {
-		return nil, fmt.Errorf("Redis is not available")
+		return nil, fmt.Errorf("redis is not available")
 	}
 
 	data, err := r.client.Get(context.Background(), BRANDS_CACHE_KEY).Bytes()

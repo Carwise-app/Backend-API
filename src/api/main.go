@@ -35,7 +35,7 @@ import (
 // @contact.email  support@carwise.com
 // @license.name  Apache 2.0
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
-// @host      carwisegw.yusuftalhaklc.com
+// @host      localhost:8080
 // @BasePath  /
 
 func main() {
@@ -72,6 +72,7 @@ func main() {
 			GoogleAuth:        infra.NewGoogleAuth(),
 			FavoriteRepo:      infra.NewFavoriteRepository(),
 			PredictRepo:       infra.NewPredictRepository(),
+			OneSignalRepo:     infra.NewOneSignalRepository(),
 		},
 	)
 
@@ -160,6 +161,11 @@ func main() {
 	{
 		predict.POST("/", OptionalAuthMiddleware(), CreatePredict)
 		predict.GET("/", AuthMiddleware(), GetPredicts)
+	}
+
+	push := app.Group("/notification")
+	{
+		push.POST("/push", AuthMiddleware(), PushNotification)
 	}
 
 	app.GET("/swagger/*any", ginSwagger.WrapHandler(ginSwaggerFiles.Handler))
