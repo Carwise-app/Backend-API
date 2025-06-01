@@ -3,6 +3,7 @@ package carwise
 import (
 	"fmt"
 	"mime/multipart"
+	"time"
 )
 
 func (i *Interactor) GetProfile(id string) (*ProfileResponse, []string) {
@@ -56,6 +57,28 @@ func (i *Interactor) EditProfile(userId string, request ProfileEditRequest, avat
 			errors = append(errors, fmt.Sprintf("Failed to update user avatar URL: %v", err))
 			return errors
 		}
+	}
+
+	return nil
+}
+
+func (i *Interactor) NotifyProfile(request ProfileNotifyRequest) error {
+	user, err := i.services.UserRepo.GetByID(request.UserId)
+	if err != nil {
+		return fmt.Errorf("failed to get user: %w", err)
+	}
+
+	if request.DeviceToken != "" {
+		user.DeviceToken = request.DeviceToken
+	}
+
+	user.EmailNotify = request.EmailNotify
+	user.PushNotify = request.PushNotify
+	user.UpdatedAt = time.Now().Unix()
+
+	err = i.services.UserRepo.Update(user)
+	if err != nil {
+		return fmt.Errorf("failed to update user notify: %w", err)
 	}
 
 	return nil

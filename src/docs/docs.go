@@ -2107,6 +2107,60 @@ const docTemplate = `{
                 }
             }
         },
+        "/profile/notify": {
+            "patch": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Notify the profile information of the authenticated user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Notify user profile",
+                "parameters": [
+                    {
+                        "description": "Notify request",
+                        "name": "notify_request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/carwise.ProfileNotifyRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Profile notify updated successfully"
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/upload/": {
             "post": {
                 "security": [
@@ -3043,6 +3097,24 @@ const docTemplate = `{
                     "description": "Predicted price in TL",
                     "type": "number",
                     "example": 250000
+                }
+            }
+        },
+        "carwise.ProfileNotifyRequest": {
+            "description": "Profile notify request",
+            "type": "object",
+            "properties": {
+                "device_token": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "email_notify": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "push_notify": {
+                    "type": "boolean",
+                    "example": true
                 }
             }
         },

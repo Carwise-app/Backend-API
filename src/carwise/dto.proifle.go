@@ -24,3 +24,12 @@ type ProfileEditRequest struct {
 	CountryCode string `json:"country_code" validate:"required,max=10" example:"+90"`
 	PhoneNumber string `json:"phone_number" validate:"required" example:"5551234567"`
 }
+
+// @model ProfileNotifyRequest
+// @Description Profile notify request
+type ProfileNotifyRequest struct {
+	DeviceToken string `json:"device_token" example:"123e4567-e89b-12d3-a456-426614174000"`
+	EmailNotify bool   `json:"email_notify" example:"true"`
+	PushNotify  bool   `json:"push_notify" example:"true"`
+	UserId      string `json:"-"`
+}

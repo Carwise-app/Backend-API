@@ -10,6 +10,9 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL DEFAULT '',
     role int NOT NULL DEFAULT 1,
     status int NOT NULL DEFAULT 1,
+    device_token TEXT DEFAULT '',
+    email_notify BOOLEAN NOT NULL DEFAULT false,
+    push_notify BOOLEAN NOT NULL DEFAULT false,
     created_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP),
     updated_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP),
     last_login bigint NOT NULL DEFAULT 0

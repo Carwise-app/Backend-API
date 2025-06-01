@@ -34,7 +34,10 @@ func (r *UserRepository) GetByID(id string) (*carwise.User, error) {
 			status, 
 			created_at, 
 			updated_at, 
-			last_login 
+			last_login,
+			device_token,
+			email_notify,
+			push_notify
 		FROM users 
 		WHERE id = $1`
 	err := r.db.QueryRow(query, id).Scan(
@@ -52,6 +55,9 @@ func (r *UserRepository) GetByID(id string) (*carwise.User, error) {
 		&user.CreatedAt,
 		&user.UpdatedAt,
 		&user.LastLogin,
+		&user.DeviceToken,
+		&user.EmailNotify,
+		&user.PushNotify,
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -79,7 +85,10 @@ func (r *UserRepository) GetByEmail(email string) (*carwise.User, error) {
 			status, 
 			created_at, 
 			updated_at, 
-			last_login 
+			last_login,
+			device_token,
+			email_notify,
+			push_notify
 		FROM users 
 		WHERE email = $1`
 	err := r.db.QueryRow(query, email).Scan(
@@ -97,6 +106,9 @@ func (r *UserRepository) GetByEmail(email string) (*carwise.User, error) {
 		&user.CreatedAt,
 		&user.UpdatedAt,
 		&user.LastLogin,
+		&user.DeviceToken,
+		&user.EmailNotify,
+		&user.PushNotify,
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -123,9 +135,12 @@ func (r *UserRepository) Create(user *carwise.User) error {
 			created_at, 
 			updated_at, 
 			last_login,
-			google_id
+			google_id,
+			device_token,
+			email_notify,
+			push_notify
 		) VALUES (
-			$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14
+			$1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18
 		)`
 	_, err := r.db.Exec(query,
 		user.Id,
@@ -142,6 +157,9 @@ func (r *UserRepository) Create(user *carwise.User) error {
 		user.UpdatedAt,
 		user.LastLogin,
 		user.GoogleId,
+		user.DeviceToken,
+		user.EmailNotify,
+		user.PushNotify,
 	)
 	if err != nil {
 		return fmt.Errorf("failed to create user: %w", err)
@@ -183,10 +201,15 @@ func (r *UserRepository) Update(user *carwise.User) error {
             image_url = $3,
 			country_code = $4,
 			phone_number = $5,
-            updated_at = $6
-        WHERE id = $7`
+			device_token = $6,
+			email_notify = $7,
+			push_notify = $8,
+            updated_at = $9
+        WHERE id = $10`
 
-	_, err := r.db.Exec(query, user.FirstName, user.LastName, user.ImageUrl, user.CountryCode, user.PhoneNumber, user.UpdatedAt, user.Id)
+	_, err := r.db.Exec(query, user.FirstName, user.LastName, user.ImageUrl,
+		 user.CountryCode, user.PhoneNumber, user.DeviceToken, user.EmailNotify,
+		  user.PushNotify, user.UpdatedAt, user.Id)
 	if err != nil {
 		return fmt.Errorf("failed to update user: %w", err)
 	}

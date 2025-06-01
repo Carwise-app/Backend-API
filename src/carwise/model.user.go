@@ -12,6 +12,9 @@ type User struct {
 	Password    string
 	Role        int
 	Status      int
+	DeviceToken string
+	EmailNotify bool
+	PushNotify  bool
 	CreatedAt   int64
 	UpdatedAt   int64
 	LastLogin   int64

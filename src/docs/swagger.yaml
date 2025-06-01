@@ -526,6 +526,19 @@ definitions:
         example: 250000
         type: number
     type: object
+  carwise.ProfileNotifyRequest:
+    description: Profile notify request
+    properties:
+      device_token:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      email_notify:
+        example: true
+        type: boolean
+      push_notify:
+        example: true
+        type: boolean
+    type: object
   carwise.ProfileResponse:
     description: User profile response
     properties:
@@ -2100,6 +2113,41 @@ paths:
       security:
       - BearerAuth: []
       summary: Edit user profile
+      tags:
+      - Profile
+  /profile/notify:
+    patch:
+      description: Notify the profile information of the authenticated user
+      parameters:
+      - description: Notify request
+        in: body
+        name: notify_request
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.ProfileNotifyRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Profile notify updated successfully
+        "400":
+          description: Validation error
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Notify user profile
       tags:
       - Profile
   /upload/:

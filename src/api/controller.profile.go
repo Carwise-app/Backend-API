@@ -109,3 +109,38 @@ func isValidImageFormat(filename string) bool {
 	}
 	return false
 }
+
+// @Summary Notify user profile
+// @Description Notify the profile information of the authenticated user
+// @Tags Profile
+// @Security BearerAuth
+// @Produce json
+// @Param notify_request body carwise.ProfileNotifyRequest true "Notify request"
+// @Success 200 "Profile notify updated successfully"
+// @Failure 400 {object} map[string]interface{} "Validation error"
+// @Failure 401 {object} map[string]interface{} "Unauthorized"
+// @Failure 500 {object} map[string]interface{} "Server error"
+// @Router /profile/notify [patch]
+func ProfileNotify(ctx *gin.Context) {
+	userContext, exists := ctx.Get("user")
+	if !exists {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
+		return
+	}
+	claim := userContext.(*UserClaims)
+
+	var request carwise.ProfileNotifyRequest
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	request.UserId = claim.UserId
+
+	if err := interactor.NotifyProfile(request); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.Status(http.StatusOK)
+}
