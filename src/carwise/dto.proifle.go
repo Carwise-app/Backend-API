@@ -33,3 +33,17 @@ type ProfileNotifyRequest struct {
 	PushNotify  bool   `json:"push_notify" example:"true"`
 	UserId      string `json:"-"`
 }
+
+// @model GetProfileNotifyRequest
+// @Description Get profile notify Request
+type GetProfileNotifyRequest struct {
+	UserId string `json:"-"`
+}
+
+// @model GetProfileNotifyResponse
+// @Description Get profile notify response
+type GetProfileNotifyResponse struct {
+	DeviceToken string `json:"device_token" example:"123e4567-e89b-12d3-a456-426614174000"`
+	EmailNotify bool   `json:"email_notify" example:"true"`
+	PushNotify  bool   `json:"push_notify" example:"true"`
+}

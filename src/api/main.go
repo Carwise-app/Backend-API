@@ -105,6 +105,7 @@ func main() {
 		profile.GET("/", AuthMiddleware(), Profile)
 		profile.PUT("/edit", AuthMiddleware(), ProfileEdit)
 		profile.PATCH("/notify", AuthMiddleware(), ProfileNotify)
+		profile.GET("/notify", AuthMiddleware(), GetProfileNotify)
 	}
 
 	brand := app.Group("/brand")

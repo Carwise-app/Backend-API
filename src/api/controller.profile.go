@@ -144,3 +144,31 @@ func ProfileNotify(ctx *gin.Context) {
 
 	ctx.Status(http.StatusOK)
 }
+
+// @Summary Get user profile notify
+// @Description Get the profile notify information of the authenticated user
+// @Tags Profile
+// @Security BearerAuth
+// @Produce json
+// @Success 200 {object} carwise.GetProfileNotifyResponse "User profile notify information"
+// @Failure 401 {object} map[string]interface{} "Unauthorized"
+// @Failure 500 {object} map[string]interface{} "Server error"
+// @Router /profile/notify [get]
+func GetProfileNotify(ctx *gin.Context) {
+	userContext, exists := ctx.Get("user")
+	if !exists {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
+		return
+	}
+	claim := userContext.(*UserClaims)
+
+	notify, err := interactor.GetProfileNotify(carwise.GetProfileNotifyRequest{
+		UserId: claim.UserId,
+	})
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, notify)
+}

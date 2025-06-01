@@ -83,3 +83,16 @@ func (i *Interactor) NotifyProfile(request ProfileNotifyRequest) error {
 
 	return nil
 }
+
+func (i *Interactor) GetProfileNotify(request GetProfileNotifyRequest) (*GetProfileNotifyResponse, error) {
+	user, err := i.services.UserRepo.GetByID(request.UserId)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get user: %w", err)
+	}
+
+	return &GetProfileNotifyResponse{
+		DeviceToken: user.DeviceToken,
+		EmailNotify: user.EmailNotify,
+		PushNotify:  user.PushNotify,
+	}, nil
+}

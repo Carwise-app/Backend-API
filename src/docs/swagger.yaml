@@ -179,6 +179,19 @@ definitions:
         description: Total number of predictions
         type: integer
     type: object
+  carwise.GetProfileNotifyResponse:
+    description: Get profile notify response
+    properties:
+      device_token:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+      email_notify:
+        example: true
+        type: boolean
+      push_notify:
+        example: true
+        type: boolean
+    type: object
   carwise.IdResponse:
     description: Response body for id
     properties:
@@ -2116,6 +2129,30 @@ paths:
       tags:
       - Profile
   /profile/notify:
+    get:
+      description: Get the profile notify information of the authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User profile notify information
+          schema:
+            $ref: '#/definitions/carwise.GetProfileNotifyResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get user profile notify
+      tags:
+      - Profile
     patch:
       description: Notify the profile information of the authenticated user
       parameters:

@@ -2108,6 +2108,43 @@ const docTemplate = `{
             }
         },
         "/profile/notify": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get the profile notify information of the authenticated user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Get user profile notify",
+                "responses": {
+                    "200": {
+                        "description": "User profile notify information",
+                        "schema": {
+                            "$ref": "#/definitions/carwise.GetProfileNotifyResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
             "patch": {
                 "security": [
                     {
@@ -2621,6 +2658,24 @@ const docTemplate = `{
                 "total": {
                     "description": "Total number of predictions",
                     "type": "integer"
+                }
+            }
+        },
+        "carwise.GetProfileNotifyResponse": {
+            "description": "Get profile notify response",
+            "type": "object",
+            "properties": {
+                "device_token": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                },
+                "email_notify": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "push_notify": {
+                    "type": "boolean",
+                    "example": true
                 }
             }
         },
