@@ -56,7 +56,6 @@ func (i *Interactor) PredictImage(request *PredictImageRequest) (*PredictImageRe
 	}
 
 	existingPrediction, _ := i.services.PredictionRepo.GetImagePredictionsByImageId(image.Id)
-	log.Println(existingPrediction)
 	if existingPrediction.CreatedAt != 0 {
 		response := &PredictImageResponse{
 			Image:      *image,

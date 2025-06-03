@@ -118,10 +118,8 @@ func (i *Interactor) GetListingById(request *GetListingRequest) (*GetListingResp
 	if err != nil {
 		return nil, err
 	}
-	log.Println(listing.Images)
 	images := make([]Image, 0, len(listing.Images))
 	for _, imageId := range listing.Images {
-		log.Println(imageId)
 		image, err := i.services.ImageRepo.GetImageById(imageId)
 		if err != nil {
 			return nil, err
@@ -240,7 +238,10 @@ func (i *Interactor) UpdateListing(request *UpdateListingRequest) error {
 		return err
 	}
 
+	log.Printf("Comparing prices - Request: %d, Listing: %d", request.Price, listing.Price)
+
 	if request.Price < listing.Price {
+		log.Printf("Price drop condition met!")
 		message := fmt.Sprintf("🎉 Harika haber! Takip ettiğiniz araçta fiyat düşüşü var.\n\nÖnceki fiyat: %s TL\nYeni fiyat: %s TL\n\n💰 %s TL tasarruf edebilirsiniz!",
 			formatPrice(listing.Price),
 			formatPrice(request.Price),
@@ -266,6 +267,8 @@ func (i *Interactor) UpdateListing(request *UpdateListingRequest) error {
 				log.Printf("Price drop notification sent successfully for listing %s", listing.Id)
 			}
 		}()
+	} else {
+		log.Printf("Price drop condition NOT met - Request: %d >= Listing: %d", request.Price, listing.Price)
 	}
 
 	return nil

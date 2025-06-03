@@ -102,7 +102,6 @@ func (r *ImageRepository) DeleteImage(id string) error {
 	if err != nil {
 		return err
 	}
-	log.Println("Image found:", image)
 
 	query := `DELETE FROM images WHERE id = $1`
 	_, err = r.db.Exec(query, id)

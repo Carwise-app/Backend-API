@@ -115,8 +115,6 @@ func (i *Interactor) GetChats(request *GetChatsRequest) (*GetChatsResponse, erro
 		return nil, err
 	}
 
-	log.Println(chats)
-
 	chatInfos := make([]ChatInfo, 0, len(chats))
 	for _, chat := range chats {
 		user, err := i.services.UserRepo.GetByID(chat.OtherUserId)
