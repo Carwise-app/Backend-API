@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/dustin/go-humanize"
 	"github.com/google/uuid"
 	"github.com/gosimple/slug"
 )
@@ -240,18 +241,29 @@ func (i *Interactor) UpdateListing(request *UpdateListingRequest) error {
 	}
 
 	if request.Price < listing.Price {
+		message := fmt.Sprintf("🎉 Harika haber! Takip ettiğiniz araçta fiyat düşüşü var.\n\nÖnceki fiyat: %s TL\nYeni fiyat: %s TL\n\n💰 %s TL tasarruf edebilirsiniz!",
+			formatPrice(listing.Price),
+			formatPrice(request.Price),
+			formatPrice(listing.Price-request.Price),
+		)
+
+		log.Printf("Price drop detected - Listing ID: %s, Old Price: %d, New Price: %d, Difference: %d",
+			listing.Id, listing.Price, request.Price, listing.Price-request.Price)
+
 		go func() {
 			err = i.CreatePushNotification(
 				PriceDropped,
 				"",
-				"",
+				message,
 				map[string]string{
 					"listing_id": listing.Id,
 				},
 				"",
 			)
 			if err != nil {
-				log.Println("CreatePushNotification error: ", err)
+				log.Printf("CreatePushNotification error for listing %s: %v", listing.Id, err)
+			} else {
+				log.Printf("Price drop notification sent successfully for listing %s", listing.Id)
 			}
 		}()
 	}
@@ -380,4 +392,8 @@ func makeUniqueSlugWithHash(title string) string {
 
 func isUUID(str string) bool {
 	return len(str) == 36 && strings.Count(str, "-") == 4
+}
+
+func formatPrice(price int) string {
+	return humanize.Comma(int64(price))
 }

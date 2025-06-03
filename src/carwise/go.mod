@@ -7,4 +7,7 @@ require (
 	github.com/gosimple/slug v1.15.0
 )
 
-require github.com/gosimple/unidecode v1.0.1 // indirect
+require (
+	github.com/dustin/go-humanize v1.0.1
+	github.com/gosimple/unidecode v1.0.1 // indirect
+)
