@@ -199,14 +199,15 @@ func (i *Interactor) UpdateListing(request *UpdateListingRequest) error {
 		}
 	}
 
+	oldPrice := listing.Price
+
 	listing.BrandId = request.BrandId
 	listing.SeriesId = request.SeriesId
 	listing.ModelId = request.ModelId
-
 	listing.Title = request.Title
 	listing.Description = request.Description
 	listing.Currency = request.Currency
-	listing.Price = request.Price
+	listing.Price = request.Price 
 	listing.City = request.City
 	listing.District = request.District
 	listing.Neighborhood = request.Neighborhood
@@ -238,18 +239,18 @@ func (i *Interactor) UpdateListing(request *UpdateListingRequest) error {
 		return err
 	}
 
-	log.Printf("Comparing prices - Request: %d, Listing: %d", request.Price, listing.Price)
+	log.Printf("Comparing prices - New: %d, Old: %d", request.Price, oldPrice)
 
-	if request.Price < listing.Price {
+	if request.Price < oldPrice {
 		log.Printf("Price drop condition met!")
 		message := fmt.Sprintf("🎉 Harika haber! Takip ettiğiniz araçta fiyat düşüşü var.\n\nÖnceki fiyat: %s TL\nYeni fiyat: %s TL\n\n💰 %s TL tasarruf edebilirsiniz!",
-			formatPrice(listing.Price),
+			formatPrice(oldPrice),
 			formatPrice(request.Price),
-			formatPrice(listing.Price-request.Price),
+			formatPrice(oldPrice-request.Price),
 		)
 
 		log.Printf("Price drop detected - Listing ID: %s, Old Price: %d, New Price: %d, Difference: %d",
-			listing.Id, listing.Price, request.Price, listing.Price-request.Price)
+			listing.Id, oldPrice, request.Price, oldPrice-request.Price)
 
 		go func() {
 			err = i.CreatePushNotification(
@@ -268,7 +269,7 @@ func (i *Interactor) UpdateListing(request *UpdateListingRequest) error {
 			}
 		}()
 	} else {
-		log.Printf("Price drop condition NOT met - Request: %d >= Listing: %d", request.Price, listing.Price)
+		log.Printf("Price drop condition NOT met - New: %d >= Old: %d", request.Price, oldPrice)
 	}
 
 	return nil
