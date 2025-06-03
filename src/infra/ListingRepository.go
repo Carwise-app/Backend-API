@@ -161,8 +161,9 @@ func (r *ListingRepository) UpdateListing(listing *carwise.Listing) error {
 		rear_left_mudguard = $29,
 		rear_bumper = $30,
 		updated_at = $31,
-		status = $32
-	WHERE id = $33
+		status = $32,
+		images = $33		
+	WHERE id = $34
 	`
 
 	_, err := r.db.Exec(query,
@@ -198,6 +199,7 @@ func (r *ListingRepository) UpdateListing(listing *carwise.Listing) error {
 		listing.RearBumper,
 		listing.UpdatedAt,
 		listing.Status,
+		pq.Array(listing.Images),
 		listing.Id,
 	)
 	if err != nil {
@@ -227,7 +229,7 @@ func (r *ListingRepository) DeleteListing(id string) error {
 	if err != nil {
 		return err
 	}
-	
+
 	return nil
 }
 
