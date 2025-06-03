@@ -150,16 +150,15 @@ func (i *Interactor) DeleteModel(request *ModelDeleteRequest) error {
 
 func (i *Interactor) GetAllBrandsWithDetails() ([]BrandWithDetails, error) {
 	brands, err := i.services.RedisRepo.GetBrandsWithDetails()
-	if err != nil {
-		if err.Error() == "Redis is not available" {
-			log.Printf("Warning: Redis is not available, falling back to database: %v", err)
-		} else {
-			return nil, fmt.Errorf("failed to get brands from cache: %v", err)
-		}
+	if err == nil && brands != nil {
+		return brands, nil
 	}
 
-	if brands != nil {
-		return brands, nil
+	if err != nil && err.Error() != "Redis is not available" {
+		return nil, fmt.Errorf("failed to get brands from cache: %v", err)
+	}
+	if err != nil {
+		log.Printf("Warning: Redis is not available, falling back to database: %v", err)
 	}
 
 	brands, err = i.services.BrandRepo.GetAllWithDetails()
@@ -167,9 +166,11 @@ func (i *Interactor) GetAllBrandsWithDetails() ([]BrandWithDetails, error) {
 		return nil, fmt.Errorf("failed to get brands from database: %v", err)
 	}
 
-	if err := i.services.RedisRepo.SetBrandsWithDetails(brands); err != nil {
-		log.Printf("Warning: failed to cache brands: %v", err)
-	}
+	go func(data []BrandWithDetails) {
+		if err := i.services.RedisRepo.SetBrandsWithDetails(data); err != nil {
+			log.Printf("Warning: failed to cache brands: %v", err)
+		}
+	}(brands)
 
 	return brands, nil
 }
