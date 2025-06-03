@@ -85,7 +85,7 @@ func (i *Interactor) CreatePushNotification(
 
 		for _, email := range emails {
 			log.Printf("Sending price drop email to: %s", email)
-			i.services.MailGW.SendEmail(email, title, "notification", map[string]interface{}{
+			i.services.MailGW.SendEmail(email, title, "notification.html", map[string]interface{}{
 				"title":   title,
 				"message": message,
 				"image":   imageUrl,
