@@ -2,6 +2,7 @@ package main
 
 import (
 	"carwise"
+	"fmt"
 	"net/http"
 	"slices"
 	"strconv"
@@ -31,6 +32,7 @@ func CreateListing(ctx *gin.Context) {
 
 	var request carwise.CreateListingRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {
+		fmt.Println(err.Error())
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -39,6 +41,8 @@ func CreateListing(ctx *gin.Context) {
 
 	id, err := interactor.CreateListing(&request)
 	if err != nil {
+		fmt.Println(request)
+		fmt.Println(err.Error())
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
