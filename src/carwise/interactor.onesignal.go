@@ -164,7 +164,7 @@ func (i *Interactor) CreatePushNotification(
 		for k, v := range customData {
 			notificationData[k] = v
 		}
-
+		log.Println("Creating notification", notificationData)
 		i.CreateNotification(&Notification{
 			ID:        uuid.New().String(),
 			Title:     title,

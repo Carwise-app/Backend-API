@@ -48,7 +48,12 @@ func (i *Interactor) DeleteNotification(request *DeleteNotificationRequest) erro
 }
 
 func (i *Interactor) CreateNotification(notification *Notification) error {
-	return i.services.NotificationRepo.CreateNotification(notification)
+	err := i.services.NotificationRepo.CreateNotification(notification)
+	if err != nil {
+		log.Println("Error creating notification", err)
+		return err
+	}
+	return nil
 }
 
 func (i *Interactor) PushNotificationToAll(request *PushNotificationRequest) error {
