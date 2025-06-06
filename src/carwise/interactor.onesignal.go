@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"log"
 	"strings"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 var (
@@ -68,37 +71,48 @@ func (i *Interactor) CreatePushNotification(
 			imageUrl = "https://carwisegw.yusuftalhaklc.com" + strings.TrimPrefix(image.Path, ".")
 			log.Printf("Image URL set for listing %s: %s", customData["listing_id"], imageUrl)
 		}
+		customData["image"] = imageUrl
 	}
 
 	if status == PriceDropped {
-		emails, err := i.services.FavoriteRepo.GetUserEmails(customData["listing_id"])
+		users, err := i.services.FavoriteRepo.GetFavoritesUsers(customData["listing_id"])
 		if err != nil {
 			log.Printf("Error getting user emails for listing %s: %v", customData["listing_id"], err)
 			return err
 		}
-		log.Printf("Found %d users to notify for price drop on listing %s", len(emails), customData["listing_id"])
 
 		link := ""
 		if customData["listing_id"] != "" {
 			link = fmt.Sprintf("https://carwisegw.yusuftalhaklc.com/listing/%s", customData["listing_id"])
 		}
 
-		for _, email := range emails {
-			log.Printf("Sending price drop email to: %s", email)
-			i.services.MailGW.SendEmail(email, title, "notification.html", map[string]interface{}{
-				"title":   title,
-				"message": message,
-				"image":   imageUrl,
-				"link":    link,
+		for _, user := range users {
+			if user.EmailNotify {
+				i.services.MailGW.SendEmail(user.Email, title, "notification.html", map[string]interface{}{
+					"title":   title,
+					"message": message,
+					"image":   imageUrl,
+					"link":    link,
+				})
+			}
+			i.CreateNotification(&Notification{
+				ID:        uuid.New().String(),
+				Title:     title,
+				Message:   message,
+				Data:      customData,
+				Status:    status,
+				CreatedBy: user.Id,
+				Read:      false,
+				CreatedAt: time.Now().Unix(),
 			})
 		}
 
-		deviceTokens, err := i.services.FavoriteRepo.GetUserDeviceTokens(customData["listing_id"])
-		if err != nil {
-			log.Printf("Error getting device tokens for listing %s: %v", customData["listing_id"], err)
-			return err
+		deviceTokens := []string{}
+		for _, user := range users {
+			if user.PushNotify {
+				deviceTokens = append(deviceTokens, user.DeviceToken)
+			}
 		}
-		log.Printf("Found %d device tokens for push notification on listing %s", len(deviceTokens), customData["listing_id"])
 
 		err = i.PushNotification(deviceTokens, title, message, customData, imageUrl)
 		if err != nil {
@@ -141,6 +155,17 @@ func (i *Interactor) CreatePushNotification(
 		} else {
 			log.Printf("Push notifications disabled for user %s", userId)
 		}
+
+		i.CreateNotification(&Notification{
+			ID:        uuid.New().String(),
+			Title:     title,
+			Message:   message,
+			Data:      customData,
+			Status:    status,
+			CreatedBy: userId,
+			Read:      false,
+			CreatedAt: time.Now().Unix(),
+		})
 	}
 	return nil
 }
@@ -154,25 +179,44 @@ func (i *Interactor) PushNotificationToAll(request *PushNotificationRequest) err
 		return errors.New("admin user only can send push notification to all users")
 	}
 
-	emails, err := i.services.UserRepo.GetAllEmails()
+	users, err := i.services.UserRepo.GetAllUsers()
 	if err != nil {
 		return err
 	}
 
-	for _, email := range emails {
-		err := i.services.MailGW.SendEmail(email, request.Title, "notification.html", map[string]interface{}{
-			"title":   request.Title,
-			"message": request.Message,
-			"image":   request.BigImage,
+	for _, user := range users {
+		if user.EmailNotify {
+			err := i.services.MailGW.SendEmail(user.Email, request.Title, "notification.html", map[string]interface{}{
+				"title":   request.Title,
+				"message": request.Message,
+				"image":   request.BigImage,
+			})
+			if err != nil {
+				log.Println("Error sending email to user", user.Email, err)
+			}
+		}
+		i.CreateNotification(&Notification{
+			ID:        uuid.New().String(),
+			Title:     request.Title,
+			Message:   request.Message,
+			Data:      request.Data,
+			Status:    SystemMessage,
+			CreatedBy: user.Id,
+			Read:      false,
+			CreatedAt: time.Now().Unix(),
 		})
-		if err != nil {
-			log.Println("Error sending email to user", email, err)
+	}
+
+	deviceTokens := []string{}
+	for _, user := range users {
+		if user.PushNotify {
+			deviceTokens = append(deviceTokens, user.DeviceToken)
 		}
 	}
 
-	deviceTokens, err := i.services.UserRepo.GetAllDeviceTokens()
+	err = i.PushNotification(deviceTokens, request.Title, request.Message, request.Data, request.BigImage)
 	if err != nil {
-		return err
+		log.Println("Error sending push notification to all users", err)
 	}
-	return i.PushNotification(deviceTokens, request.Title, request.Message, request.Data, request.BigImage)
+	return err
 }

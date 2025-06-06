@@ -97,12 +97,12 @@ func (r *FavoriteRepository) IsFavorite(userId, listingId string) bool {
 	return exists
 }
 
-func (r *FavoriteRepository) GetUserDeviceTokens(listingId string) ([]string, error) {
+func (r *FavoriteRepository) GetFavoritesUsers(listingId string) ([]carwise.User, error) {
 	query := `
-	SELECT u.device_token 
+	SELECT u.id, u.email, u.device_token, u.email_notify, u.push_notify
 	FROM favorites f
 	INNER JOIN users u ON f.user_id = u.id
-	WHERE f.listing_id = $1 AND u.push_notify = true AND u.device_token IS NOT NULL
+	WHERE f.listing_id = $1
 	`
 	rows, err := r.db.Query(query, listingId)
 	if err != nil {
@@ -110,39 +110,14 @@ func (r *FavoriteRepository) GetUserDeviceTokens(listingId string) ([]string, er
 	}
 	defer rows.Close()
 
-	deviceTokens := []string{}
+	users := []carwise.User{}
 	for rows.Next() {
-		var deviceToken string
-		err := rows.Scan(&deviceToken)
+		var user carwise.User
+		err := rows.Scan(&user.Id, &user.Email, &user.DeviceToken, &user.EmailNotify, &user.PushNotify)
 		if err != nil {
 			return nil, err
 		}
-		deviceTokens = append(deviceTokens, deviceToken)
+		users = append(users, user)
 	}
-	return deviceTokens, nil
-}
-
-func (r *FavoriteRepository) GetUserEmails(listingId string) ([]string, error) {
-	query := `
-	SELECT u.email 
-	FROM favorites f
-	INNER JOIN users u ON f.user_id = u.id
-	WHERE f.listing_id = $1 AND u.email_notify = true
-	`
-	rows, err := r.db.Query(query, listingId)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	emails := []string{}
-	for rows.Next() {
-		var email string
-		err := rows.Scan(&email)
-		if err != nil {
-			return nil, err
-		}
-		emails = append(emails, email)
-	}
-	return emails, nil
+	return users, nil
 }

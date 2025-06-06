@@ -163,9 +163,12 @@ func main() {
 		predict.GET("/", AuthMiddleware(), GetPredicts)
 	}
 
-	push := app.Group("/notification")
+	notification := app.Group("/notification")
 	{
-		push.POST("/push", AuthMiddleware(), PushNotification)
+		notification.POST("/push", AuthMiddleware(), PushNotification)
+		notification.GET("/", AuthMiddleware(), GetNotifications)
+		notification.PUT("/:id", AuthMiddleware(), ReadNotification)
+		notification.DELETE("/:id", AuthMiddleware(), DeleteNotification)
 	}
 
 	app.GET("/swagger/*any", ginSwagger.WrapHandler(ginSwaggerFiles.Handler))

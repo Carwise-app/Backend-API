@@ -11,8 +11,7 @@ type UserRepository interface {
 	GetByEmail(email string) (*User, error)
 	UpdatePassword(email, hashedPassword string) error
 	Update(user *User) error
-	GetAllDeviceTokens() ([]string, error)
-	GetAllEmails() ([]string, error)
+	GetAllUsers() ([]User, error)
 }
 
 type RedisRepository interface {
@@ -97,8 +96,7 @@ type FavoriteRepository interface {
 	DeleteFavorite(favorite *Favorite) error
 	IsFavorite(userId, listingId string) bool
 
-	GetUserDeviceTokens(listingId string) ([]string, error)
-	GetUserEmails(listingId string) ([]string, error)
+	GetFavoritesUsers(listingId string) ([]User, error)
 }
 
 type PredictRepository interface {
@@ -109,6 +107,15 @@ type PredictRepository interface {
 
 type OneSignalRepository interface {
 	PushNotification(deviceTokens []string, title, message string, customData map[string]string, bigImage string) error
+}
+
+type NotificationRepository interface {
+	CreateNotification(notification *Notification) error
+	GetNotificationsByUserId(userId string, limit, offset int) ([]Notification, error)
+	GetTotalNotificationsCount(userId string) (int, error)
+	ReadNotification(id string, userId string) error
+	DeleteNotification(id string, userId string) error
+	GetUnreadNotificationsCount(userId string) (int, error)
 }
 
 type Services struct {
@@ -125,4 +132,5 @@ type Services struct {
 	FavoriteRepo      FavoriteRepository
 	PredictRepo       PredictRepository
 	OneSignalRepo     OneSignalRepository
+	NotificationRepo  NotificationRepository
 }

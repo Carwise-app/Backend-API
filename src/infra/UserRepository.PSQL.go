@@ -216,50 +216,25 @@ func (r *UserRepository) Update(user *carwise.User) error {
 	return nil
 }
 
-func (r *UserRepository) GetAllDeviceTokens() ([]string, error) {
+func (r *UserRepository) GetAllUsers() ([]carwise.User, error) {
 	query := `
-		SELECT device_token 
-		FROM users 
-		WHERE push_notify = true AND device_token IS NOT NULL
+		SELECT id, email, device_token, email_notify, push_notify
+		FROM users
 	`
 	rows, err := r.db.Query(query)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get all device tokens: %w", err)
+		return nil, fmt.Errorf("failed to get all users: %w", err)
 	}
 	defer rows.Close()
 
-	deviceTokens := []string{}
+	users := []carwise.User{}
 	for rows.Next() {
-		var deviceToken string
-		err := rows.Scan(&deviceToken)
+		var user carwise.User
+		err := rows.Scan(&user.Id, &user.Email, &user.DeviceToken, &user.EmailNotify, &user.PushNotify)
 		if err != nil {
-			return nil, fmt.Errorf("failed to scan device token: %w", err)
+			return nil, fmt.Errorf("failed to scan user: %w", err)
 		}
-		deviceTokens = append(deviceTokens, deviceToken)
+		users = append(users, user)
 	}
-	return deviceTokens, nil
-}
-
-func (r *UserRepository) GetAllEmails() ([]string, error) {
-	query := `
-		SELECT email 
-		FROM users 
-		WHERE email_notify = true
-	`
-	rows, err := r.db.Query(query)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get all emails: %w", err)
-	}
-	defer rows.Close()
-
-	emails := []string{}
-	for rows.Next() {
-		var email string
-		err := rows.Scan(&email)
-		if err != nil {
-			return nil, fmt.Errorf("failed to scan email: %w", err)
-		}
-		emails = append(emails, email)
-	}
-	return emails, nil
+	return users, nil
 }
