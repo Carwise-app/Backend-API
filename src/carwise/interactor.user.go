@@ -41,7 +41,7 @@ func (i *Interactor) CreateUser(request UserCreateRequest) (*User, []string) {
 		return nil, []string{"Failed to create user: " + err.Error()}
 	}
 	go func() {
-		err = i.services.MailGW.SendEmail(request.Email, "Welcome to Carwise", "welcome.html", map[string]interface{}{
+		err = i.services.MailGW.SendEmail(request.Email, "Hoşgeldiniz!", "welcome.html", map[string]interface{}{
 			"full_name": request.FirstName + " " + request.LastName,
 		})
 		if err != nil {
