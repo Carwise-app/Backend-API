@@ -15,13 +15,20 @@ func (i *Interactor) SendMessage(request *SendMessageRequest) error {
 
 	if !request.IsReceiverActive {
 		go func() {
+
+			user, err := i.services.UserRepo.GetByID(request.UserId)
+			if err != nil {
+				log.Println("GetByID error: ", err)
+			}
+
 			err = i.CreatePushNotification(
 				ChatMessage,
 				"",
 				"",
 				map[string]string{
 					"listing_id": listing.Id,
-					"user_id":    request.UserId,
+					"user_id":    user.Id,
+					"user_name":  user.FirstName + " " + user.LastName,
 				},
 				request.ReceiverId,
 			)
