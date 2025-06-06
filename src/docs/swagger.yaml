@@ -167,6 +167,17 @@ definitions:
       total:
         type: integer
     type: object
+  carwise.GetNotificationsResponse:
+    properties:
+      notifications:
+        items:
+          $ref: '#/definitions/carwise.Notification'
+        type: array
+      total:
+        type: integer
+      unread:
+        type: integer
+    type: object
   carwise.GetPredictsResponse:
     description: Response containing user's predictions
     properties:
@@ -350,6 +361,27 @@ definitions:
         type: string
     required:
     - name
+    type: object
+  carwise.Notification:
+    properties:
+      created_at:
+        type: integer
+      created_by:
+        type: string
+      data:
+        additionalProperties:
+          type: string
+        type: object
+      id:
+        type: string
+      message:
+        type: string
+      read:
+        type: boolean
+      status:
+        type: integer
+      title:
+        type: string
     type: object
   carwise.Predict:
     description: Car price prediction model
@@ -775,7 +807,7 @@ definitions:
         example: Operation completed successfully
         type: string
     type: object
-host: localhost:8080
+host: carwisegw.yusuftalhaklc.com
 info:
   contact:
     email: support@carwise.com
@@ -1984,6 +2016,128 @@ paths:
       summary: Update a listing status
       tags:
       - Listing Car
+  /notification:
+    get:
+      consumes:
+      - application/json
+      description: Get Notifications
+      parameters:
+      - default: 10
+        description: Limit
+        in: query
+        name: limit
+        type: integer
+      - default: 1
+        description: Page
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Get Notifications Response
+          schema:
+            $ref: '#/definitions/carwise.GetNotificationsResponse'
+        "400":
+          description: Bad Request" example:{"error":"Invalid request"}
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized" example:{"error":"No User found in request context"}
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error" example:{"error":"Internal server error"}
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get Notifications
+      tags:
+      - Notification
+  /notification/{notificationId}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete Notification
+      parameters:
+      - description: Notification ID
+        in: path
+        name: notificationId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Delete Notification Response" example:{"message":"Notification
+            deleted successfully"}
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request" example:{"error":"Invalid request"}
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized" example:{"error":"No User found in request context"}
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error" example:{"error":"Internal server error"}
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete Notification
+      tags:
+      - Notification
+    put:
+      consumes:
+      - application/json
+      description: Read Notification
+      parameters:
+      - description: Notification ID
+        in: path
+        name: notificationId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Read Notification Response" example:{"message":"Notification
+            read successfully"}
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request" example:{"error":"Invalid request"}
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized" example:{"error":"No User found in request context"}
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error" example:{"error":"Internal server error"}
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Read Notification
+      tags:
+      - Notification
   /notification/push:
     post:
       consumes:
