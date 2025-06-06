@@ -73,6 +73,7 @@ func main() {
 			FavoriteRepo:      infra.NewFavoriteRepository(),
 			PredictRepo:       infra.NewPredictRepository(),
 			OneSignalRepo:     infra.NewOneSignalRepository(),
+			NotificationRepo:  infra.NewNotificationRepository(),
 		},
 	)
 
