@@ -167,7 +167,7 @@ func main() {
 	notification := app.Group("/notification")
 	{
 		notification.POST("/push", AuthMiddleware(), PushNotification)
-		notification.GET("/", AuthMiddleware(), GetNotifications)
+		notification.GET("", AuthMiddleware(), GetNotifications)
 		notification.PUT("/:id", AuthMiddleware(), ReadNotification)
 		notification.DELETE("/:id", AuthMiddleware(), DeleteNotification)
 	}

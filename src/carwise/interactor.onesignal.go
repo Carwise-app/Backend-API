@@ -95,11 +95,15 @@ func (i *Interactor) CreatePushNotification(
 					"link":    link,
 				})
 			}
+			notificationData := make(map[string]any)
+			for k, v := range customData {
+				notificationData[k] = v
+			}
 			i.CreateNotification(&Notification{
 				ID:        uuid.New().String(),
 				Title:     title,
 				Message:   message,
-				Data:      customData,
+				Data:      notificationData,
 				Status:    status,
 				CreatedBy: user.Id,
 				Read:      false,
@@ -156,11 +160,16 @@ func (i *Interactor) CreatePushNotification(
 			log.Printf("Push notifications disabled for user %s", userId)
 		}
 
+		notificationData := make(map[string]any)
+		for k, v := range customData {
+			notificationData[k] = v
+		}
+
 		i.CreateNotification(&Notification{
 			ID:        uuid.New().String(),
 			Title:     title,
 			Message:   message,
-			Data:      customData,
+			Data:      notificationData,
 			Status:    status,
 			CreatedBy: userId,
 			Read:      false,
@@ -172,51 +181,4 @@ func (i *Interactor) CreatePushNotification(
 
 func (i *Interactor) PushNotification(deviceTokens []string, title, message string, customData map[string]string, bigImage string) error {
 	return i.services.OneSignalRepo.PushNotification(deviceTokens, title, message, customData, bigImage)
-}
-
-func (i *Interactor) PushNotificationToAll(request *PushNotificationRequest) error {
-	if request.Role != 2 {
-		return errors.New("admin user only can send push notification to all users")
-	}
-
-	users, err := i.services.UserRepo.GetAllUsers()
-	if err != nil {
-		return err
-	}
-
-	for _, user := range users {
-		if user.EmailNotify {
-			err := i.services.MailGW.SendEmail(user.Email, request.Title, "notification.html", map[string]interface{}{
-				"title":   request.Title,
-				"message": request.Message,
-				"image":   request.BigImage,
-			})
-			if err != nil {
-				log.Println("Error sending email to user", user.Email, err)
-			}
-		}
-		i.CreateNotification(&Notification{
-			ID:        uuid.New().String(),
-			Title:     request.Title,
-			Message:   request.Message,
-			Data:      request.Data,
-			Status:    SystemMessage,
-			CreatedBy: user.Id,
-			Read:      false,
-			CreatedAt: time.Now().Unix(),
-		})
-	}
-
-	deviceTokens := []string{}
-	for _, user := range users {
-		if user.PushNotify {
-			deviceTokens = append(deviceTokens, user.DeviceToken)
-		}
-	}
-
-	err = i.PushNotification(deviceTokens, request.Title, request.Message, request.Data, request.BigImage)
-	if err != nil {
-		log.Println("Error sending push notification to all users", err)
-	}
-	return err
 }

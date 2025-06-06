@@ -2,6 +2,7 @@ package main
 
 import (
 	"carwise"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -66,14 +67,12 @@ func GetNotifications(c *gin.Context) {
 	claim := userContext.(*UserClaims)
 
 	var request carwise.GetNotificationsRequest
-	if err := c.ShouldBindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+
 	request.UserId = claim.UserId
 
 	limit, err := strconv.Atoi(c.DefaultQuery("limit", "10"))
 	if err != nil {
+		log.Println("Invalid limit", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid limit"})
 		return
 	}
@@ -81,6 +80,7 @@ func GetNotifications(c *gin.Context) {
 
 	page, err := strconv.Atoi(c.DefaultQuery("page", "1"))
 	if err != nil {
+		log.Println("Invalid page", err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid page"})
 		return
 	}
@@ -116,10 +116,6 @@ func ReadNotification(c *gin.Context) {
 	claim := userContext.(*UserClaims)
 
 	var request carwise.ReadNotificationRequest
-	if err := c.ShouldBindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
 	request.UserId = claim.UserId
 
 	notificationId := c.Param("id")
@@ -154,10 +150,6 @@ func DeleteNotification(c *gin.Context) {
 	claim := userContext.(*UserClaims)
 
 	var request carwise.DeleteNotificationRequest
-	if err := c.ShouldBindJSON(&request); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
 	request.UserId = claim.UserId
 
 	notificationId := c.Param("id")
