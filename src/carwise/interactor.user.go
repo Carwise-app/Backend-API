@@ -40,6 +40,15 @@ func (i *Interactor) CreateUser(request UserCreateRequest) (*User, []string) {
 	if err != nil {
 		return nil, []string{"Failed to create user: " + err.Error()}
 	}
+	go func() {
+		err = i.services.MailGW.SendEmail(request.Email, "Welcome to Carwise", "welcome.html", map[string]interface{}{
+			"full_name": request.FirstName + " " + request.LastName,
+		})
+		if err != nil {
+			log.Printf("Error sending welcome email: %v\n", err)
+		}
+	}()
+
 	return user, nil
 }
 
