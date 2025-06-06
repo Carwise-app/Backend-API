@@ -132,6 +132,22 @@ func (i *Interactor) CreatePushNotification(
 			return err
 		}
 
+		notificationData := make(map[string]any)
+		for k, v := range customData {
+			notificationData[k] = v
+		}
+		log.Println("Creating notification", notificationData)
+		i.CreateNotification(&Notification{
+			ID:        uuid.New().String(),
+			Title:     title,
+			Message:   message,
+			Data:      notificationData,
+			Status:    status,
+			CreatedBy: userId,
+			Read:      false,
+			CreatedAt: time.Now().Unix(),
+		})
+
 		if user.EmailNotify {
 			link := ""
 			if customData["listing_id"] != "" {
@@ -160,21 +176,6 @@ func (i *Interactor) CreatePushNotification(
 			log.Printf("Push notifications disabled for user %s", userId)
 		}
 
-		notificationData := make(map[string]any)
-		for k, v := range customData {
-			notificationData[k] = v
-		}
-		log.Println("Creating notification", notificationData)
-		i.CreateNotification(&Notification{
-			ID:        uuid.New().String(),
-			Title:     title,
-			Message:   message,
-			Data:      notificationData,
-			Status:    status,
-			CreatedBy: userId,
-			Read:      false,
-			CreatedAt: time.Now().Unix(),
-		})
 	}
 	return nil
 }
