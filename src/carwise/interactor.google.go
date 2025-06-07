@@ -81,6 +81,24 @@ func (i *Interactor) GoogleIdToken(idToken string) (*User, error) {
 		if err != nil {
 			return nil, fmt.Errorf("failed to create google account: %v", err)
 		}
+
+		go func() {
+			i.services.MailGW.SendEmail(newAccount.Email, "Hoşgeldiniz!", "welcome.html", map[string]interface{}{
+				"full_name": newAccount.FirstName + " " + newAccount.LastName,
+			})
+			i.CreateNotification(
+				&Notification{
+					ID:        uuid.New().String(),
+					Title:     "Carwise'e Hoş Geldiniz!",
+					Status:    SystemMessage,
+					Message:   "Hoşgeldin, " + newAccount.FirstName + "! 2. el araç alım-satımı ve araç fiyat tahmini artık çok daha kolay. Akıllı sistemimizle aracınızın gerçek değerini öğrenin, güvenle alım-satım yapın.",
+					Read:      false,
+					CreatedBy: newAccount.Id,
+					CreatedAt: time.Now().Unix(),
+				},
+			)
+		}()
+
 		return &newAccount, nil
 	} else if account.Password != "" {
 		return nil, fmt.Errorf("this email is already registered with password. Please login with email and password")
