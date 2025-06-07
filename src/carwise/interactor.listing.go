@@ -82,6 +82,31 @@ func (i *Interactor) CreateListing(request *CreateListingRequest) (string, error
 		return "", err
 	}
 
+	go func() {
+		user, err := i.services.UserRepo.GetByID(listing.CreatedBy)
+		if err != nil {
+			log.Printf("GetByID error for listing %s: %v", listing.Id, err)
+			return
+		}
+
+		message := fmt.Sprintf("Merhaba %s! İlanınız yayınlandı. İlanınızı görüntülemek için tıklayınız.", user.FirstName)
+
+		err = i.CreatePushNotification(
+			SystemMessage,
+			"İlanınız Yayınlandı!",
+			message,
+			map[string]string{
+				"listing_id": listing.Id,
+			},
+			user.Id,
+		)
+		if err != nil {
+			log.Printf("CreatePushNotification error for listing %s: %v", listing.Id, err)
+		} else {
+			log.Printf("Price drop notification sent successfully for listing %s", listing.Id)
+		}
+	}()
+
 	return listing.Id, nil
 }
 
@@ -207,7 +232,7 @@ func (i *Interactor) UpdateListing(request *UpdateListingRequest) error {
 	listing.Title = request.Title
 	listing.Description = request.Description
 	listing.Currency = request.Currency
-	listing.Price = request.Price 
+	listing.Price = request.Price
 	listing.City = request.City
 	listing.District = request.District
 	listing.Neighborhood = request.Neighborhood
@@ -269,7 +294,25 @@ func (i *Interactor) UpdateListing(request *UpdateListingRequest) error {
 			}
 		}()
 	} else {
-		log.Printf("Price drop condition NOT met - New: %d >= Old: %d", request.Price, oldPrice)
+		go func() {
+			user, err := i.services.UserRepo.GetByID(listing.CreatedBy)
+			if err != nil {
+				log.Printf("GetByID error for listing %s: %v", listing.Id, err)
+				return
+			}
+
+			message := fmt.Sprintf("Merhaba %s! İlanınız güncellendi. İlanınızı görüntülemek için tıklayınız.", user.FirstName)
+
+			i.CreatePushNotification(
+				SystemMessage,
+				"İlanınız Güncellendi!",
+				message,
+				map[string]string{
+					"listing_id": listing.Id,
+				},
+				user.Id,
+			)
+		}()
 	}
 
 	return nil
@@ -291,6 +334,24 @@ func (i *Interactor) DeleteListing(request *DeleteListingRequest) error {
 	if err != nil {
 		return err
 	}
+
+	go func() {
+		user, err := i.services.UserRepo.GetByID(listing.CreatedBy)
+		if err != nil {
+			log.Printf("GetByID error for listing %s: %v", listing.Id, err)
+			return
+		}
+
+		message := fmt.Sprintf("Merhaba %s! İlanınız silindi.", user.FirstName)
+
+		i.CreatePushNotification(
+			SystemMessage,
+			"İlanınız Silindi!",
+			message,
+			map[string]string{},
+			user.Id,
+		)
+	}()
 
 	return nil
 }
@@ -317,6 +378,50 @@ func (i *Interactor) UpdateListingStatus(request *UpdateListingStatusRequest) er
 	err = i.services.ListingRepo.UpdateListing(listing)
 	if err != nil {
 		return err
+	}
+
+	if listing.Status == 1 {
+		go func() {
+			user, err := i.services.UserRepo.GetByID(listing.CreatedBy)
+			if err != nil {
+				log.Printf("GetByID error for listing %s: %v", listing.Id, err)
+				return
+			}
+
+			message := fmt.Sprintf("Merhaba %s! İlanınız aktif hale getirildi. İlanınızı görüntülemek için tıklayınız.", user.FirstName)
+
+			i.CreatePushNotification(
+				SystemMessage,
+				"İlanınız Aktif Hale Getirildi!",
+				message,
+				map[string]string{
+					"listing_id": listing.Id,
+				},
+				user.Id,
+			)
+		}()
+	}
+
+	if listing.Status == 2 {
+		go func() {
+			user, err := i.services.UserRepo.GetByID(listing.CreatedBy)
+			if err != nil {
+				log.Printf("GetByID error for listing %s: %v", listing.Id, err)
+				return
+			}
+
+			message := fmt.Sprintf("Merhaba %s! İlanınız satıldı olarak işaretlendi. İlanınızı görüntülemek için tıklayınız.", user.FirstName)
+
+			i.CreatePushNotification(
+				SystemMessage,
+				"İlanınız Satıldı Olarak İşaretlendi!",
+				message,
+				map[string]string{
+					"listing_id": listing.Id,
+				},
+				user.Id,
+			)
+		}()
 	}
 
 	return nil
