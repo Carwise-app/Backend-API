@@ -12,6 +12,7 @@ package main
 import (
 	"carwise"
 	_ "docs" // Import the generated docs package with blank identifier
+	"fmt"
 	"infra"
 	"log"
 	"net/http"
@@ -174,6 +175,9 @@ func main() {
 
 	app.GET("/swagger/*any", ginSwagger.WrapHandler(ginSwaggerFiles.Handler))
 	openBrowser(getSwaggerURL())
+
+	startScheduler()
+
 	app.Run(os.Getenv("HOST") + ":" + os.Getenv("PORT"))
 }
 
@@ -199,4 +203,16 @@ func getSwaggerURL() string {
 	port := os.Getenv("PORT")
 	swaggerURL := "http://" + host + ":" + port + "/swagger/index.html"
 	return swaggerURL
+}
+
+func startScheduler() {
+	go func() {
+		ticker := time.NewTicker(4 * time.Minute)
+		defer ticker.Stop()
+
+		for range ticker.C {
+			interactor.GetAllBrandsWithDetails()
+			fmt.Println("Scheduler running")
+		}
+	}()
 }
