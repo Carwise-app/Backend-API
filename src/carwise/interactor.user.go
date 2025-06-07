@@ -41,12 +41,20 @@ func (i *Interactor) CreateUser(request UserCreateRequest) (*User, []string) {
 		return nil, []string{"Failed to create user: " + err.Error()}
 	}
 	go func() {
-		err = i.services.MailGW.SendEmail(request.Email, "Hoşgeldiniz!", "welcome.html", map[string]interface{}{
+		i.services.MailGW.SendEmail(request.Email, "Hoşgeldiniz!", "welcome.html", map[string]interface{}{
 			"full_name": request.FirstName + " " + request.LastName,
 		})
-		if err != nil {
-			log.Printf("Error sending welcome email: %v\n", err)
-		}
+		i.CreateNotification(
+			&Notification{
+				ID:        uuid.New().String(),
+				Title:     "Carwise'e Hoş Geldiniz!",
+				Status:    SystemMessage,
+				Message:   "Hoşgeldin, " + user.FirstName + "! 2. el araç alım-satımı ve araç fiyat tahmini artık çok daha kolay. Akıllı sistemimizle aracınızın gerçek değerini öğrenin, güvenle alım-satım yapın.",
+				Read:      false,
+				CreatedBy: user.Id,
+				CreatedAt: time.Now().Unix(),
+			},
+		)
 	}()
 
 	return user, nil

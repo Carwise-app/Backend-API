@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 // @model PredictionResponse
@@ -71,6 +73,18 @@ func (i *Interactor) CreatePredict(request *PredictRequest) (*PredictionResponse
 		if err != nil {
 			return nil, err
 		}
+
+		notification := &Notification{
+			ID:        uuid.New().String(),
+			Title:     "Araç Fiyat Tahmini Hazır!",
+			Status:    SystemMessage,
+			Message:   fmt.Sprintf("Tahmini araç değeri: %s ₺. Carwise ile doğru fiyatla satışa başlayabilirsiniz!", formatPrice(int(predictionResp.TahminiFiyat))),
+			Read:      false,
+			CreatedBy: request.UserId,
+			CreatedAt: time.Now().Unix(),
+		}
+
+		go i.CreateNotification(notification)
 	}
 
 	return &predictionResp, nil
