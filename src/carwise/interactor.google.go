@@ -89,7 +89,7 @@ func (i *Interactor) GoogleIdToken(idToken string) (*User, error) {
 			i.CreateNotification(
 				&Notification{
 					ID:        uuid.New().String(),
-					Title:     "Carwise'e Hoş Geldiniz!",
+					Title:     "🎉 Carwise'e Hoş Geldiniz!",
 					Status:    SystemMessage,
 					Message:   "Hoşgeldin, " + newAccount.FirstName + "! 2. el araç alım-satımı ve araç fiyat tahmini artık çok daha kolay. Akıllı sistemimizle aracınızın gerçek değerini öğrenin, güvenle alım-satım yapın.",
 					Read:      false,
