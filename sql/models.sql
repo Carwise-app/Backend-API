@@ -37,16 +37,6 @@ CREATE TABLE IF NOT EXISTS models (
     name VARCHAR(255) NOT NULL DEFAULT ''
 );
 
-CREATE TABLE IF NOT EXISTS messages (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    listing_id UUID NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
-    sender_id UUID NOT NULL REFERENCES users(id),
-    receiver_id UUID NOT NULL REFERENCES users(id),
-    message TEXT NOT NULL DEFAULT '',
-    read BOOLEAN NOT NULL DEFAULT false,
-    created_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP)
-);
-
 CREATE TABLE IF NOT EXISTS listings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     slug VARCHAR(255) NOT NULL DEFAULT '',
@@ -85,6 +75,17 @@ CREATE TABLE IF NOT EXISTS listings (
     created_by UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     created_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP),
     updated_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP)
+);
+
+
+CREATE TABLE IF NOT EXISTS messages (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    listing_id UUID NOT NULL REFERENCES listings(id) ON DELETE CASCADE,
+    sender_id UUID NOT NULL REFERENCES users(id),
+    receiver_id UUID NOT NULL REFERENCES users(id),
+    message TEXT NOT NULL DEFAULT '',
+    read BOOLEAN NOT NULL DEFAULT false,
+    created_at bigint NOT NULL DEFAULT EXTRACT (EPOCH FROM CURRENT_TIMESTAMP)
 );
 
 CREATE TABLE IF NOT EXISTS images (
