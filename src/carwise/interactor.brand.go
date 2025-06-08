@@ -24,6 +24,8 @@ func (i *Interactor) CreateBrand(request *BrandCreateRequest) (*Brand, error) {
 		return nil, err
 	}
 
+	go i.BrandCache()
+
 	return brand, nil
 }
 
@@ -39,7 +41,14 @@ func (i *Interactor) UpdateBrand(request *BrandUpdateRequest) error {
 	brand.ImagePath = request.ImagePath
 	brand.Name = request.Name
 
-	return i.services.BrandRepo.Update(brand)
+	err = i.services.BrandRepo.Update(brand)
+	if err != nil {
+		return err
+	}
+
+	go i.BrandCache()
+
+	return nil
 }
 
 func (i *Interactor) DeleteBrand(request *BrandDeleteRequest) error {
@@ -47,7 +56,14 @@ func (i *Interactor) DeleteBrand(request *BrandDeleteRequest) error {
 		return errors.New("unauthorized")
 	}
 
-	return i.services.BrandRepo.Delete(request.BrandId)
+	err := i.services.BrandRepo.Delete(request.BrandId)
+	if err != nil {
+		return err
+	}
+
+	go i.BrandCache()
+
+	return nil
 }
 
 func (i *Interactor) CreateSeries(request *SeriesCreateRequest) (*Series, error) {
@@ -71,6 +87,8 @@ func (i *Interactor) CreateSeries(request *SeriesCreateRequest) (*Series, error)
 		return nil, err
 	}
 
+	go i.BrandCache()
+
 	return series, nil
 }
 
@@ -85,7 +103,14 @@ func (i *Interactor) UpdateSeries(request *SeriesUpdateRequest) error {
 	}
 	series.Name = request.Name
 
-	return i.services.BrandRepo.UpdateSeries(series)
+	err = i.services.BrandRepo.UpdateSeries(series)
+	if err != nil {
+		return err
+	}
+
+	go i.BrandCache()
+
+	return nil
 }
 
 func (i *Interactor) DeleteSeries(request *SeriesDeleteRequest) error {
@@ -93,7 +118,14 @@ func (i *Interactor) DeleteSeries(request *SeriesDeleteRequest) error {
 		return errors.New("unauthorized")
 	}
 
-	return i.services.BrandRepo.DeleteSeries(request.SeriesId)
+	err := i.services.BrandRepo.DeleteSeries(request.SeriesId)
+	if err != nil {
+		return err
+	}
+
+	go i.BrandCache()
+
+	return nil
 }
 
 func (i *Interactor) CreateModel(request *ModelCreateRequest) (*Model, error) {
@@ -123,6 +155,8 @@ func (i *Interactor) CreateModel(request *ModelCreateRequest) (*Model, error) {
 		return nil, err
 	}
 
+	go i.BrandCache()
+
 	return model, nil
 }
 
@@ -137,25 +171,34 @@ func (i *Interactor) UpdateModel(request *ModelUpdateRequest) error {
 	}
 	model.Name = request.Name
 
-	return i.services.BrandRepo.UpdateModel(model)
+	err = i.services.BrandRepo.UpdateModel(model)
+	if err != nil {
+		return err
+	}
+
+	go i.BrandCache()
+
+	return nil
 }
 
 func (i *Interactor) DeleteModel(request *ModelDeleteRequest) error {
 	if request.Role != 2 {
 		return errors.New("unauthorized")
 	}
+	err := i.services.BrandRepo.DeleteModel(request.ModelId)
+	if err != nil {
+		return err
+	}
 
-	return i.services.BrandRepo.DeleteModel(request.ModelId)
+	go i.BrandCache()
+
+	return nil
 }
 
 func (i *Interactor) GetAllBrandsWithDetails() ([]BrandWithDetails, error) {
 	brands, err := i.services.RedisRepo.GetBrandsWithDetails()
 	if err == nil && brands != nil {
 		return brands, nil
-	}
-
-	if err != nil && err.Error() != "Redis is not available" {
-		return nil, fmt.Errorf("failed to get brands from cache: %v", err)
 	}
 	if err != nil {
 		log.Printf("Warning: Redis is not available, falling back to database: %v", err)
@@ -173,4 +216,15 @@ func (i *Interactor) GetAllBrandsWithDetails() ([]BrandWithDetails, error) {
 	}(brands)
 
 	return brands, nil
+}
+
+func (i *Interactor) BrandCache() {
+	brands, err := i.services.BrandRepo.GetAllWithDetails()
+	if err != nil {
+		log.Printf("Warning: failed to get brands from database: %v", err)
+	}
+
+	if err := i.services.RedisRepo.SetBrandsWithDetails(brands); err != nil {
+		log.Printf("Warning: failed to cache brands: %v", err)
+	}
 }

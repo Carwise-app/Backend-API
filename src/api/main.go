@@ -218,7 +218,7 @@ func startScheduler() {
 		defer ticker.Stop()
 
 		for range ticker.C {
-			interactor.GetAllBrandsWithDetails()
+			interactor.BrandCache()
 			fmt.Println("Scheduler running")
 		}
 	}()
