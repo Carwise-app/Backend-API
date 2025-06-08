@@ -14,7 +14,7 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8080",
+    "host": "carwisegw.yusuftalhaklc.com",
     "basePath": "/",
     "paths": {
         "/admin/count": {
