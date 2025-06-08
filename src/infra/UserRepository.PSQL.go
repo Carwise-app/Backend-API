@@ -288,3 +288,64 @@ func (r *UserRepository) CountUsers() (int, error) {
 	err := r.db.QueryRow(query).Scan(&count)
 	return count, err
 }
+
+func (r *UserRepository) DeleteUser(id string) error {
+	queryListingDelete := `
+		DELETE FROM listings WHERE created_by = $1
+	`
+	_, err := r.db.Exec(queryListingDelete, id)
+	if err != nil {
+		return fmt.Errorf("failed to delete listings: %w", err)
+	}
+
+	queryImageDelete := `
+		DELETE FROM images WHERE created_by = $1
+	`
+	_, err = r.db.Exec(queryImageDelete, id)
+	if err != nil {
+		return fmt.Errorf("failed to delete images: %w", err)
+	}
+
+	queryMessageDelete := `
+		DELETE FROM messages WHERE sender_id = $1
+		OR receiver_id = $1
+	`
+	_, err = r.db.Exec(queryMessageDelete, id)
+	if err != nil {
+		return fmt.Errorf("failed to delete messages: %w", err)
+	}
+
+	queryFavoriteDelete := `
+		DELETE FROM favorites WHERE user_id = $1
+	`
+	_, err = r.db.Exec(queryFavoriteDelete, id)
+	if err != nil {
+		return fmt.Errorf("failed to delete favorites: %w", err)
+	}
+
+	queryPredictDelete := `
+		DELETE FROM predicts WHERE created_by = $1
+	`
+	_, err = r.db.Exec(queryPredictDelete, id)
+	if err != nil {
+		return fmt.Errorf("failed to delete predicts: %w", err)
+	}
+
+	queryNotificationDelete := `
+		DELETE FROM notifications WHERE created_by = $1
+	`
+	_, err = r.db.Exec(queryNotificationDelete, id)
+	if err != nil {
+		return fmt.Errorf("failed to delete notifications: %w", err)
+	}
+
+	queryUserDelete := `
+		DELETE FROM users WHERE id = $1
+	`
+	_, err = r.db.Exec(queryUserDelete, id)
+	if err != nil {
+		return fmt.Errorf("failed to delete user: %w", err)
+	}
+
+	return nil
+}

@@ -763,12 +763,8 @@ definitions:
         type: string
       created_at:
         type: integer
-      device_token:
-        type: string
       email:
         type: string
-      email_notify:
-        type: boolean
       first_name:
         type: string
       google_id:
@@ -783,8 +779,6 @@ definitions:
         type: string
       phone_number:
         type: string
-      push_notify:
-        type: boolean
       role:
         type: integer
       status:
@@ -918,6 +912,17 @@ paths:
   /admin/users:
     get:
       description: Get users
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: Limit number
+        in: query
+        name: limit
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -2445,6 +2450,35 @@ paths:
       summary: Edit user profile
       tags:
       - Profile
+  /profile/{id}:
+    delete:
+      description: Delete user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User deleted successfully
+        "400":
+          description: Validation error
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete user
+      tags:
+      - Admin
   /profile/notify:
     get:
       description: Get the profile notify information of the authenticated user

@@ -14,6 +14,7 @@ type UserRepository interface {
 	GetAllUsers() ([]User, error)
 	GetUsers(page, limit int) ([]User, error)
 	CountUsers() (int, error)
+	DeleteUser(id string) error
 }
 
 type RedisRepository interface {

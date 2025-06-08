@@ -96,3 +96,16 @@ func (i *Interactor) GetProfileNotify(request GetProfileNotifyRequest) (*GetProf
 		PushNotify:  user.PushNotify,
 	}, nil
 }
+
+func (i *Interactor) DeleteAccount(request DeleteAccountRequest) error {
+	if request.Role == 2 || request.UserId == request.ProfileId {
+		return fmt.Errorf("you are not authorized to access this resource")
+	}
+
+	err := i.services.UserRepo.DeleteUser(request.ProfileId)
+	if err != nil {
+		return fmt.Errorf("failed to get user: %w", err)
+	}
+
+	return nil
+}

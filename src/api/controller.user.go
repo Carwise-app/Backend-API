@@ -323,3 +323,39 @@ func GetUsers(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, users)
 }
+
+// @Summary Delete user
+// @Description Delete user
+// @Tags Admin
+// @Produce json
+// @Security BearerAuth
+// @Param id path string true "User ID"
+// @Success 200 "User deleted successfully"
+// @Failure 400 {object} map[string]interface{} "Validation error"
+// @Failure 500 {object} map[string]interface{} "Server error"
+// @Router /profile/{id} [delete]
+func DeleteUser(ctx *gin.Context) {
+	var request carwise.DeleteAccountRequest
+
+	userContext, exists := ctx.Get("user")
+	if !exists {
+		log.Println("No User found in request context")
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
+		return
+	}
+	claim := userContext.(*UserClaims)
+
+	request.UserId = claim.UserId
+	request.Role = claim.Role
+	request.ProfileId = ctx.Param("id")
+
+	errors := interactor.DeleteAccount(request)
+	if errors != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": errors,
+		})
+		return
+	}
+
+	ctx.Status(http.StatusOK)
+}

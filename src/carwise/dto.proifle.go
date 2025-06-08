@@ -47,3 +47,11 @@ type GetProfileNotifyResponse struct {
 	EmailNotify bool   `json:"email_notify" example:"true"`
 	PushNotify  bool   `json:"push_notify" example:"true"`
 }
+
+// @model DeleteAccountRequest
+// @Description Delete account request
+type DeleteAccountRequest struct {
+	ProfileId string `json:"-"`
+	UserId    string `json:"-"`
+	Role      int    `json:"-"`
+}

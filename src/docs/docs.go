@@ -77,6 +77,22 @@ const docTemplate = `{
                     "Admin"
                 ],
                 "summary": "Get users",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit number",
+                        "name": "limit",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Get users response",
@@ -2518,6 +2534,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/profile/{id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Delete user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User deleted successfully"
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/upload/": {
             "post": {
                 "security": [
@@ -3799,14 +3860,8 @@ const docTemplate = `{
                 "created_at": {
                     "type": "integer"
                 },
-                "device_token": {
-                    "type": "string"
-                },
                 "email": {
                     "type": "string"
-                },
-                "email_notify": {
-                    "type": "boolean"
                 },
                 "first_name": {
                     "type": "string"
@@ -3828,9 +3883,6 @@ const docTemplate = `{
                 },
                 "phone_number": {
                     "type": "string"
-                },
-                "push_notify": {
-                    "type": "boolean"
                 },
                 "role": {
                     "type": "integer"
