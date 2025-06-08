@@ -265,6 +265,7 @@ func Count(ctx *gin.Context) {
 
 	count, errors := interactor.Count(&request)
 	if errors != nil {
+		log.Println("Error counting users:", errors.Error())
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": errors,
 		})
@@ -301,6 +302,7 @@ func GetUsers(ctx *gin.Context) {
 
 	page, err := strconv.Atoi(ctx.DefaultQuery("page", "1"))
 	if err != nil {
+		log.Println("Error parsing page parameter:", err.Error())
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid page parameter"})
 		return
 	}
@@ -308,6 +310,7 @@ func GetUsers(ctx *gin.Context) {
 
 	limit, err := strconv.Atoi(ctx.DefaultQuery("limit", "10"))
 	if err != nil {
+		log.Println("Error parsing limit parameter:", err.Error())
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid limit parameter"})
 		return
 	}
@@ -315,6 +318,7 @@ func GetUsers(ctx *gin.Context) {
 
 	users, errors := interactor.GetUsers(&request)
 	if errors != nil {
+		log.Println("Error getting users:", errors.Error())
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": errors.Error(),
 		})
