@@ -13,7 +13,7 @@ func NewInteractor(svcs Services) *Interactor {
 }
 
 func (i *Interactor) Count(req *CountRequest) (*CountResponse, error) {
-	if req.Role == 2 {
+	if req.Role != 2 {
 		return nil, errors.New("you are not authorized to access this resource")
 	}
 
@@ -64,7 +64,7 @@ func (i *Interactor) Count(req *CountRequest) (*CountResponse, error) {
 }
 
 func (i *Interactor) GetUsers(req *GetUsersRequest) (*GetUsersResponse, error) {
-	if req.Role == 2 {
+	if req.Role != 2 {
 		return nil, errors.New("you are not authorized to access this resource")
 	}
 
