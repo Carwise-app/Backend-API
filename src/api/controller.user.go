@@ -355,6 +355,7 @@ func DeleteUser(ctx *gin.Context) {
 
 	errors := interactor.DeleteAccount(request)
 	if errors != nil {
+		log.Println("Error deleting user:", errors.Error())
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": errors,
 		})

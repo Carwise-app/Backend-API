@@ -2,6 +2,7 @@ package carwise
 
 import (
 	"fmt"
+	"log"
 	"mime/multipart"
 	"time"
 )
@@ -104,7 +105,8 @@ func (i *Interactor) DeleteAccount(request DeleteAccountRequest) error {
 
 	err := i.services.UserRepo.DeleteUser(request.ProfileId)
 	if err != nil {
-		return fmt.Errorf("failed to get user: %w", err)
+		log.Println("Error deleting user:", err.Error())
+		return fmt.Errorf("failed to delete user: %w", err)
 	}
 
 	return nil
