@@ -66,3 +66,38 @@ type PushNotificationRequest struct {
 	Role     int               `json:"-"`
 	BigImage string            `json:"big_image" example:"https://example.com/big_image.png"`
 }
+
+// @model CountRequest
+// @Description Count request
+type CountRequest struct {
+	UserId string `json:"-"`
+	Role   int    `json:"-"`
+}
+
+// @model CountResponse
+// @Description Count response
+type CountResponse struct {
+	UserCount         int `json:"user_count" example:"100"`
+	ImageCount        int `json:"image_count" example:"100"`
+	MessageCount      int `json:"message_count" example:"100"`
+	PredictCount      int `json:"predict_count" example:"100"`
+	NotificationCount int `json:"notification_count" example:"100"`
+	FavoriteCount     int `json:"favorite_count" example:"100"`
+	ListingCount      int `json:"listing_count" example:"100"`
+}
+
+// @model GetUsersRequest
+// @Description Get users request
+type GetUsersRequest struct {
+	Page   int    `json:"page" example:"1"`
+	Limit  int    `json:"limit" example:"10"`
+	UserId string `json:"-"`
+	Role   int    `json:"-"`
+}
+
+// @model GetUsersResponse
+// @Description Get users response
+type GetUsersResponse struct {
+	Users []User `json:"users"`
+	Total int    `json:"total" example:"100"`
+}

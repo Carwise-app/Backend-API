@@ -71,3 +71,15 @@ func (r *PredictRepository) CountPredictByUserId(userId string) (int, error) {
 	}
 	return count, nil
 }
+
+func (r *PredictRepository) PredictCount() (int, error) {
+	query := `
+		SELECT COUNT(*) FROM predicts
+	`
+	var count int
+	err := r.db.QueryRow(query).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+	return count, nil
+}

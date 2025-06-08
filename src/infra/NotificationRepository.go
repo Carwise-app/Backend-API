@@ -139,3 +139,17 @@ func (r *NotificationRepository) GetTotalNotificationsCount(userId string) (int,
 
 	return count, nil
 }
+
+func (r *NotificationRepository) NotificationsCount() (int, error) {
+	query := `
+	SELECT COUNT(*) FROM notifications
+	`
+
+	var count int
+	err := r.db.QueryRow(query).Scan(&count)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}

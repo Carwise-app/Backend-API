@@ -154,3 +154,12 @@ func (r *MessageRepository) ReadMessage(messageId string) error {
 	_, err := r.db.Exec(query, messageId)
 	return err
 }
+
+func (r *MessageRepository) MessagesCount() (int, error) {
+	query := `
+		SELECT COUNT(*) FROM messages
+	`
+	var count int
+	err := r.db.QueryRow(query).Scan(&count)
+	return count, err
+}

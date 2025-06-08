@@ -23,6 +23,84 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/admin/count": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Count",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Count",
+                "responses": {
+                    "200": {
+                        "description": "Count response",
+                        "schema": {
+                            "$ref": "#/definitions/carwise.CountResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/users": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get users",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get users",
+                "responses": {
+                    "200": {
+                        "description": "Get users response",
+                        "schema": {
+                            "$ref": "#/definitions/carwise.GetUsersResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/auth/forgot-password": {
             "post": {
                 "description": "Send password reset email to user",
@@ -2745,6 +2823,40 @@ const docTemplate = `{
                 }
             }
         },
+        "carwise.CountResponse": {
+            "description": "Count response",
+            "type": "object",
+            "properties": {
+                "favorite_count": {
+                    "type": "integer",
+                    "example": 100
+                },
+                "image_count": {
+                    "type": "integer",
+                    "example": 100
+                },
+                "listing_count": {
+                    "type": "integer",
+                    "example": 100
+                },
+                "message_count": {
+                    "type": "integer",
+                    "example": 100
+                },
+                "notification_count": {
+                    "type": "integer",
+                    "example": 100
+                },
+                "predict_count": {
+                    "type": "integer",
+                    "example": 100
+                },
+                "user_count": {
+                    "type": "integer",
+                    "example": 100
+                }
+            }
+        },
         "carwise.CreateListingRequest": {
             "description": "Request body for creating a new listing",
             "type": "object",
@@ -2935,6 +3047,22 @@ const docTemplate = `{
                 "push_notify": {
                     "type": "boolean",
                     "example": true
+                }
+            }
+        },
+        "carwise.GetUsersResponse": {
+            "description": "Get users response",
+            "type": "object",
+            "properties": {
+                "total": {
+                    "type": "integer",
+                    "example": 100
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/carwise.User"
+                    }
                 }
             }
         },
@@ -3183,9 +3311,7 @@ const docTemplate = `{
                 },
                 "data": {
                     "type": "object",
-                    "additionalProperties": {
-                        "type": "string"
-                    }
+                    "additionalProperties": {}
                 },
                 "id": {
                     "type": "string"
@@ -3664,6 +3790,59 @@ const docTemplate = `{
                 }
             }
         },
+        "carwise.User": {
+            "type": "object",
+            "properties": {
+                "country_code": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "integer"
+                },
+                "device_token": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "email_notify": {
+                    "type": "boolean"
+                },
+                "first_name": {
+                    "type": "string"
+                },
+                "google_id": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "image_url": {
+                    "type": "string"
+                },
+                "last_login": {
+                    "type": "integer"
+                },
+                "last_name": {
+                    "type": "string"
+                },
+                "phone_number": {
+                    "type": "string"
+                },
+                "push_notify": {
+                    "type": "boolean"
+                },
+                "role": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "integer"
+                }
+            }
+        },
         "carwise.UserCreateRequest": {
             "description": "User registration request",
             "type": "object",
@@ -3790,7 +3969,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "carwisegw.yusuftalhaklc.com",
+	Host:             "localhost:8080",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Carwise API",

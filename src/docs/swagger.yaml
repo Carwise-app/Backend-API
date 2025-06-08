@@ -73,6 +73,31 @@ definitions:
       user:
         $ref: '#/definitions/carwise.UserInfo'
     type: object
+  carwise.CountResponse:
+    description: Count response
+    properties:
+      favorite_count:
+        example: 100
+        type: integer
+      image_count:
+        example: 100
+        type: integer
+      listing_count:
+        example: 100
+        type: integer
+      message_count:
+        example: 100
+        type: integer
+      notification_count:
+        example: 100
+        type: integer
+      predict_count:
+        example: 100
+        type: integer
+      user_count:
+        example: 100
+        type: integer
+    type: object
   carwise.CreateListingRequest:
     description: Request body for creating a new listing
     properties:
@@ -202,6 +227,17 @@ definitions:
       push_notify:
         example: true
         type: boolean
+    type: object
+  carwise.GetUsersResponse:
+    description: Get users response
+    properties:
+      total:
+        example: 100
+        type: integer
+      users:
+        items:
+          $ref: '#/definitions/carwise.User'
+        type: array
     type: object
   carwise.IdResponse:
     description: Response body for id
@@ -369,8 +405,7 @@ definitions:
       created_by:
         type: string
       data:
-        additionalProperties:
-          type: string
+        additionalProperties: {}
         type: object
       id:
         type: string
@@ -722,6 +757,41 @@ definitions:
     required:
     - status
     type: object
+  carwise.User:
+    properties:
+      country_code:
+        type: string
+      created_at:
+        type: integer
+      device_token:
+        type: string
+      email:
+        type: string
+      email_notify:
+        type: boolean
+      first_name:
+        type: string
+      google_id:
+        type: string
+      id:
+        type: string
+      image_url:
+        type: string
+      last_login:
+        type: integer
+      last_name:
+        type: string
+      phone_number:
+        type: string
+      push_notify:
+        type: boolean
+      role:
+        type: integer
+      status:
+        type: integer
+      updated_at:
+        type: integer
+    type: object
   carwise.UserCreateRequest:
     description: User registration request
     properties:
@@ -807,7 +877,7 @@ definitions:
         example: Operation completed successfully
         type: string
     type: object
-host: carwisegw.yusuftalhaklc.com
+host: localhost:8080
 info:
   contact:
     email: support@carwise.com
@@ -820,6 +890,56 @@ info:
   title: Carwise API
   version: "1.0"
 paths:
+  /admin/count:
+    get:
+      description: Count
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Count response
+          schema:
+            $ref: '#/definitions/carwise.CountResponse'
+        "400":
+          description: Validation error
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Count
+      tags:
+      - Admin
+  /admin/users:
+    get:
+      description: Get users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Get users response
+          schema:
+            $ref: '#/definitions/carwise.GetUsersResponse'
+        "400":
+          description: Validation error
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get users
+      tags:
+      - Admin
   /auth/forgot-password:
     post:
       consumes:

@@ -121,3 +121,12 @@ func (r *FavoriteRepository) GetFavoritesUsers(listingId string) ([]carwise.User
 	}
 	return users, nil
 }
+
+func (r *FavoriteRepository) CountFavorites() (int, error) {
+	query := `
+		SELECT COUNT(*) FROM favorites
+	`
+	var count int
+	err := r.db.QueryRow(query).Scan(&count)
+	return count, err
+}

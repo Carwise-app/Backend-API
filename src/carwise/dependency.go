@@ -12,6 +12,8 @@ type UserRepository interface {
 	UpdatePassword(email, hashedPassword string) error
 	Update(user *User) error
 	GetAllUsers() ([]User, error)
+	GetUsers(page, limit int) ([]User, error)
+	CountUsers() (int, error)
 }
 
 type RedisRepository interface {
@@ -66,6 +68,7 @@ type ImageRepository interface {
 	SaveImage(file *multipart.FileHeader, userId string) (*Image, error)
 	GetImageById(id string) (*Image, error)
 	DeleteImage(id string) error
+	ImagesCount() (int, error)
 }
 
 type MessageRepository interface {
@@ -75,6 +78,7 @@ type MessageRepository interface {
 	GetChats(userId string, limit, offset int) ([]Chat, error)
 	CountChats(userId string) (int, error)
 	ReadMessage(messageId string) error
+	MessagesCount() (int, error)
 }
 
 type PredictionRepository interface {
@@ -97,12 +101,14 @@ type FavoriteRepository interface {
 	IsFavorite(userId, listingId string) bool
 
 	GetFavoritesUsers(listingId string) ([]User, error)
+	CountFavorites() (int, error)
 }
 
 type PredictRepository interface {
 	SavePredict(predict *Predict) error
 	GetPredictByUserId(userId string, page, limit int) ([]Predict, error)
 	CountPredictByUserId(userId string) (int, error)
+	PredictCount() (int, error)
 }
 
 type OneSignalRepository interface {
@@ -116,6 +122,7 @@ type NotificationRepository interface {
 	ReadNotification(id string, userId string) error
 	DeleteNotification(id string, userId string) error
 	GetUnreadNotificationsCount(userId string) (int, error)
+	NotificationsCount() (int, error)
 }
 
 type Services struct {

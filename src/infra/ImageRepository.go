@@ -115,3 +115,12 @@ func (r *ImageRepository) DeleteImage(id string) error {
 
 	return nil
 }
+
+func (r *ImageRepository) ImagesCount() (int, error) {
+	query := `
+		SELECT COUNT(*) FROM images
+	`
+	var count int
+	err := r.db.QueryRow(query).Scan(&count)
+	return count, err
+}

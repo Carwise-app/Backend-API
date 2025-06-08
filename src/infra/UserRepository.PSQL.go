@@ -238,3 +238,53 @@ func (r *UserRepository) GetAllUsers() ([]carwise.User, error) {
 	}
 	return users, nil
 }
+
+func (r *UserRepository) GetUsers(page, limit int) ([]carwise.User, error) {
+	query := `
+		SELECT 
+			id,
+			google_id,
+			first_name,
+			last_name,
+			image_url,
+			country_code,
+			phone_number,
+			email,
+			role,
+			status,
+			created_at,
+			updated_at,
+			last_login
+		FROM users
+		LIMIT $1 OFFSET $2
+	`
+	rows, err := r.db.Query(query, limit, (page-1)*limit)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get users: %w", err)
+	}
+	defer rows.Close()
+
+	users := []carwise.User{}
+	for rows.Next() {
+		var user carwise.User
+		err := rows.Scan(
+			&user.Id, &user.GoogleId, &user.FirstName, &user.LastName, &user.ImageUrl,
+			&user.CountryCode, &user.PhoneNumber, &user.Email, &user.Role,
+			&user.Status, &user.CreatedAt, &user.UpdatedAt, &user.LastLogin,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan user: %w", err)
+		}
+		users = append(users, user)
+	}
+	return users, nil
+}
+
+func (r *UserRepository) CountUsers() (int, error) {
+	query := `
+		SELECT COUNT(*) FROM users
+	`
+	var count int
+	err := r.db.QueryRow(query).Scan(&count)
+	return count, err
+}

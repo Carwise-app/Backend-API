@@ -4,6 +4,7 @@ import (
 	"carwise"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -237,4 +238,88 @@ func GetUserById(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, user)
+}
+
+// @Summary Count
+// @Description Count
+// @Tags Admin
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} carwise.CountResponse "Count response"
+// @Failure 400 {object} map[string]interface{} "Validation error"
+// @Failure 500 {object} map[string]interface{} "Server error"
+// @Router /admin/count [get]
+func Count(ctx *gin.Context) {
+	var request carwise.CountRequest
+
+	userContext, exists := ctx.Get("user")
+	if !exists {
+		log.Println("No User found in request context")
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
+		return
+	}
+	claim := userContext.(*UserClaims)
+
+	request.UserId = claim.UserId
+	request.Role = claim.Role
+
+	count, errors := interactor.Count(&request)
+	if errors != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": errors,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, count)
+}
+
+// @Summary Get users
+// @Description Get users
+// @Tags Admin
+// @Produce json
+// @Security BearerAuth
+// @Param page query int true "Page number"
+// @Param limit query int true "Limit number"
+// @Success 200 {object} carwise.GetUsersResponse "Get users response"
+// @Failure 400 {object} map[string]interface{} "Validation error"
+// @Failure 500 {object} map[string]interface{} "Server error"
+// @Router /admin/users [get]
+func GetUsers(ctx *gin.Context) {
+	var request carwise.GetUsersRequest
+
+	userContext, exists := ctx.Get("user")
+	if !exists {
+		log.Println("No User found in request context")
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
+		return
+	}
+	claim := userContext.(*UserClaims)
+
+	request.UserId = claim.UserId
+	request.Role = claim.Role
+
+	page, err := strconv.Atoi(ctx.DefaultQuery("page", "1"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid page parameter"})
+		return
+	}
+	request.Page = page
+
+	limit, err := strconv.Atoi(ctx.DefaultQuery("limit", "10"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid limit parameter"})
+		return
+	}
+	request.Limit = limit
+
+	users, errors := interactor.GetUsers(&request)
+	if errors != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": errors.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, users)
 }

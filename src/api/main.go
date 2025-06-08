@@ -36,7 +36,7 @@ import (
 // @contact.email  support@carwise.com
 // @license.name  Apache 2.0
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
-// @host      carwisegw.yusuftalhaklc.com
+// @host      localhost:8080
 // @BasePath  /
 
 func main() {
@@ -171,6 +171,12 @@ func main() {
 		notification.GET("", AuthMiddleware(), GetNotifications)
 		notification.PUT("/:id", AuthMiddleware(), ReadNotification)
 		notification.DELETE("/:id", AuthMiddleware(), DeleteNotification)
+	}
+
+	admin := app.Group("/admin")
+	{
+		admin.GET("/count", AuthMiddleware(), Count)
+		admin.GET("/users", AuthMiddleware(), GetUsers)
 	}
 
 	app.GET("/swagger/*any", ginSwagger.WrapHandler(ginSwaggerFiles.Handler))
