@@ -98,7 +98,7 @@ func (i *Interactor) GetProfileNotify(request GetProfileNotifyRequest) (*GetProf
 }
 
 func (i *Interactor) DeleteAccount(request DeleteAccountRequest) error {
-	if request.Role == 2 || request.UserId == request.ProfileId {
+	if request.Role != 2 || request.UserId != request.ProfileId {
 		return fmt.Errorf("you are not authorized to access this resource")
 	}
 
