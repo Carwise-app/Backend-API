@@ -945,31 +945,6 @@ paths:
       summary: Get users
       tags:
       - Admin
-  /auth/forgot-password:
-    post:
-      consumes:
-      - application/json
-      description: Send password reset email to user
-      parameters:
-      - description: Password reset request
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/carwise.ResetPasswordRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Reset email sent successfully
-        "400":
-          description: Validation error
-          schema:
-            additionalProperties: true
-            type: object
-      summary: Request password reset
-      tags:
-      - Authentication
   /auth/google:
     get:
       description: Redirect to Google OAuth login page
@@ -1137,6 +1112,30 @@ paths:
       - Authentication
   /auth/reset-password:
     post:
+      consumes:
+      - application/json
+      description: Send password reset email to user
+      parameters:
+      - description: Password reset request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.ResetPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Reset email sent successfully
+        "400":
+          description: Validation error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Request password reset
+      tags:
+      - Authentication
+    put:
       consumes:
       - application/json
       description: Reset user password using token and email

@@ -142,7 +142,7 @@ func Logout(ctx *gin.Context) {
 // @Param request body carwise.ResetPasswordRequest true "Password reset request"
 // @Success 200 "Reset email sent successfully"
 // @Failure 400 {object} map[string]interface{} "Validation error"
-// @Router /auth/forgot-password [post]
+// @Router /auth/reset-password [post]
 func ForgotPassword(ctx *gin.Context) {
 	var request carwise.ResetPasswordRequest
 
@@ -181,7 +181,7 @@ func ForgotPassword(ctx *gin.Context) {
 // @Param request body carwise.ChangePasswordRequest true "New password request"
 // @Success 200 "Password reset successful"
 // @Failure 400 {object} map[string]interface{} "Validation error"
-// @Router /auth/reset-password [post]
+// @Router /auth/reset-password [put]
 func ResetPassword(ctx *gin.Context) {
 	var request carwise.ChangePasswordRequest
 

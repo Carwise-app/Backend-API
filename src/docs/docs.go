@@ -117,44 +117,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/auth/forgot-password": {
-            "post": {
-                "description": "Send password reset email to user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Authentication"
-                ],
-                "summary": "Request password reset",
-                "parameters": [
-                    {
-                        "description": "Password reset request",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/carwise.ResetPasswordRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Reset email sent successfully"
-                    },
-                    "400": {
-                        "description": "Validation error",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": true
-                        }
-                    }
-                }
-            }
-        },
         "/auth/google": {
             "get": {
                 "description": "Redirect to Google OAuth login page",
@@ -404,7 +366,7 @@ const docTemplate = `{
             }
         },
         "/auth/reset-password": {
-            "post": {
+            "put": {
                 "description": "Reset user password using token and email",
                 "consumes": [
                     "application/json"
@@ -444,6 +406,42 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "Password reset successful"
+                    },
+                    "400": {
+                        "description": "Validation error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Send password reset email to user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Request password reset",
+                "parameters": [
+                    {
+                        "description": "Password reset request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/carwise.ResetPasswordRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reset email sent successfully"
                     },
                     "400": {
                         "description": "Validation error",
