@@ -156,21 +156,30 @@ type ListListingResponse struct {
 // @model ListListingInfo
 // @Description Information about a listing
 type ListListingInfo struct {
-	Id           string `json:"id"`
-	Slug         string `json:"slug"`
-	Status       int    `json:"status"`
-	Brand        Brand  `json:"brand"`
-	Series       Series `json:"series"`
-	Model        Model  `json:"model"`
-	Title        string `json:"title"`
-	Currency     string `json:"currency"`
-	Price        int    `json:"price"`
-	City         string `json:"city"`
-	District     string `json:"district"`
-	Neighborhood string `json:"neighborhood"`
-	IsFavorite   bool   `json:"is_favorite"`
-	Image        Image  `json:"image"`
-	CreatedAt    int64  `json:"created_at"`
+	Id               string `json:"id"`
+	Slug             string `json:"slug"`
+	Status           int    `json:"status"`
+	Brand            Brand  `json:"brand"`
+	Series           Series `json:"series"`
+	Model            Model  `json:"model"`
+	Title            string `json:"title"`
+	Currency         string `json:"currency"`
+	Price            int    `json:"price"`
+	City             string `json:"city"`
+	District         string `json:"district"`
+	Neighborhood     string `json:"neighborhood"`
+	IsFavorite       bool   `json:"is_favorite"`
+	Image            Image  `json:"image"`
+	Year             int    `json:"year"`
+	Color            string `json:"color"`
+	Kilometers       int    `json:"kilometers"`
+	EnginePower      int    `json:"engine_power"`
+	EngineVolume     int    `json:"engine_volume"`
+	FuelType         string `json:"fuel_type"`
+	TransmissionType string `json:"transmission_type"`
+	BodyType         string `json:"body_type"`
+	DriveType        string `json:"drive_type"`
+	CreatedAt        int64  `json:"created_at"`
 }
 
 // @model IdResponse
