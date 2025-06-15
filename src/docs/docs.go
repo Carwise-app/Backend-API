@@ -3164,10 +3164,16 @@ const docTemplate = `{
             "description": "Information about a listing",
             "type": "object",
             "properties": {
+                "body_type": {
+                    "type": "string"
+                },
                 "brand": {
                     "$ref": "#/definitions/carwise.Brand"
                 },
                 "city": {
+                    "type": "string"
+                },
+                "color": {
                     "type": "string"
                 },
                 "created_at": {
@@ -3179,6 +3185,18 @@ const docTemplate = `{
                 "district": {
                     "type": "string"
                 },
+                "drive_type": {
+                    "type": "string"
+                },
+                "engine_power": {
+                    "type": "integer"
+                },
+                "engine_volume": {
+                    "type": "integer"
+                },
+                "fuel_type": {
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -3187,6 +3205,9 @@ const docTemplate = `{
                 },
                 "is_favorite": {
                     "type": "boolean"
+                },
+                "kilometers": {
+                    "type": "integer"
                 },
                 "model": {
                     "$ref": "#/definitions/carwise.Model"
@@ -3208,6 +3229,12 @@ const docTemplate = `{
                 },
                 "title": {
                     "type": "string"
+                },
+                "transmission_type": {
+                    "type": "string"
+                },
+                "year": {
+                    "type": "integer"
                 }
             }
         },

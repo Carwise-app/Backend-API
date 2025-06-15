@@ -268,9 +268,13 @@ definitions:
   carwise.ListListingInfo:
     description: Information about a listing
     properties:
+      body_type:
+        type: string
       brand:
         $ref: '#/definitions/carwise.Brand'
       city:
+        type: string
+      color:
         type: string
       created_at:
         type: integer
@@ -278,12 +282,22 @@ definitions:
         type: string
       district:
         type: string
+      drive_type:
+        type: string
+      engine_power:
+        type: integer
+      engine_volume:
+        type: integer
+      fuel_type:
+        type: string
       id:
         type: string
       image:
         $ref: '#/definitions/carwise.Image'
       is_favorite:
         type: boolean
+      kilometers:
+        type: integer
       model:
         $ref: '#/definitions/carwise.Model'
       neighborhood:
@@ -298,6 +312,10 @@ definitions:
         type: integer
       title:
         type: string
+      transmission_type:
+        type: string
+      year:
+        type: integer
     type: object
   carwise.ListListingResponse:
     description: Response body for listing listings
