@@ -14,7 +14,7 @@ import (
 // @Produce json
 // @Success 200 {object} []carwise.BrandWithDetails
 // @Failure 500 {object} map[string]string
-// @Router /brands [get]
+// @Router /brand [get]
 func GetAllBrands(ctx *gin.Context) {
 	brands, err := interactor.GetAllBrandsWithDetails()
 	if err != nil {

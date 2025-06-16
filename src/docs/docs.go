@@ -453,7 +453,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/brands": {
+        "/brand": {
             "get": {
                 "description": "Retrieve all brands with their associated details",
                 "consumes": [
@@ -486,7 +486,9 @@ const docTemplate = `{
                         }
                     }
                 }
-            },
+            }
+        },
+        "/brands": {
             "post": {
                 "security": [
                     {

@@ -1187,7 +1187,7 @@ paths:
       summary: Reset password
       tags:
       - Authentication
-  /brands:
+  /brand:
     get:
       consumes:
       - application/json
@@ -1210,6 +1210,7 @@ paths:
       summary: Get all brands with details
       tags:
       - Brands - Series - Models
+  /brands:
     post:
       consumes:
       - application/json

@@ -117,7 +117,7 @@ func main() {
 		brand.POST("/", AuthMiddleware(), CreateBrand)
 		brand.PUT("/:id", AuthMiddleware(), UpdateBrand)
 		brand.DELETE("/:id", AuthMiddleware(), DeleteBrand)
-		brand.GET("/", AuthMiddleware(), GetAllBrands)
+		brand.GET("/", OptionalAuthMiddleware(), GetAllBrands)
 
 		brand.POST("/:id/series", AuthMiddleware(), CreateSeries)
 		brand.PUT("/:id/series/:sid", AuthMiddleware(), UpdateSeries)
