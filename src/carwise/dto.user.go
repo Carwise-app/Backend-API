@@ -101,3 +101,12 @@ type GetUsersResponse struct {
 	Users []User `json:"users"`
 	Total int    `json:"total" example:"100"`
 }
+
+// @model UpdateUserRoleRequest
+// @Description Update user role request
+type UpdateUserRoleRequest struct {
+	UserId      string `json:"user_id" validate:"required" example:"123e4567-e89b-12d3-a456-426614174000"`
+	Role        int    `json:"role" validate:"required,min=1,max=2" example:"2"`
+	AdminUserId string `json:"-"`
+	AdminRole   int    `json:"-"`
+}

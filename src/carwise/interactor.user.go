@@ -204,3 +204,34 @@ func generateToken(size int) (string, error) {
 	return hex.EncodeToString(buf), nil
 
 }
+
+func (i *Interactor) UpdateUserRole(request UpdateUserRoleRequest) []string {
+	// Check if the requesting user is an admin (role = 2)
+	if request.AdminRole != 2 {
+		return []string{"Only admin users can update user roles"}
+	}
+
+	// Validate role value
+	if request.Role < 1 || request.Role > 2 {
+		return []string{"Invalid role value. Role must be 1 (normal user) or 2 (admin)"}
+	}
+
+	// Check if the user exists
+	_, err := i.services.UserRepo.GetByID(request.UserId)
+	if err != nil {
+		return []string{"User not found"}
+	}
+
+	// Prevent admin from changing their own role
+	if request.UserId == request.AdminUserId {
+		return []string{"Cannot change your own role"}
+	}
+
+	// Update the user's role
+	err = i.services.UserRepo.UpdateUserRole(request.UserId, request.Role)
+	if err != nil {
+		return []string{"Failed to update user role: " + err.Error()}
+	}
+
+	return nil
+}

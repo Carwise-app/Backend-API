@@ -775,6 +775,21 @@ definitions:
     required:
     - status
     type: object
+  carwise.UpdateUserRoleRequest:
+    description: Update user role request
+    properties:
+      role:
+        example: 2
+        maximum: 2
+        minimum: 1
+        type: integer
+      user_id:
+        example: 123e4567-e89b-12d3-a456-426614174000
+        type: string
+    required:
+    - role
+    - user_id
+    type: object
   carwise.User:
     properties:
       country_code:
@@ -925,6 +940,53 @@ paths:
       security:
       - BearerAuth: []
       summary: Count
+      tags:
+      - Admin
+  /admin/update-user-role:
+    put:
+      consumes:
+      - application/json
+      description: Update user role (admin only)
+      parameters:
+      - description: Update user role request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/carwise.UpdateUserRoleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User role updated successfully" example:{"message":"User role
+            updated successfully"}
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Validation error" example:{"error":"Invalid role value"}
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized" example:{"error":"No User found in request context"}
+          schema:
+            additionalProperties: true
+            type: object
+        "403":
+          description: Forbidden" example:{"error":"Only admin users can update user
+            roles"}
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error" example:{"error":"Internal server error"}
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update user role
       tags:
       - Admin
   /admin/users:

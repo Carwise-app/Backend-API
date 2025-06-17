@@ -56,6 +56,74 @@
                 }
             }
         },
+        "/admin/update-user-role": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Update user role (admin only)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Update user role",
+                "parameters": [
+                    {
+                        "description": "Update user role request",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/carwise.UpdateUserRoleRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User role updated successfully\" example:{\"message\":\"User role updated successfully\"}",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "Validation error\" example:{\"error\":\"Invalid role value\"}",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized\" example:{\"error\":\"No User found in request context\"}",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden\" example:{\"error\":\"Only admin users can update user roles\"}",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "Server error\" example:{\"error\":\"Internal server error\"}",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/admin/users": {
             "get": {
                 "security": [
@@ -3955,6 +4023,26 @@
                     "type": "integer",
                     "maximum": 3,
                     "minimum": 1
+                }
+            }
+        },
+        "carwise.UpdateUserRoleRequest": {
+            "description": "Update user role request",
+            "type": "object",
+            "required": [
+                "role",
+                "user_id"
+            ],
+            "properties": {
+                "role": {
+                    "type": "integer",
+                    "maximum": 2,
+                    "minimum": 1,
+                    "example": 2
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
                 }
             }
         },

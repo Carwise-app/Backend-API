@@ -11,6 +11,7 @@ type UserRepository interface {
 	GetByEmail(email string) (*User, error)
 	UpdatePassword(email, hashedPassword string) error
 	Update(user *User) error
+	UpdateUserRole(userId string, role int) error
 	GetAllUsers() ([]User, error)
 	GetUsers(page, limit int) ([]User, error)
 	CountUsers() (int, error)

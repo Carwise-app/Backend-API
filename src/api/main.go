@@ -180,6 +180,7 @@ func main() {
 	{
 		admin.GET("/count", AuthMiddleware(), Count)
 		admin.GET("/users", AuthMiddleware(), GetUsers)
+		admin.PUT("/update-user-role", AuthMiddleware(), UpdateUserRole)
 	}
 
 	app.GET("/swagger/*any", ginSwagger.WrapHandler(ginSwaggerFiles.Handler))

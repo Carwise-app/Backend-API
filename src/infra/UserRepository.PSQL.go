@@ -349,3 +349,28 @@ func (r *UserRepository) DeleteUser(id string) error {
 
 	return nil
 }
+
+func (r *UserRepository) UpdateUserRole(userId string, role int) error {
+	query := `
+		UPDATE users 
+		SET 
+			role = $1,
+			updated_at = $2
+		WHERE id = $3`
+
+	result, err := r.db.Exec(query, role, time.Now().Unix(), userId)
+	if err != nil {
+		return fmt.Errorf("failed to update user role: %w", err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("failed to check rows affected: %w", err)
+	}
+
+	if rowsAffected == 0 {
+		return errors.New("no user found with the provided ID")
+	}
+
+	return nil
+}

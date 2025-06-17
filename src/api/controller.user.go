@@ -364,3 +364,59 @@ func DeleteUser(ctx *gin.Context) {
 
 	ctx.Status(http.StatusOK)
 }
+
+// @Summary Update user role
+// @Description Update user role (admin only)
+// @Tags Admin
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Param request body carwise.UpdateUserRoleRequest true "Update user role request"
+// @Success 200 {object} map[string]interface{} "User role updated successfully" example:{"message":"User role updated successfully"}
+// @Failure 400 {object} map[string]interface{} "Validation error" example:{"error":"Invalid role value"}
+// @Failure 401 {object} map[string]interface{} "Unauthorized" example:{"error":"No User found in request context"}
+// @Failure 403 {object} map[string]interface{} "Forbidden" example:{"error":"Only admin users can update user roles"}
+// @Failure 500 {object} map[string]interface{} "Server error" example:{"error":"Internal server error"}
+// @Router /admin/update-user-role [put]
+func UpdateUserRole(ctx *gin.Context) {
+	userContext, exists := ctx.Get("user")
+	if !exists {
+		log.Println("No User found in request context")
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
+		return
+	}
+	claim := userContext.(*UserClaims)
+
+	var request carwise.UpdateUserRoleRequest
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		log.Println("Error binding JSON:", err.Error())
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Set admin information from JWT claims
+	request.AdminUserId = claim.UserId
+	request.AdminRole = claim.Role
+
+	// Validate request structure
+	errors := ValidateStruct(request)
+	if errors != nil {
+		log.Println("Validation errors:", errors)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": errors,
+		})
+		return
+	}
+
+	// Call interactor to update user role
+	errors = interactor.UpdateUserRole(request)
+	if errors != nil {
+		log.Println("Error updating user role:", errors)
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": errors,
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "User role updated successfully"})
+}
