@@ -162,3 +162,61 @@ func DeleteNotification(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "Notification deleted successfully"})
 }
+
+// @Summary Mark All Notifications as Read
+// @Description Mark All Notifications as Read
+// @Tags Notification
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} map[string]interface{} "Mark All as Read Response" example:{"message":"All notifications marked as read successfully"}
+// @Failure 401 {object} map[string]interface{} "Unauthorized" example:{"error":"No User found in request context"}
+// @Failure 500 {object} map[string]interface{} "Internal Server Error" example:{"error":"Internal server error"}
+// @Router /notification/mark-all-read [put]
+func MarkAllNotificationsAsRead(c *gin.Context) {
+	userContext, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
+		return
+	}
+	claim := userContext.(*UserClaims)
+
+	var request carwise.MarkAllAsReadRequest
+	request.UserId = claim.UserId
+
+	err := interactor.MarkAllAsRead(&request)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "All notifications marked as read successfully"})
+}
+
+// @Summary Delete All Notifications
+// @Description Delete All Notifications
+// @Tags Notification
+// @Accept json
+// @Produce json
+// @Security BearerAuth
+// @Success 200 {object} map[string]interface{} "Delete All Notifications Response" example:{"message":"All notifications deleted successfully"}
+// @Failure 401 {object} map[string]interface{} "Unauthorized" example:{"error":"No User found in request context"}
+// @Failure 500 {object} map[string]interface{} "Internal Server Error" example:{"error":"Internal server error"}
+// @Router /notification/delete-all [delete]
+func DeleteAllNotifications(c *gin.Context) {
+	userContext, exists := c.Get("user")
+	if !exists {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
+		return
+	}
+	claim := userContext.(*UserClaims)
+
+	var request carwise.DeleteAllNotificationsRequest
+	request.UserId = claim.UserId
+
+	err := interactor.DeleteAllNotifications(&request)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "All notifications deleted successfully"})
+}

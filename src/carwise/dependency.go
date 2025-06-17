@@ -124,6 +124,8 @@ type NotificationRepository interface {
 	DeleteNotification(id string, userId string) error
 	GetUnreadNotificationsCount(userId string) (int, error)
 	NotificationsCount() (int, error)
+	MarkAllAsReadByUserId(userId string) error
+	DeleteAllByUserId(userId string) error
 }
 
 type Services struct {

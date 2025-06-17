@@ -153,3 +153,29 @@ func (r *NotificationRepository) NotificationsCount() (int, error) {
 
 	return count, nil
 }
+
+func (r *NotificationRepository) MarkAllAsReadByUserId(userId string) error {
+	query := `
+	UPDATE notifications SET read = true WHERE created_by = $1 AND read = false
+	`
+
+	_, err := r.db.Exec(query, userId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *NotificationRepository) DeleteAllByUserId(userId string) error {
+	query := `
+	DELETE FROM notifications WHERE created_by = $1
+	`
+
+	_, err := r.db.Exec(query, userId)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

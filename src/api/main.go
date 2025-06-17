@@ -172,6 +172,8 @@ func main() {
 		notification.GET("", AuthMiddleware(), GetNotifications)
 		notification.PUT("/:id", AuthMiddleware(), ReadNotification)
 		notification.DELETE("/:id", AuthMiddleware(), DeleteNotification)
+		notification.PUT("/mark-all-read", AuthMiddleware(), MarkAllNotificationsAsRead)
+		notification.DELETE("/delete-all", AuthMiddleware(), DeleteAllNotifications)
 	}
 
 	admin := app.Group("/admin")

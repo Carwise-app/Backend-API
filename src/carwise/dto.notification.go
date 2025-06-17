@@ -21,3 +21,11 @@ type ReadNotificationRequest struct {
 	NotificationId string
 	UserId         string
 }
+
+type MarkAllAsReadRequest struct {
+	UserId string
+}
+
+type DeleteAllNotificationsRequest struct {
+	UserId string
+}

@@ -109,3 +109,11 @@ func (i *Interactor) PushNotificationToAll(request *PushNotificationRequest) err
 	}
 	return err
 }
+
+func (i *Interactor) MarkAllAsRead(request *MarkAllAsReadRequest) error {
+	return i.services.NotificationRepo.MarkAllAsReadByUserId(request.UserId)
+}
+
+func (i *Interactor) DeleteAllNotifications(request *DeleteAllNotificationsRequest) error {
+	return i.services.NotificationRepo.DeleteAllByUserId(request.UserId)
+}
