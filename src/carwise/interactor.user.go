@@ -123,7 +123,7 @@ func (i *Interactor) ResetPasswordRequest(request ResetPasswordRequest) []string
 		fmt.Printf("Failed to save reset code: %v\n", err)
 	}
 
-	resetLink := fmt.Sprintf("https://carwisegw.yusuftalhaklc.com/auth/reset-password?token=%s&email=%s", token, request.Email)
+	resetLink := fmt.Sprintf("https://carwise.yusuftalhaklc.com/kokpit/reset-password?token=%s&email=%s", token, request.Email)
 	err = i.services.MailGW.SendEmail(request.Email, "Password Reset Request", "reset_password.html", map[string]interface{}{
 		"title":   "Şifre Sıfırlama İsteği",
 		"message": "Hesabınızla ilişkili şifreyi sıfırlama talebi aldık. Eğer bu talebi siz yaptıysanız, şifrenizi sıfırlamak için aşağıdaki bağlantıya tıklayın:",
