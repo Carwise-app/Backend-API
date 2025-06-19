@@ -107,7 +107,7 @@ func main() {
 	{
 		profile.GET("/", AuthMiddleware(), Profile)
 		profile.PUT("/edit", AuthMiddleware(), ProfileEdit)
-		profile.PATCH("/notify", AuthMiddleware(), ProfileNotify)
+		profile.PUT("/notify", AuthMiddleware(), ProfileNotify)
 		profile.GET("/notify", AuthMiddleware(), GetProfileNotify)
 		profile.DELETE("/:id", AuthMiddleware(), DeleteUser)
 	}
