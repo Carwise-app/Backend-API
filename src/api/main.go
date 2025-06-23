@@ -84,7 +84,7 @@ func main() {
 		c.Redirect(http.StatusMovedPermanently, "/swagger/index.html")
 	})
 
-	app.GET("/user/:id", AuthMiddleware(), GetUserById)
+	app.GET("/user/:id", AuthMiddleware, GetUserById)
 
 	auth := app.Group("/auth")
 	{
@@ -105,82 +105,82 @@ func main() {
 
 	profile := app.Group("/profile")
 	{
-		profile.GET("/", AuthMiddleware(), Profile)
-		profile.PUT("/edit", AuthMiddleware(), ProfileEdit)
-		profile.PUT("/notify", AuthMiddleware(), ProfileNotify)
-		profile.GET("/notify", AuthMiddleware(), GetProfileNotify)
-		profile.DELETE("/:id", AuthMiddleware(), DeleteUser)
+		profile.GET("/", AuthMiddleware, Profile)
+		profile.PUT("/edit", AuthMiddleware, ProfileEdit)
+		profile.PUT("/notify", AuthMiddleware, ProfileNotify)
+		profile.GET("/notify", AuthMiddleware, GetProfileNotify)
+		profile.DELETE("/:id", AuthMiddleware, DeleteUser)
 	}
 
 	brand := app.Group("/brand")
 	{
-		brand.POST("/", AuthMiddleware(), CreateBrand)
-		brand.PUT("/:id", AuthMiddleware(), UpdateBrand)
-		brand.DELETE("/:id", AuthMiddleware(), DeleteBrand)
-		brand.GET("/", OptionalAuthMiddleware(), GetAllBrands)
+		brand.POST("/", AuthMiddleware, CreateBrand)
+		brand.PUT("/:id", AuthMiddleware, UpdateBrand)
+		brand.DELETE("/:id", AuthMiddleware, DeleteBrand)
+		brand.GET("/", OptionalAuthMiddleware, GetAllBrands)
 
-		brand.POST("/:id/series", AuthMiddleware(), CreateSeries)
-		brand.PUT("/:id/series/:sid", AuthMiddleware(), UpdateSeries)
-		brand.DELETE("/:id/series/:sid", AuthMiddleware(), DeleteSeries)
+		brand.POST("/:id/series", AuthMiddleware, CreateSeries)
+		brand.PUT("/:id/series/:sid", AuthMiddleware, UpdateSeries)
+		brand.DELETE("/:id/series/:sid", AuthMiddleware, DeleteSeries)
 
-		brand.POST("/:id/series/:sid/model", AuthMiddleware(), CreateModel)
-		brand.PUT("/:id/series/:sid/model/:mid", AuthMiddleware(), UpdateModel)
-		brand.DELETE("/:id/series/:sid/model/:mid", AuthMiddleware(), DeleteModel)
+		brand.POST("/:id/series/:sid/model", AuthMiddleware, CreateModel)
+		brand.PUT("/:id/series/:sid/model/:mid", AuthMiddleware, UpdateModel)
+		brand.DELETE("/:id/series/:sid/model/:mid", AuthMiddleware, DeleteModel)
 	}
 
 	listing := app.Group("/listing")
 	{
-		listing.POST("/", AuthMiddleware(), CreateListing)
-		listing.GET("/:id", OptionalAuthMiddleware(), GetListing)
-		listing.PUT("/:id", AuthMiddleware(), UpdateListing)
-		listing.DELETE("/:id", AuthMiddleware(), DeleteListing)
-		listing.PATCH("/:id/status", AuthMiddleware(), UpdateListingStatus)
-		listing.GET("/", OptionalAuthMiddleware(), ListListing)
+		listing.POST("/", AuthMiddleware, CreateListing)
+		listing.GET("/:id", OptionalAuthMiddleware, GetListing)
+		listing.PUT("/:id", AuthMiddleware, UpdateListing)
+		listing.DELETE("/:id", AuthMiddleware, DeleteListing)
+		listing.PATCH("/:id/status", AuthMiddleware, UpdateListingStatus)
+		listing.GET("/", OptionalAuthMiddleware, ListListing)
 	}
 
 	upload := app.Group("/upload")
 	{
-		upload.POST("", AuthMiddleware(), UploadImage)
-		upload.DELETE("/:id", AuthMiddleware(), DeleteImage)
-		upload.GET("/:id/predict", AuthMiddleware(), PredictImage)
+		upload.POST("", AuthMiddleware, UploadImage)
+		upload.DELETE("/:id", AuthMiddleware, DeleteImage)
+		upload.GET("/:id/predict", AuthMiddleware, PredictImage)
 	}
 
 	chat := app.Group("/chat")
 	{
-		chat.GET("/", AuthMiddleware(), GetChats)
-		chat.POST("/:listing_id/:receiver_id", AuthMiddleware(), SendMessage)
-		chat.GET("/:listing_id/:receiver_id", AuthMiddleware(), GetMessages)
-		chat.GET("/ws/:listing_id/:receiver_id", WebSocketAuthMiddleware(), WebSocketHandler)
+		chat.GET("/", AuthMiddleware, GetChats)
+		chat.POST("/:listing_id/:receiver_id", AuthMiddleware, SendMessage)
+		chat.GET("/:listing_id/:receiver_id", AuthMiddleware, GetMessages)
+		chat.GET("/ws/:listing_id/:receiver_id", WebSocketAuthMiddleware, WebSocketHandler)
 	}
 
 	favorite := app.Group("/favorite")
 	{
-		favorite.POST("/:listing_id", AuthMiddleware(), CreateFavorite)
-		favorite.DELETE("/:listing_id", AuthMiddleware(), DeleteFavorite)
-		favorite.GET("/", AuthMiddleware(), GetFavorites)
+		favorite.POST("/:listing_id", AuthMiddleware, CreateFavorite)
+		favorite.DELETE("/:listing_id", AuthMiddleware, DeleteFavorite)
+		favorite.GET("/", AuthMiddleware, GetFavorites)
 	}
 
 	predict := app.Group("/predict")
 	{
-		predict.POST("/", OptionalAuthMiddleware(), CreatePredict)
-		predict.GET("/", AuthMiddleware(), GetPredicts)
+		predict.POST("/", OptionalAuthMiddleware, CreatePredict)
+		predict.GET("/", AuthMiddleware, GetPredicts)
 	}
 
 	notification := app.Group("/notification")
 	{
-		notification.POST("/push", AuthMiddleware(), PushNotification)
-		notification.GET("", AuthMiddleware(), GetNotifications)
-		notification.PUT("/:id", AuthMiddleware(), ReadNotification)
-		notification.DELETE("/:id", AuthMiddleware(), DeleteNotification)
-		notification.PUT("/mark-all-read", AuthMiddleware(), MarkAllNotificationsAsRead)
-		notification.DELETE("/delete-all", AuthMiddleware(), DeleteAllNotifications)
+		notification.POST("/push", AuthMiddleware, PushNotification)
+		notification.GET("", AuthMiddleware, GetNotifications)
+		notification.PUT("/:id", AuthMiddleware, ReadNotification)
+		notification.DELETE("/:id", AuthMiddleware, DeleteNotification)
+		notification.PUT("/mark-all-read", AuthMiddleware, MarkAllNotificationsAsRead)
+		notification.DELETE("/delete-all", AuthMiddleware, DeleteAllNotifications)
 	}
 
 	admin := app.Group("/admin")
 	{
-		admin.GET("/count", AuthMiddleware(), Count)
-		admin.GET("/users", AuthMiddleware(), GetUsers)
-		admin.PUT("/update-user-role", AuthMiddleware(), UpdateUserRole)
+		admin.GET("/count", AuthMiddleware, Count)
+		admin.GET("/users", AuthMiddleware, GetUsers)
+		admin.PUT("/update-user-role", AuthMiddleware, UpdateUserRole)
 	}
 
 	app.GET("/swagger/*any", ginSwagger.WrapHandler(ginSwaggerFiles.Handler))
