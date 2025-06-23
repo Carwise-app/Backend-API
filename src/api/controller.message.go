@@ -25,12 +25,7 @@ import (
 // @Failure 500 {object} ErrorResponse "Internal server error"
 // @Router /chat/{receiver_id} [post]
 func SendMessage(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.SendMessageRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {
@@ -68,12 +63,7 @@ func SendMessage(ctx *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Internal server error"
 // @Router /chat/{receiver_id} [get]
 func GetMessages(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.GetMessagesRequest
 
@@ -108,12 +98,7 @@ func GetMessages(ctx *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Internal server error"
 // @Router /chat [get]
 func GetChats(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.GetChatsRequest
 	request.Limit, _ = strconv.Atoi(ctx.DefaultQuery("limit", "10"))

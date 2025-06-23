@@ -37,12 +37,7 @@ func GetAllBrands(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string
 // @Router /brands [post]
 func CreateBrand(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.BrandCreateRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {
@@ -75,12 +70,7 @@ func CreateBrand(ctx *gin.Context) {
 // @Failure 500 {object} map[string]string
 // @Router /brands/{id} [put]
 func UpdateBrand(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.BrandUpdateRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {
@@ -113,12 +103,7 @@ func UpdateBrand(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string
 // @Router /brands/{id} [delete]
 func DeleteBrand(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.BrandDeleteRequest
 	request.UserId = claim.UserId
@@ -149,12 +134,7 @@ func DeleteBrand(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string
 // @Router /brands/{id}/series [post]
 func CreateSeries(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.SeriesCreateRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {
@@ -190,12 +170,7 @@ func CreateSeries(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string
 // @Router /brands/{id}/series/{sid} [put]
 func UpdateSeries(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.SeriesUpdateRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {
@@ -232,12 +207,7 @@ func UpdateSeries(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string
 // @Router /brands/{id}/series/{sid} [delete]
 func DeleteSeries(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.SeriesDeleteRequest
 	request.UserId = claim.UserId
@@ -272,12 +242,7 @@ func DeleteSeries(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string
 // @Router /brands/{id}/series/{sid}/models [post]
 func CreateModel(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.ModelCreateRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {
@@ -317,12 +282,7 @@ func CreateModel(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string
 // @Router /brands/{id}/series/{sid}/models/{mid} [put]
 func UpdateModel(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.ModelUpdateRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {
@@ -360,12 +320,7 @@ func UpdateModel(ctx *gin.Context) {
 // @Failure 401 {object} map[string]string
 // @Router /brands/{id}/series/{sid}/models/{mid} [delete]
 func DeleteModel(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.ModelDeleteRequest
 	request.UserId = claim.UserId

@@ -20,12 +20,7 @@ import (
 // @Failure 400 {object} ErrorResponse "Invalid request"
 // @Router /favorite/{listing_id} [post]
 func CreateFavorite(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.FavoriteRequest
 	request.UserId = claim.UserId
@@ -55,12 +50,7 @@ func CreateFavorite(ctx *gin.Context) {
 // @Failure 400 {object} ErrorResponse "Invalid request"
 // @Router /favorite/{listing_id} [delete]
 func DeleteFavorite(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.DeleteFavoriteRequest
 	request.UserId = claim.UserId
@@ -89,12 +79,7 @@ func DeleteFavorite(ctx *gin.Context) {
 // @Failure 400 {object} ErrorResponse "Invalid request"
 // @Router /favorite [get]
 func GetFavorites(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.GetFavoritesRequest
 	request.UserId = claim.UserId

@@ -202,3 +202,7 @@ func OptionalAuthMiddleware(ctx *gin.Context) {
 	ctx.Next()
 
 }
+
+func GetUserClaims(ctx *gin.Context) *UserClaims {
+	return ctx.MustGet("user").(*UserClaims)
+}
