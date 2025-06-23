@@ -23,12 +23,7 @@ import (
 // @Failure 401 {object} ErrorResponse "Unauthorized"
 // @Router /listing [post]
 func CreateListing(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.CreateListingRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {
@@ -357,12 +352,7 @@ func ListListing(ctx *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Internal server error"
 // @Router /listing/{id} [put]
 func UpdateListing(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.UpdateListingRequest
 	request.UserId = claim.UserId
@@ -400,12 +390,7 @@ func UpdateListing(ctx *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Internal server error"
 // @Router /listing/{id} [delete]
 func DeleteListing(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.DeleteListingRequest
 	request.UserId = claim.UserId
@@ -439,12 +424,7 @@ func DeleteListing(ctx *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Internal server error"
 // @Router /listing/{id}/status [patch]
 func UpdateListingStatus(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.UpdateListingStatusRequest
 	request.UserId = claim.UserId

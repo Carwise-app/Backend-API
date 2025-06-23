@@ -20,13 +20,7 @@ import (
 // @Failure 401 {object} ErrorResponse "Unauthorized"
 // @Router /upload/ [post]
 func UploadImage(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		log.Println("No User found in request context")
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.UploadImageRequest
 	file, err := ctx.FormFile("file")
@@ -61,12 +55,7 @@ func UploadImage(ctx *gin.Context) {
 // @Failure 401 {object} ErrorResponse "Unauthorized"
 // @Router /upload/{id} [delete]
 func DeleteImage(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	id := ctx.Param("id")
 	if id == "" {
@@ -99,12 +88,7 @@ func DeleteImage(ctx *gin.Context) {
 // @Failure 401 {object} ErrorResponse "Unauthorized"
 // @Router /upload/{id}/predict [get]
 func PredictImage(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.PredictImageRequest
 	request.ImageId = ctx.Param("id")

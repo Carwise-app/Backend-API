@@ -21,11 +21,8 @@ import (
 // @Router /predict [post]
 func CreatePredict(c *gin.Context) {
 	var request carwise.PredictRequest
-	userContext, exists := c.Get("user")
-	if exists {
-		claim := userContext.(*UserClaims)
-		request.UserId = claim.UserId
-	}
+	claim := GetUserClaims(c)
+	request.UserId = claim.UserId
 
 	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -53,12 +50,7 @@ func CreatePredict(c *gin.Context) {
 // @Failure 500 {object} ErrorResponse "Server error"
 // @Router /predict [get]
 func GetPredicts(c *gin.Context) {
-	userContext, exists := c.Get("user")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(c)
 
 	var request carwise.GetPredictsRequest
 	request.UserId = claim.UserId

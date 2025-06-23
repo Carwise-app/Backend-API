@@ -252,13 +252,7 @@ func GetUserById(ctx *gin.Context) {
 func Count(ctx *gin.Context) {
 	var request carwise.CountRequest
 
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		log.Println("No User found in request context")
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	request.UserId = claim.UserId
 	request.Role = claim.Role
@@ -289,13 +283,7 @@ func Count(ctx *gin.Context) {
 func GetUsers(ctx *gin.Context) {
 	var request carwise.GetUsersRequest
 
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		log.Println("No User found in request context")
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	request.UserId = claim.UserId
 	request.Role = claim.Role
@@ -341,13 +329,7 @@ func GetUsers(ctx *gin.Context) {
 func DeleteUser(ctx *gin.Context) {
 	var request carwise.DeleteAccountRequest
 
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		log.Println("No User found in request context")
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	request.UserId = claim.UserId
 	request.Role = claim.Role
@@ -379,13 +361,7 @@ func DeleteUser(ctx *gin.Context) {
 // @Failure 500 {object} map[string]interface{} "Server error" example:{"error":"Internal server error"}
 // @Router /admin/update-user-role [put]
 func UpdateUserRole(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		log.Println("No User found in request context")
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.UpdateUserRoleRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {

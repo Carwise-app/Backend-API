@@ -22,12 +22,7 @@ import (
 // @Failure 500 {object} map[string]interface{} "Internal Server Error" example:{"error":"Internal server error"}
 // @Router /notification/push [post]
 func PushNotification(c *gin.Context) {
-	userContext, exists := c.Get("user")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(c)
 
 	var request carwise.PushNotificationRequest
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -59,12 +54,7 @@ func PushNotification(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{} "Internal Server Error" example:{"error":"Internal server error"}
 // @Router /notification [get]
 func GetNotifications(c *gin.Context) {
-	userContext, exists := c.Get("user")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(c)
 
 	var request carwise.GetNotificationsRequest
 
@@ -108,12 +98,7 @@ func GetNotifications(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{} "Internal Server Error" example:{"error":"Internal server error"}
 // @Router /notification/{notificationId} [put]
 func ReadNotification(c *gin.Context) {
-	userContext, exists := c.Get("user")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(c)
 
 	var request carwise.ReadNotificationRequest
 	request.UserId = claim.UserId
@@ -142,12 +127,7 @@ func ReadNotification(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{} "Internal Server Error" example:{"error":"Internal server error"}
 // @Router /notification/{notificationId} [delete]
 func DeleteNotification(c *gin.Context) {
-	userContext, exists := c.Get("user")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(c)
 
 	var request carwise.DeleteNotificationRequest
 	request.UserId = claim.UserId
@@ -174,12 +154,7 @@ func DeleteNotification(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{} "Internal Server Error" example:{"error":"Internal server error"}
 // @Router /notification/mark-all-read [put]
 func MarkAllNotificationsAsRead(c *gin.Context) {
-	userContext, exists := c.Get("user")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(c)
 
 	var request carwise.MarkAllAsReadRequest
 	request.UserId = claim.UserId
@@ -203,12 +178,7 @@ func MarkAllNotificationsAsRead(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{} "Internal Server Error" example:{"error":"Internal server error"}
 // @Router /notification/delete-all [delete]
 func DeleteAllNotifications(c *gin.Context) {
-	userContext, exists := c.Get("user")
-	if !exists {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(c)
 
 	var request carwise.DeleteAllNotificationsRequest
 	request.UserId = claim.UserId

@@ -18,12 +18,7 @@ import (
 // @Failure 500 {object} map[string]interface{} "Server error"
 // @Router /profile [get]
 func Profile(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	profile, err := interactor.GetProfile(claim.UserId)
 	if err != nil {
@@ -52,12 +47,7 @@ func Profile(ctx *gin.Context) {
 // @Failure 500 {object} map[string]interface{} "Server error"
 // @Router /profile [put]
 func ProfileEdit(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.ProfileEditRequest
 
@@ -122,12 +112,7 @@ func isValidImageFormat(filename string) bool {
 // @Failure 500 {object} map[string]interface{} "Server error"
 // @Router /profile/notify [patch]
 func ProfileNotify(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	var request carwise.ProfileNotifyRequest
 	if err := ctx.ShouldBindJSON(&request); err != nil {
@@ -155,12 +140,7 @@ func ProfileNotify(ctx *gin.Context) {
 // @Failure 500 {object} map[string]interface{} "Server error"
 // @Router /profile/notify [get]
 func GetProfileNotify(ctx *gin.Context) {
-	userContext, exists := ctx.Get("user")
-	if !exists {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"error": "No User found in request context"})
-		return
-	}
-	claim := userContext.(*UserClaims)
+	claim := GetUserClaims(ctx)
 
 	notify, err := interactor.GetProfileNotify(carwise.GetProfileNotifyRequest{
 		UserId: claim.UserId,
